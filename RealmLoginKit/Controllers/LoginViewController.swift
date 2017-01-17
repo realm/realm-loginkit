@@ -32,6 +32,7 @@ class LoginViewController: UIViewController, UITableViewDataSource, UITableViewD
     private let mailIcon = UIImage.mailIcon()
     
     /* Views */
+    private let navigationBar = UINavigationBar()
     private let tableView = TORoundedTableView()
     private let headerView = LoginHeaderView()
     private let footerView = LoginFooterView()
@@ -76,7 +77,7 @@ class LoginViewController: UIViewController, UITableViewDataSource, UITableViewD
         dimmingView = UIView()
         dimmingView?.frame = view.bounds
         dimmingView?.autoresizingMask = [.flexibleWidth, .flexibleHeight]
-        dimmingView?.backgroundColor = UIColor(white: 0.0, alpha: 0.1)
+        dimmingView?.backgroundColor = UIColor(white: 0.9, alpha: 0.3)
         view.addSubview(dimmingView!)
     }
     
@@ -89,7 +90,13 @@ class LoginViewController: UIViewController, UITableViewDataSource, UITableViewD
         tableView.maximumWidth = 500
         tableView.tableHeaderView = headerView
         tableView.tableFooterView = footerView
+        tableView.delaysContentTouches = false
         view.addSubview(tableView)
+        
+        navigationBar.frame = CGRect(x: 0, y: 0, width: view.bounds.size.width, height: 20)
+        navigationBar.autoresizingMask = [.flexibleWidth]
+        navigationBar.alpha = 0.0
+        view.addSubview(navigationBar)
     }
     
     //MARK: - View Management
@@ -117,6 +124,22 @@ class LoginViewController: UIViewController, UITableViewDataSource, UITableViewD
         edgeInsets.top = verticalPadding
         edgeInsets.bottom = verticalPadding
         tableView.contentInset = edgeInsets
+    }
+    
+    //MARK: - Scroll View Delegate
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        // Show the navigation bar when content starts passing under the status bar
+        let verticalOffset = scrollView.contentOffset.y
+        
+        if verticalOffset >= -20 {
+            navigationBar.alpha = 1.0
+        }
+        else if verticalOffset <= -40 {
+            navigationBar.alpha = 0.0
+        }
+        else {
+            navigationBar.alpha = 1.0 - ((abs(verticalOffset) - 20) / 20.0)
+        }
     }
     
     //MARK: - Table View Data Source
