@@ -118,7 +118,9 @@ class LoginViewController: UIViewController, UITableViewDataSource, UITableViewD
         // Vertically align the table view content in the middle of the view
         let contentSize = tableView.contentSize
         let boundsHeight = view.bounds.size.height
-        let verticalPadding = (boundsHeight - contentSize.height) * 0.5
+        let verticalPadding = max((boundsHeight - contentSize.height) * 0.5, 0)
+        
+        print(verticalPadding)
         
         var edgeInsets = tableView.contentInset
         edgeInsets.top = verticalPadding
@@ -128,17 +130,26 @@ class LoginViewController: UIViewController, UITableViewDataSource, UITableViewD
     
     //MARK: - Scroll View Delegate
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        
+        if UIApplication.shared.isStatusBarHidden {
+            navigationBar.alpha = 0.0
+            return
+        }
+        
+        let statusBarFrameHeight = UIApplication.shared.statusBarFrame.height
+        navigationBar.frame.size.height = statusBarFrameHeight
+        
         // Show the navigation bar when content starts passing under the status bar
         let verticalOffset = scrollView.contentOffset.y
         
-        if verticalOffset >= -20 {
+        if verticalOffset >= -statusBarFrameHeight {
             navigationBar.alpha = 1.0
         }
-        else if verticalOffset <= -40 {
+        else if verticalOffset <= -(statusBarFrameHeight + 20) {
             navigationBar.alpha = 0.0
         }
         else {
-            navigationBar.alpha = 1.0 - ((abs(verticalOffset) - 20) / 20.0)
+            navigationBar.alpha = 1.0 - ((abs(verticalOffset) - 20) / statusBarFrameHeight)
         }
     }
     
