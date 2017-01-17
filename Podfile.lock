@@ -1,11 +1,11 @@
 PODS:
-  - TORoundedTableView (0.0.2)
+  - TORoundedTableView (0.0.3)
 
 DEPENDENCIES:
   - TORoundedTableView
 
 SPEC CHECKSUMS:
-  TORoundedTableView: e9df2fe0ff1c86aaf220899382267f63643b6488
+  TORoundedTableView: 4155565233135d81d6626a0c4ecfba27991cf2b1
 
 PODFILE CHECKSUM: 22c91849d85f1b4f770c684fcbee0db3d1678a36
 
