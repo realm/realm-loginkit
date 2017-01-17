@@ -1,0 +1,74 @@
+//
+//  LoginFooterView.swift
+//  RealmLoginKit
+//
+//  Created by Tim Oliver on 1/17/17.
+//  Copyright © 2017 Realm. All rights reserved.
+//
+
+import UIKit
+
+class LoginFooterView: UIView {
+
+    private let viewHeight = 210 // Overall height of the view
+    private let loginButtonHeight = 50
+    private let topMargin = 15
+    private let loginButtonSizeRatio = 0.8
+    
+    private let loginButton = UIButton(type: .system)
+    private let registerButton = UIButton(type: .system)
+    
+    override init(frame: CGRect) {
+        var newRect = frame
+        newRect.size.height = CGFloat(viewHeight)
+        super.init(frame: newRect)
+        setUpViews()
+    }
+    
+    convenience init() {
+        self.init(frame: CGRect.zero)
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
+    private func setUpViews() {
+        loginButton.backgroundColor = UIColor(red: 0.941, green: 0.278, blue: 0.529, alpha: 1.0)
+        loginButton.layer.cornerRadius = 5
+        loginButton.layer.masksToBounds = true
+        loginButton.setTitleColor(.white, for: .normal)
+        loginButton.titleLabel?.font = UIFont.systemFont(ofSize: 18)
+        loginButton.setTitle("Log In", for: .normal)
+        addSubview(loginButton)
+        
+        registerButton.backgroundColor = .clear
+        registerButton.layer.cornerRadius = 5
+        registerButton.layer.borderColor = UIColor.black.cgColor
+        registerButton.layer.borderWidth = 1
+        registerButton.layer.masksToBounds = true
+        registerButton.setTitleColor(.black, for: .normal)
+        registerButton.titleLabel?.font = UIFont.systemFont(ofSize: 15)
+        registerButton.setTitle("Register a New Account", for: .normal)
+        addSubview(registerButton)
+    }
+ 
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        
+        var rect = loginButton.frame
+        rect.origin.y = CGFloat(topMargin)
+        rect.size.width = bounds.size.width * CGFloat(loginButtonSizeRatio)
+        rect.size.height = CGFloat(loginButtonHeight)
+        rect.origin.x = (bounds.size.width - rect.size.width) * 0.5
+        loginButton.frame = rect
+        
+        registerButton.sizeToFit()
+        rect = registerButton.frame
+        rect.size.height = 44
+        rect.size.width *= 1.2
+        rect.origin.y = bounds.size.height - rect.size.height
+        rect.origin.x = (bounds.size.width - rect.size.width) * 0.5
+        registerButton.frame = rect
+    }
+}

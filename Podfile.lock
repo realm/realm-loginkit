@@ -1,0 +1,12 @@
+PODS:
+  - TORoundedTableView (0.0.2)
+
+DEPENDENCIES:
+  - TORoundedTableView
+
+SPEC CHECKSUMS:
+  TORoundedTableView: e9df2fe0ff1c86aaf220899382267f63643b6488
+
+PODFILE CHECKSUM: 22c91849d85f1b4f770c684fcbee0db3d1678a36
+
+COCOAPODS: 1.1.1
