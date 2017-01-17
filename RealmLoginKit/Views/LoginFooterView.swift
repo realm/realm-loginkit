@@ -12,8 +12,10 @@ class LoginFooterView: UIView {
 
     private let viewHeight = 210 // Overall height of the view
     private let loginButtonHeight = 50
+    private let loginButtonWidthScale = 0.8
+    
     private let topMargin = 15
-    private let loginButtonSizeRatio = 0.8
+    private let middleMargin = 35
     
     private let loginButton = UIButton(type: .system)
     private let registerButton = UIButton(type: .system)
@@ -42,12 +44,14 @@ class LoginFooterView: UIView {
         loginButton.setTitle("Log In", for: .normal)
         addSubview(loginButton)
         
+        let blueColor = UIColor(red: 0.219, green: 0.278, blue: 0.494, alpha: 1.0)
+        
         registerButton.backgroundColor = .clear
         registerButton.layer.cornerRadius = 5
-        registerButton.layer.borderColor = UIColor.black.cgColor
+        registerButton.layer.borderColor = blueColor.cgColor
         registerButton.layer.borderWidth = 1
         registerButton.layer.masksToBounds = true
-        registerButton.setTitleColor(.black, for: .normal)
+        registerButton.setTitleColor(blueColor, for: .normal)
         registerButton.titleLabel?.font = UIFont.systemFont(ofSize: 15)
         registerButton.setTitle("Register a New Account", for: .normal)
         addSubview(registerButton)
@@ -58,7 +62,7 @@ class LoginFooterView: UIView {
         
         var rect = loginButton.frame
         rect.origin.y = CGFloat(topMargin)
-        rect.size.width = bounds.size.width * CGFloat(loginButtonSizeRatio)
+        rect.size.width = bounds.size.width * CGFloat(loginButtonWidthScale)
         rect.size.height = CGFloat(loginButtonHeight)
         rect.origin.x = (bounds.size.width - rect.size.width) * 0.5
         loginButton.frame = rect
@@ -67,7 +71,7 @@ class LoginFooterView: UIView {
         rect = registerButton.frame
         rect.size.height = 44
         rect.size.width *= 1.2
-        rect.origin.y = bounds.size.height - rect.size.height
+        rect.origin.y = loginButton.frame.maxY + CGFloat(middleMargin)
         rect.origin.x = (bounds.size.width - rect.size.width) * 0.5
         registerButton.frame = rect
     }
