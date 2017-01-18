@@ -8,6 +8,11 @@
 
 import UIKit
 
+enum LoginHeaderViewStyle {
+    case light
+    case dark
+}
+
 class LoginHeaderView: UIView {
 
     private let viewHeight = 190 // Overall height of the view
@@ -15,17 +20,22 @@ class LoginHeaderView: UIView {
     
     private let logoSize = 100
     
+    private let realmLogoView = RealmLogoView(frame: CGRect.zero, style: .colored, wordMarkHidden: true)
+    private let titleLabel = UILabel()
+    
     private var _registering: Bool = false
-    
-    let realmLogoView = RealmLogoView(frame: CGRect.zero, style: .colored, wordMarkHidden: true)
-    let titleLabel = UILabel()
-    
-    var registering: Bool {
+    var isRegistering: Bool {
         set {
-            _registering = newValue
+            setRegistering(newValue, animated: false)
         }
         
         get { return _registering }
+    }
+    
+    public var appName: String? {
+        didSet {
+            updateTitleView()
+        }
     }
     
     override init(frame: CGRect) {
@@ -49,8 +59,9 @@ class LoginHeaderView: UIView {
         titleLabel.font = UIFont.systemFont(ofSize: 28.0)
         titleLabel.textAlignment = .center
         titleLabel.textColor = .black
-        titleLabel.text = "Log Into Realm Tasks"
         addSubview(titleLabel)
+        
+        updateTitleView()
     }
     
     override func layoutSubviews() {
@@ -67,7 +78,34 @@ class LoginHeaderView: UIView {
         titleLabel.frame = rect
     }
 
-    func setRegistering(_ registering: Bool, animated: Bool) {
+    private func updateTitleView() {
+        var titleName = appName
+        if titleName == nil {
+            titleName = "Realm Object Server"
+        }
         
+        if isRegistering {
+            titleLabel.text = "Sign Up for \(titleName!)"
+        }
+        else {
+            titleLabel.text = "Log Into \(titleName!)"
+        }
+    }
+    
+    func setRegistering(_ registering: Bool, animated: Bool) {
+        guard registering != _registering else {
+            return
+        }
+        
+        _registering = registering
+        
+        if animated == false {
+            updateTitleView()
+            return
+        }
+
+        UIView.transition(with: titleLabel, duration: 0.25, options: [.transitionCrossDissolve], animations: {
+            self.updateTitleView()
+        }, completion: nil)
     }
 }

@@ -8,6 +8,11 @@
 
 import UIKit
 
+enum LoginFooterViewStyle {
+    case light
+    case dark
+}
+
 class LoginFooterView: UIView {
 
     private let viewHeight = 145 // Overall height of the view
@@ -22,6 +27,15 @@ class LoginFooterView: UIView {
     
     var loginButtonTapped: (() -> Void)?
     var registerButtonTapped: (() -> Void)?
+    
+    private var _registering: Bool = false
+    var registering: Bool {
+        set {
+            setRegistering(newValue, animated: false)
+        }
+        
+        get { return _registering }
+    }
     
     override init(frame: CGRect) {
         var newRect = frame
@@ -46,7 +60,6 @@ class LoginFooterView: UIView {
         loginButton.layer.masksToBounds = true
         loginButton.setTitleColor(.white, for: .normal)
         loginButton.titleLabel?.font = UIFont.systemFont(ofSize: 18)
-        loginButton.setTitle("Log In", for: .normal)
         loginButton.addTarget(self, action: #selector(buttonTapped(sender:)), for: .touchUpInside)
         addSubview(loginButton)
         
@@ -59,9 +72,10 @@ class LoginFooterView: UIView {
         registerButton.layer.masksToBounds = true
         registerButton.setTitleColor(blueColor, for: .normal)
         registerButton.titleLabel?.font = UIFont.systemFont(ofSize: 15)
-        registerButton.setTitle("Register a New Account", for: .normal)
         registerButton.addTarget(self, action: #selector(buttonTapped(sender:)), for: .touchUpInside)
         addSubview(registerButton)
+        
+        updateButtonTitles()
     }
  
     override func layoutSubviews() {
@@ -82,7 +96,7 @@ class LoginFooterView: UIView {
         rect.origin.x = (bounds.size.width - rect.size.width) * 0.5
         registerButton.frame = rect
     }
-    
+
     func buttonTapped(sender: AnyObject?) {
         guard let sender = sender else {
             return
@@ -94,5 +108,38 @@ class LoginFooterView: UIView {
         else {
             registerButtonTapped?()
         }
+    }
+
+    private func updateButtonTitles() {
+        let loginText: String , registerText: String
+        
+        if _registering {
+            loginText = "Sign Up"
+            registerText = "Log Into Your Account"
+        }
+        else {
+            loginText = "Log In"
+            registerText = "Register a New Account"
+        }
+        
+        loginButton.setTitle(loginText, for: .normal)
+        registerButton.setTitle(registerText, for: .normal)
+    }
+    
+    func setRegistering(_ registering: Bool, animated: Bool) {
+        guard registering != _registering else {
+            return
+        }
+        
+        _registering = registering
+        
+        if animated == false {
+            updateButtonTitles()
+            return
+        }
+        
+        UIView.transition(with: self, duration: 0.3, options: [.transitionCrossDissolve], animations: { 
+            self.updateButtonTitles()
+        }, completion: nil)
     }
 }

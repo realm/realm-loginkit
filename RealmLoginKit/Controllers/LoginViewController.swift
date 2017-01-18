@@ -43,6 +43,8 @@ class LoginViewController: UIViewController, UITableViewDataSource, UITableViewD
     private let tableView = TORoundedTableView()
     private let headerView = LoginHeaderView()
     private let footerView = LoginFooterView()
+    private let copyrightView = UILabel()
+    
     private var effectView: UIVisualEffectView?
     private var dimmingView: UIView?
     
@@ -50,9 +52,13 @@ class LoginViewController: UIViewController, UITableViewDataSource, UITableViewD
     private var _registering: Bool = false
     private var keyboardHeight: CGFloat = 0.0
     
+    /* Login/Register Credentials */
     private var email: String?
     private var password: String?
     private var confirmPassword: String?
+    
+    /* Layout Constants */
+    private let copyrightViewMargin: CGFloat = 45
     
     /* State Convienience Methods */
     private var isTranslucent: Bool  {
@@ -95,16 +101,10 @@ class LoginViewController: UIViewController, UITableViewDataSource, UITableViewD
         dimmingView = UIView()
         dimmingView?.frame = view.bounds
         dimmingView?.autoresizingMask = [.flexibleWidth, .flexibleHeight]
-        dimmingView?.backgroundColor = UIColor(white: 0.9, alpha: 0.3)
         view.addSubview(dimmingView!)
     }
     
     private func setUpCommonViews() {
-        let containerView = UIView()
-        containerView.frame = view.bounds
-        containerView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
-        view.addSubview(containerView)
-        
         tableView.frame = view.bounds
         tableView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
         tableView.dataSource = self
@@ -114,7 +114,11 @@ class LoginViewController: UIViewController, UITableViewDataSource, UITableViewD
         tableView.tableHeaderView = headerView
         tableView.tableFooterView = footerView
         tableView.delaysContentTouches = false
-        containerView.addSubview(tableView)
+        view.addSubview(tableView)
+        
+        footerView.loginButtonTapped = {
+            
+        }
         
         footerView.registerButtonTapped = {
             self.setRegistering(!self.isRegistering, animated: true)
@@ -124,6 +128,30 @@ class LoginViewController: UIViewController, UITableViewDataSource, UITableViewD
         navigationBar.autoresizingMask = [.flexibleWidth]
         navigationBar.alpha = 0.0
         view.addSubview(navigationBar)
+        
+        copyrightView.text = "With ❤️ from the Realm team, 2017."
+        copyrightView.textAlignment = .center
+        copyrightView.font = UIFont.systemFont(ofSize: 15)
+        copyrightView.sizeToFit()
+        copyrightView.autoresizingMask = [.flexibleLeftMargin, .flexibleRightMargin, .flexibleTopMargin]
+        copyrightView.frame.origin.y = view.bounds.height - copyrightViewMargin
+        copyrightView.frame.origin.x = (view.bounds.width - copyrightView.frame.width) * 0.5
+        view.addSubview(copyrightView)
+    }
+    
+    func applyTheme() {
+
+        navigationBar.barStyle  = isDarkStyle ? .blackTranslucent : .default
+        copyrightView.textColor = isDarkStyle ? UIColor(white: 0.3, alpha: 1.0) : UIColor(white: 0.6, alpha: 1.0)
+        
+        
+        if effectView != nil {
+            effectView?.effect = UIBlurEffect(style: isDarkStyle ? .dark : .light)
+        }
+        
+        if dimmingView != nil {
+            dimmingView?.backgroundColor = isDarkStyle ? UIColor(white: 0.1, alpha: 0.3) : UIColor(white: 0.9, alpha: 0.3)
+        }
     }
     
     //MARK: - View Management
@@ -199,6 +227,10 @@ class LoginViewController: UIViewController, UITableViewDataSource, UITableViewD
         else {
             navigationBar.alpha = 1.0 - ((abs(verticalOffset) - 10) / statusBarFrameHeight)
         }
+        
+        // Offset the copyright label
+        let normalizedOffset = verticalOffset + scrollView.contentInset.top
+        copyrightView.frame.origin.y = (view.bounds.height - copyrightViewMargin) - normalizedOffset
     }
     
     //MARK: - Table View Data Source
@@ -290,6 +322,9 @@ class LoginViewController: UIViewController, UITableViewDataSource, UITableViewD
         
         // Animate the content size adjustments
         animateContentInsetTransition()
+        
+        headerView.setRegistering(_registering, animated: animated)
+        footerView.setRegistering(_registering, animated: animated)
     }
     
     // MARK: - Keyboard Handling
@@ -314,9 +349,8 @@ class LoginViewController: UIViewController, UITableViewDataSource, UITableViewD
             self.layoutTableContentInset()
         }, completion: nil)
         
-        // When animating the table view edge insets when its rounded, the header and footer views
-        // snap because their width override is caught in the animation block.
+        // When animating the table view edge insets when its rounded, the header view
+        // snaps because their width override is caught in the animation block.
         tableView.tableHeaderView?.layer.removeAllAnimations()
-        //tableView.tableFooterView?.layer.removeAllAnimations()
     }
 }
