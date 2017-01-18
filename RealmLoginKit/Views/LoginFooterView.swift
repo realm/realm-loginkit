@@ -14,7 +14,7 @@ enum LoginFooterViewStyle {
 }
 
 class LoginFooterView: UIView {
-
+    
     private let viewHeight = 145 // Overall height of the view
     private let loginButtonHeight = 50
     private let loginButtonWidthScale = 0.8
@@ -24,6 +24,12 @@ class LoginFooterView: UIView {
     
     private let loginButton = UIButton(type: .system)
     private let registerButton = UIButton(type: .system)
+    
+    public var isSubmitButtonEnabled: Bool = false {
+        didSet {
+            updateSubmitButton()
+        }
+    }
     
     var loginButtonTapped: (() -> Void)?
     var registerButtonTapped: (() -> Void)?
@@ -61,6 +67,7 @@ class LoginFooterView: UIView {
         loginButton.setTitleColor(.white, for: .normal)
         loginButton.titleLabel?.font = UIFont.systemFont(ofSize: 18)
         loginButton.addTarget(self, action: #selector(buttonTapped(sender:)), for: .touchUpInside)
+        loginButton.isEnabled = false
         addSubview(loginButton)
         
         let blueColor = UIColor(red: 0.219, green: 0.278, blue: 0.494, alpha: 1.0)
@@ -76,6 +83,7 @@ class LoginFooterView: UIView {
         addSubview(registerButton)
         
         updateButtonTitles()
+        updateSubmitButton()
     }
  
     override func layoutSubviews() {
@@ -126,6 +134,11 @@ class LoginFooterView: UIView {
         registerButton.setTitle(registerText, for: .normal)
     }
     
+    private func updateSubmitButton() {
+        loginButton.isEnabled = isSubmitButtonEnabled
+        loginButton.alpha = isSubmitButtonEnabled ? 1.0 : 0.7
+    }
+    
     func setRegistering(_ registering: Bool, animated: Bool) {
         guard registering != _registering else {
             return
@@ -138,7 +151,7 @@ class LoginFooterView: UIView {
             return
         }
         
-        UIView.transition(with: self, duration: 0.3, options: [.transitionCrossDissolve], animations: { 
+        UIView.transition(with: loginButton, duration: 0.3, options: [.transitionCrossDissolve], animations: {
             self.updateButtonTitles()
         }, completion: nil)
     }
