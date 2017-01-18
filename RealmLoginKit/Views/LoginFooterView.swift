@@ -10,7 +10,7 @@ import UIKit
 
 class LoginFooterView: UIView {
 
-    private let viewHeight = 210 // Overall height of the view
+    private let viewHeight = 165 // Overall height of the view
     private let loginButtonHeight = 50
     private let loginButtonWidthScale = 0.8
     

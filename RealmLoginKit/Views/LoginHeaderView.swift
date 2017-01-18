@@ -10,8 +10,8 @@ import UIKit
 
 class LoginHeaderView: UIView {
 
-    private let viewHeight = 210 // Overall height of the view
-    private let bottomMargin = 40 // Gap between the label and the bottom of the view
+    private let viewHeight = 190 // Overall height of the view
+    private let bottomMargin = 30 // Gap between the label and the bottom of the view
     
     private let logoSize = 100
     
