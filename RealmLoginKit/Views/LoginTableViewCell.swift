@@ -13,6 +13,7 @@ class LoginTableViewCell: TORoundedTableViewCapCell, UITextFieldDelegate {
     
     let textField = UITextField()
     var textChangedHandler: (() -> Void)?
+    var returnButtonTappedHandler: (() -> Void)?
     
     //MARK: - Class Creation
     
@@ -28,6 +29,8 @@ class LoginTableViewCell: TORoundedTableViewCapCell, UITextFieldDelegate {
     //MARK: - Text Field Setup
     
     func setUpViews() {
+        textField.autocorrectionType = .no
+        textField.autocapitalizationType = .none
         textField.delegate = self
         textField.addTarget(self, action: #selector(textFieldDidChange(_:)), for: .editingChanged)
         contentView.addSubview(textField)
@@ -46,5 +49,10 @@ class LoginTableViewCell: TORoundedTableViewCapCell, UITextFieldDelegate {
     //MARK: - Text Field Delegate
     @objc private func textFieldDidChange(_ sender: AnyObject?) {
         textChangedHandler?()
+    }
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        returnButtonTappedHandler?()
+        return true
     }
 }

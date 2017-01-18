@@ -100,6 +100,11 @@ class LoginViewController: UIViewController, UITableViewDataSource, UITableViewD
     }
     
     private func setUpCommonViews() {
+        let containerView = UIView()
+        containerView.frame = view.bounds
+        containerView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+        view.addSubview(containerView)
+        
         tableView.frame = view.bounds
         tableView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
         tableView.dataSource = self
@@ -109,7 +114,11 @@ class LoginViewController: UIViewController, UITableViewDataSource, UITableViewD
         tableView.tableHeaderView = headerView
         tableView.tableFooterView = footerView
         tableView.delaysContentTouches = false
-        view.addSubview(tableView)
+        containerView.addSubview(tableView)
+        
+        footerView.registerButtonTapped = {
+            self.setRegistering(!self.isRegistering, animated: true)
+        }
         
         navigationBar.frame = CGRect(x: 0, y: 0, width: view.bounds.size.width, height: 20)
         navigationBar.autoresizingMask = [.flexibleWidth]
@@ -136,6 +145,7 @@ class LoginViewController: UIViewController, UITableViewDataSource, UITableViewD
     }
     
     func layoutTableContentInset() {
+        
         // Vertically align the table view so the table cells are in the middle
         let boundsHeight = view.bounds.size.height - keyboardHeight // Adjusted for keyboard visibility
         let contentHeight = tableView.contentSize.height
@@ -151,8 +161,13 @@ class LoginViewController: UIViewController, UITableViewDataSource, UITableViewD
             contentMidPoint = headerView.frame.height + (sectionHeight * 0.5)
         }
         
-        let topPadding    = max(0, (boundsHeight * 0.5) - contentMidPoint)
-        let bottomPadding = max(0, boundsHeight - (topPadding + contentHeight))
+        var topPadding    = max(0, (boundsHeight * 0.5) - contentMidPoint)
+        if keyboardHeight > 0 { topPadding += (UIApplication.shared.statusBarFrame.height + 10) }
+        
+        var bottomPadding:CGFloat = 0.0
+        if keyboardHeight > 0 {
+            bottomPadding = keyboardHeight + 15
+        }
         
         var edgeInsets = tableView.contentInset
         edgeInsets.top = topPadding
@@ -178,11 +193,11 @@ class LoginViewController: UIViewController, UITableViewDataSource, UITableViewD
         if verticalOffset >= -statusBarFrameHeight {
             navigationBar.alpha = 1.0
         }
-        else if verticalOffset <= -(statusBarFrameHeight + 20) {
+        else if verticalOffset <= -(statusBarFrameHeight + 10) {
             navigationBar.alpha = 0.0
         }
         else {
-            navigationBar.alpha = 1.0 - ((abs(verticalOffset) - 20) / statusBarFrameHeight)
+            navigationBar.alpha = 1.0 - ((abs(verticalOffset) - 10) / statusBarFrameHeight)
         }
     }
     
@@ -205,28 +220,47 @@ class LoginViewController: UIViewController, UITableViewDataSource, UITableViewD
         
         // Configure rounded caps
         textFieldCell.topCornersRounded = (indexPath.row == 0)
-        textFieldCell.bottomCornersRounded = (indexPath.row == 1)
+        textFieldCell.bottomCornersRounded = (!isRegistering ? indexPath.row == 1 : indexPath.row == 2)
         
         // Configure icons
         textFieldCell.imageView?.image = (indexPath.row == 0 ? mailIcon : lockIcon)
         
-        // Configure placeholder text
+        let textField = textFieldCell.textField
+        
+        // Configure text field
         switch indexPath.row {
         case 0:
-            textFieldCell.textField.placeholder = "Email Address"
-            textFieldCell.textField.text = email
-            textFieldCell.textField.isSecureTextEntry = false
+            textField.placeholder = "Email Address"
+            textField.text = email
+            textField.isSecureTextEntry = false
+            textField.keyboardType = .emailAddress
+            textField.returnKeyType = .next
             textFieldCell.textChangedHandler = { self.email = textFieldCell.textField.text }
+            textFieldCell.returnButtonTappedHandler = { self.makeFirstResponder(atRow: 1) }
         case 1:
-            textFieldCell.textField.placeholder = "Password"
-            textFieldCell.textField.text = password
-            textFieldCell.textField.isSecureTextEntry = true
+            textField.placeholder = "Password"
+            textField.text = password
+            textField.isSecureTextEntry = true
+            textField.keyboardType = .default
+            textField.returnKeyType = isRegistering ? .next : .done
             textFieldCell.textChangedHandler = { self.password = textFieldCell.textField.text }
+            textFieldCell.returnButtonTappedHandler = {
+                if self.isRegistering {
+                    self.makeFirstResponder(atRow: 1)
+                }
+                else {
+                    // Submit Form
+                }
+            }
         case 2:
-            textFieldCell.textField.placeholder = "Confirm Password"
-            textFieldCell.textField.text = confirmPassword
-            textFieldCell.textField.isSecureTextEntry = true
+            textField.placeholder = "Confirm Password"
+            textField.text = confirmPassword
+            textField.isSecureTextEntry = true
+            textField.keyboardType = .default
+            textField.returnKeyType = .done
             textFieldCell.textChangedHandler = { self.confirmPassword = textFieldCell.textField.text }
+            textFieldCell.returnButtonTappedHandler = { self.makeFirstResponder(atRow: 1) }
+            textFieldCell.returnButtonTappedHandler = { /* Begin Submission */ }
         default:
             break
         }
@@ -237,22 +271,45 @@ class LoginViewController: UIViewController, UITableViewDataSource, UITableViewD
     // MARK: - Login/Register Transition
     
     func setRegistering(_ registering: Bool, animated: Bool) {
+        guard _registering != registering else {
+            return
+        }
         
+        _registering = registering
+        
+        // Insert/Delete the 'confirm password' field
+        if _registering {
+            tableView.insertRows(at: [IndexPath(row: 2, section: 0)], with: .fade)
+        }
+        else {
+            tableView.deleteRows(at: [IndexPath(row: 2, section: 0)], with: .fade)
+        }
+        
+        // Reload the middle row to refresh its cap graphics
+        tableView.reloadRows(at: [IndexPath(row: 1, section: 0)], with: .none)
+        
+        // Animate the content size adjustments
+        animateContentInsetTransition()
     }
     
     // MARK: - Keyboard Handling
+    func makeFirstResponder(atRow row: Int) {
+        let cell = tableView.cellForRow(at: IndexPath(row: row, section: 0)) as! LoginTableViewCell
+        cell.textField.becomeFirstResponder()
+    }
+    
     @objc private func keyboardWillShow(notification: Notification) {
         let keyboardFrame = notification.userInfo?[UIKeyboardFrameEndUserInfoKey] as! CGRect
         keyboardHeight = keyboardFrame.height
-        animateKeyboardTransition()
+        animateContentInsetTransition()
     }
     
     @objc private func keyboardWillHide(notification: Notification) {
         keyboardHeight = 0
-        animateKeyboardTransition()
+        animateContentInsetTransition()
     }
     
-    private func animateKeyboardTransition() {
+    private func animateContentInsetTransition() {
         UIView.animate(withDuration: 0.6, delay: 0, usingSpringWithDamping: 1.0, initialSpringVelocity: 0.9, options: [], animations: {
             self.layoutTableContentInset()
         }, completion: nil)
@@ -260,6 +317,6 @@ class LoginViewController: UIViewController, UITableViewDataSource, UITableViewD
         // When animating the table view edge insets when its rounded, the header and footer views
         // snap because their width override is caught in the animation block.
         tableView.tableHeaderView?.layer.removeAllAnimations()
-        tableView.tableFooterView?.layer.removeAllAnimations()
+        //tableView.tableFooterView?.layer.removeAllAnimations()
     }
 }
