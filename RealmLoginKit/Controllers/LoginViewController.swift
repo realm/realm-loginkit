@@ -25,6 +25,13 @@ class LoginViewController: UIViewController, UITableViewDataSource, UITableViewD
     */
     var style = LoginViewControllerStyle.lightTranslucent
     
+    var isRegistering: Bool {
+        set {
+            setRegistering(newValue, animated: false)
+        }
+        get { return _registering }
+    }
+    
     //MARK: - Private Properties
     
     /* Assets */
@@ -38,6 +45,14 @@ class LoginViewController: UIViewController, UITableViewDataSource, UITableViewD
     private let footerView = LoginFooterView()
     private var effectView: UIVisualEffectView?
     private var dimmingView: UIView?
+    
+    /* State tracking */
+    private var _registering: Bool = false
+    private var keyboardHeight: CGFloat = 0.0
+    
+    private var email: String?
+    private var password: String?
+    private var confirmPassword: String?
     
     /* State Convienience Methods */
     private var isTranslucent: Bool  {
@@ -55,6 +70,9 @@ class LoginViewController: UIViewController, UITableViewDataSource, UITableViewD
         self.style = style
         
         modalPresentationStyle = isTranslucent ? .overFullScreen : .fullScreen
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow(notification:)), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide(notification:)), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
     }
     
     convenience init() {
@@ -114,21 +132,36 @@ class LoginViewController: UIViewController, UITableViewDataSource, UITableViewD
 
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
+        layoutTableContentInset()
+    }
+    
+    func layoutTableContentInset() {
+        // Vertically align the table view so the table cells are in the middle
+        let boundsHeight = view.bounds.size.height - keyboardHeight // Adjusted for keyboard visibility
+        let contentHeight = tableView.contentSize.height
+        let sectionHeight = tableView.rect(forSection: 0).size.height
+        let contentMidPoint: CGFloat //
         
-        // Vertically align the table view content in the middle of the view
-        let contentSize = tableView.contentSize
-        let boundsHeight = view.bounds.size.height
-        let verticalPadding = max((boundsHeight - contentSize.height) * 0.5, 0)
+        // If keyboard is not visible, align the table cells to the middle of the screen,
+        // else just align the whole content region
+        if keyboardHeight > 0 {
+            contentMidPoint = contentHeight * 0.5
+        }
+        else {
+            contentMidPoint = headerView.frame.height + (sectionHeight * 0.5)
+        }
         
-        print(verticalPadding)
+        let topPadding    = max(0, (boundsHeight * 0.5) - contentMidPoint)
+        let bottomPadding = max(0, boundsHeight - (topPadding + contentHeight))
         
         var edgeInsets = tableView.contentInset
-        edgeInsets.top = verticalPadding
-        edgeInsets.bottom = verticalPadding
+        edgeInsets.top = topPadding
+        edgeInsets.bottom = bottomPadding
         tableView.contentInset = edgeInsets
     }
     
     //MARK: - Scroll View Delegate
+    
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         
         if UIApplication.shared.isStatusBarHidden {
@@ -156,26 +189,77 @@ class LoginViewController: UIViewController, UITableViewDataSource, UITableViewD
     //MARK: - Table View Data Source
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 2
+        return isRegistering ? 3 : 2
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let identifier = "CapCell"
         var cell = tableView.dequeueReusableCell(withIdentifier: identifier)
         if cell == nil {
-            cell = TORoundedTableViewCapCell(style: .default, reuseIdentifier: identifier)
+            cell = LoginTableViewCell(style: .default, reuseIdentifier: identifier)
             cell?.imageView?.tintColor = UIColor(white: 0.6, alpha: 1.0)
             cell?.selectionStyle = .none
         }
         
-        let capCell = (cell as! TORoundedTableViewCapCell)
+        let textFieldCell = (cell as! LoginTableViewCell)
         
-        capCell.topCornersRounded = (indexPath.row == 0)
-        capCell.bottomCornersRounded = (indexPath.row == 1)
+        // Configure rounded caps
+        textFieldCell.topCornersRounded = (indexPath.row == 0)
+        textFieldCell.bottomCornersRounded = (indexPath.row == 1)
         
-        capCell.imageView?.image = (indexPath.row == 0 ? mailIcon : lockIcon)
-        capCell.textLabel?.text = (indexPath.row == 0) ? "to@realm.io" : "p@ssword"
+        // Configure icons
+        textFieldCell.imageView?.image = (indexPath.row == 0 ? mailIcon : lockIcon)
         
-        return capCell
+        // Configure placeholder text
+        switch indexPath.row {
+        case 0:
+            textFieldCell.textField.placeholder = "Email Address"
+            textFieldCell.textField.text = email
+            textFieldCell.textField.isSecureTextEntry = false
+            textFieldCell.textChangedHandler = { self.email = textFieldCell.textField.text }
+        case 1:
+            textFieldCell.textField.placeholder = "Password"
+            textFieldCell.textField.text = password
+            textFieldCell.textField.isSecureTextEntry = true
+            textFieldCell.textChangedHandler = { self.password = textFieldCell.textField.text }
+        case 2:
+            textFieldCell.textField.placeholder = "Confirm Password"
+            textFieldCell.textField.text = confirmPassword
+            textFieldCell.textField.isSecureTextEntry = true
+            textFieldCell.textChangedHandler = { self.confirmPassword = textFieldCell.textField.text }
+        default:
+            break
+        }
+        
+        return textFieldCell
+    }
+    
+    // MARK: - Login/Register Transition
+    
+    func setRegistering(_ registering: Bool, animated: Bool) {
+        
+    }
+    
+    // MARK: - Keyboard Handling
+    @objc private func keyboardWillShow(notification: Notification) {
+        let keyboardFrame = notification.userInfo?[UIKeyboardFrameEndUserInfoKey] as! CGRect
+        keyboardHeight = keyboardFrame.height
+        animateKeyboardTransition()
+    }
+    
+    @objc private func keyboardWillHide(notification: Notification) {
+        keyboardHeight = 0
+        animateKeyboardTransition()
+    }
+    
+    private func animateKeyboardTransition() {
+        UIView.animate(withDuration: 0.6, delay: 0, usingSpringWithDamping: 1.0, initialSpringVelocity: 0.9, options: [], animations: {
+            self.layoutTableContentInset()
+        }, completion: nil)
+        
+        // When animating the table view edge insets when its rounded, the header and footer views
+        // snap because their width override is caught in the animation block.
+        tableView.tableHeaderView?.layer.removeAllAnimations()
+        tableView.tableFooterView?.layer.removeAllAnimations()
     }
 }
