@@ -21,6 +21,7 @@
 		225574BD1E2DFC2800C52098 /* UIImage+Icons.swift in Sources */ = {isa = PBXBuildFile; fileRef = 225574BC1E2DFC2800C52098 /* UIImage+Icons.swift */; };
 		225574BF1E2E0ACE00C52098 /* LoginHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 225574BE1E2E0ACE00C52098 /* LoginHeaderView.swift */; };
 		225574C11E2E14DC00C52098 /* LoginFooterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 225574C01E2E14DC00C52098 /* LoginFooterView.swift */; };
+		22AEE18B1E2F3F1F00CBB40A /* LoginTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22AEE18A1E2F3F1F00CBB40A /* LoginTableViewCell.swift */; };
 		8FAF1820D60523BA38FD7E07 /* Pods_RealmLoginKitTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 67B6597D2C5536C5E869E3BC /* Pods_RealmLoginKitTests.framework */; };
 		B6D5A4D35A85702557F8800E /* Pods_RealmLoginKitUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8DC3FEBB61F6DB84C7CA2F04 /* Pods_RealmLoginKitUITests.framework */; };
 /* End PBXBuildFile section */
@@ -61,6 +62,7 @@
 		225574BC1E2DFC2800C52098 /* UIImage+Icons.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "UIImage+Icons.swift"; path = "Extensions/UIImage+Icons.swift"; sourceTree = "<group>"; };
 		225574BE1E2E0ACE00C52098 /* LoginHeaderView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginHeaderView.swift; sourceTree = "<group>"; };
 		225574C01E2E14DC00C52098 /* LoginFooterView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginFooterView.swift; sourceTree = "<group>"; };
+		22AEE18A1E2F3F1F00CBB40A /* LoginTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginTableViewCell.swift; sourceTree = "<group>"; };
 		4229F1F3EEFF3543F9F1382F /* Pods-RealmLoginKitUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RealmLoginKitUITests.release.xcconfig"; path = "Pods/Target Support Files/Pods-RealmLoginKitUITests/Pods-RealmLoginKitUITests.release.xcconfig"; sourceTree = "<group>"; };
 		67B6597D2C5536C5E869E3BC /* Pods_RealmLoginKitTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_RealmLoginKitTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		7BB8D9C8EF0F07E405866089 /* Pods-RealmLoginKitTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RealmLoginKitTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-RealmLoginKitTests/Pods-RealmLoginKitTests.debug.xcconfig"; sourceTree = "<group>"; };
@@ -223,6 +225,7 @@
 				221840F91E2CCBC900E85B6E /* RealmLogoView.swift */,
 				225574BE1E2E0ACE00C52098 /* LoginHeaderView.swift */,
 				225574C01E2E14DC00C52098 /* LoginFooterView.swift */,
+				22AEE18A1E2F3F1F00CBB40A /* LoginTableViewCell.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -550,6 +553,7 @@
 				221840FA1E2CCBC900E85B6E /* RealmLogoView.swift in Sources */,
 				221840E11E2CCAE300E85B6E /* AppDelegate.swift in Sources */,
 				225574BD1E2DFC2800C52098 /* UIImage+Icons.swift in Sources */,
+				22AEE18B1E2F3F1F00CBB40A /* LoginTableViewCell.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
