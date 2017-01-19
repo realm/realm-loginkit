@@ -8,6 +8,7 @@
 
 import UIKit
 import TORoundedTableView
+import RealmSwift
 
 enum LoginViewControllerStyle {
     case lightTranslucent
@@ -16,7 +17,12 @@ enum LoginViewControllerStyle {
     case darkOpaque
 }
 
+@objc(RLMLoginViewController)
 class LoginViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UIViewControllerTransitioningDelegate {
+    
+    static let serverURLKey = "RealmLoginServerURLKey"
+    static let emailKey = "RealmLoginEmailKey"
+    static let passwordKey = "RealmLoginPasswordKey"
     
     //MARK: - Public Properties
     
@@ -25,20 +31,22 @@ class LoginViewController: UIViewController, UITableViewDataSource, UITableViewD
     */
     public private(set) var style = LoginViewControllerStyle.lightTranslucent
     
-    var isRegistering: Bool {
+    public var isRegistering: Bool {
         set {
             setRegistering(newValue, animated: false)
         }
         get { return _registering }
     }
     
+    public var logInSuccessfulHandler: ((SyncUser) -> Void)?
+    
     //MARK: - Private Properties
     
     /* Assets */
     private let earthIcon = UIImage.earthIcon()
-    private let lockIcon = UIImage.lockIcon()
-    private let mailIcon = UIImage.mailIcon()
-    private let tickIcon = UIImage.tickIcon()
+    private let lockIcon  = UIImage.lockIcon()
+    private let mailIcon  = UIImage.mailIcon()
+    private let tickIcon  = UIImage.tickIcon()
     
     /* Views */
     private let containerView = UIView()
@@ -56,11 +64,11 @@ class LoginViewController: UIViewController, UITableViewDataSource, UITableViewD
     private var keyboardHeight: CGFloat = 0.0
     
     /* Login/Register Credentials */
-    private var serverURL: String?       { didSet { validateFormItems() } }
-    private var email: String?           { didSet { validateFormItems() } }
-    private var password: String?        { didSet { validateFormItems() } }
-    private var confirmPassword: String? { didSet { validateFormItems() } }
-    private var rememberLogin: Bool = true
+    public var serverURL: String?       { didSet { validateFormItems() } }
+    public var email: String?           { didSet { validateFormItems() } }
+    public var password: String?        { didSet { validateFormItems() } }
+    public var confirmPassword: String? { didSet { validateFormItems() } }
+    public var rememberLogin: Bool = true
     
     /* Layout Constants */
     private let copyrightViewMargin: CGFloat = 45
@@ -85,6 +93,8 @@ class LoginViewController: UIViewController, UITableViewDataSource, UITableViewD
         
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow(notification:)), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide(notification:)), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
+        
+        loadLoginCredentials()
     }
     
     convenience init() {
@@ -93,6 +103,11 @@ class LoginViewController: UIViewController, UITableViewDataSource, UITableViewD
     
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
+    }
+    
+    deinit {
+        NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIKeyboardWillShow, object: nil)
+        NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIKeyboardWillHide, object: nil)
     }
     
     //MARK: - View Setup
@@ -127,7 +142,7 @@ class LoginViewController: UIViewController, UITableViewDataSource, UITableViewD
         containerView.addSubview(tableView)
         
         footerView.loginButtonTapped = {
-            
+            self.submitLogin()
         }
         
         footerView.registerButtonTapped = {
@@ -254,7 +269,7 @@ class LoginViewController: UIViewController, UITableViewDataSource, UITableViewD
     private func validateFormItems() {
         var formIsValid = true
         
-        if serverURL?.range(of: ".") == nil {
+        if serverURL == nil || (serverURL?.isEmpty)! {
             formIsValid = false
         }
         
@@ -262,11 +277,7 @@ class LoginViewController: UIViewController, UITableViewDataSource, UITableViewD
             formIsValid = false
         }
         
-        if password?.characters.count == 0 {
-            formIsValid = false
-        }
-        
-        if isRegistering && confirmPassword?.characters.count == 0 {
+        if password == nil || (password?.isEmpty)! {
             formIsValid = false
         }
         
@@ -360,7 +371,7 @@ class LoginViewController: UIViewController, UITableViewDataSource, UITableViewD
                         self.makeFirstResponder(atRow: 3)
                     }
                     else {
-                        // Submit Form
+                        self.submitLogin()
                     }
                 }
             case 3:
@@ -469,5 +480,56 @@ class LoginViewController: UIViewController, UITableViewDataSource, UITableViewD
         return animationController
     }
     
+    //MARK: - Form Submission
+    private func submitLogin() {
+        footerView.isSubmitting = true
+        
+        var formattedURL = serverURL
+        if let schemeRange = formattedURL?.range(of: "://") {
+            formattedURL = formattedURL?.substring(from: schemeRange.upperBound)
+        }
+        
+        if formattedURL?.range(of: ":") == nil {
+            formattedURL = "\(formattedURL!):9080"
+        }
+        
+        let credentials = SyncCredentials.usernamePassword(username: email!, password: password!, register: isRegistering)
+        SyncUser.logIn(with: credentials, server: URL(string: "http://\(formattedURL!)")!) { (user, error) in
+            DispatchQueue.main.async {
+                if let error = error {
+                    let alertController = UIAlertController(title: "Unable to Sign In", message: error.localizedDescription, preferredStyle: .alert)
+                    alertController.addAction(UIAlertAction(title: "Okay", style: .default, handler: nil))
+                    self.present(alertController, animated: true, completion: nil)
+                    self.footerView.isSubmitting = false
+                    return
+                }
+                
+                logInSuccessfulHandler(user)?
+            }
+        }
+    }
     
+    private func saveLoginCredentials() {
+        let userDefaults = UserDefaults.standard
+        
+        if rememberLogin {
+            userDefaults.set(serverURL, forKey: LoginViewController.serverURLKey)
+            userDefaults.set(email, forKey: LoginViewController.emailKey)
+            userDefaults.set(password, forKey: LoginViewController.passwordKey)
+        }
+        else {
+            userDefaults.set(nil, forKey: LoginViewController.serverURLKey)
+            userDefaults.set(nil, forKey: LoginViewController.emailKey)
+            userDefaults.set(nil, forKey: LoginViewController.passwordKey)
+        }
+        
+        userDefaults.synchronize()
+    }
+    
+    private func loadLoginCredentials() {
+        let userDefaults = UserDefaults.standard
+        serverURL = userDefaults.object(forKey: LoginViewController.serverURLKey) as! String?
+        email = userDefaults.object(forKey:  LoginViewController.emailKey) as! String?
+        password = userDefaults.object(forKey: LoginViewController.passwordKey) as! String?
+    }
 }
