@@ -1,16 +1,26 @@
+////////////////////////////////////////////////////////////////////////////
 //
-//  LoginViewController.swift
-//  RealmLoginKit
+// Copyright 2017 Realm Inc.
 //
-//  Created by Tim Oliver on 1/17/17.
-//  Copyright © 2017 Realm. All rights reserved.
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
 //
+// http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+//
+////////////////////////////////////////////////////////////////////////////
 
 import UIKit
 import TORoundedTableView
 import RealmSwift
 
-enum LoginViewControllerStyle {
+@objc enum LoginViewControllerStyle: Int {
     case lightTranslucent
     case lightOpaque
     case darkTranslucent
@@ -20,9 +30,9 @@ enum LoginViewControllerStyle {
 @objc(RLMLoginViewController)
 class LoginViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UIViewControllerTransitioningDelegate {
     
-    static let serverURLKey = "RealmLoginServerURLKey"
-    static let emailKey = "RealmLoginEmailKey"
-    static let passwordKey = "RealmLoginPasswordKey"
+    private static let serverURLKey = "RealmLoginServerURLKey"
+    private static let emailKey = "RealmLoginEmailKey"
+    private static let passwordKey = "RealmLoginPasswordKey"
     
     //MARK: - Public Properties
     
@@ -381,7 +391,7 @@ class LoginViewController: UIViewController, UITableViewDataSource, UITableViewD
                 textField.returnKeyType = .done
                 cell?.textChangedHandler = { self.confirmPassword = textField.text }
                 cell?.returnButtonTappedHandler = { self.makeFirstResponder(atRow: 1) }
-                cell?.returnButtonTappedHandler = { /* Begin Submission */ }
+                cell?.returnButtonTappedHandler = { self.submitLogin() }
             default:
                 break
             }
@@ -484,6 +494,8 @@ class LoginViewController: UIViewController, UITableViewDataSource, UITableViewD
     private func submitLogin() {
         footerView.isSubmitting = true
         
+        saveLoginCredentials()
+        
         var formattedURL = serverURL
         if let schemeRange = formattedURL?.range(of: "://") {
             formattedURL = formattedURL?.substring(from: schemeRange.upperBound)
@@ -496,15 +508,17 @@ class LoginViewController: UIViewController, UITableViewDataSource, UITableViewD
         let credentials = SyncCredentials.usernamePassword(username: email!, password: password!, register: isRegistering)
         SyncUser.logIn(with: credentials, server: URL(string: "http://\(formattedURL!)")!) { (user, error) in
             DispatchQueue.main.async {
+                self.footerView.isSubmitting = false
+                
                 if let error = error {
                     let alertController = UIAlertController(title: "Unable to Sign In", message: error.localizedDescription, preferredStyle: .alert)
                     alertController.addAction(UIAlertAction(title: "Okay", style: .default, handler: nil))
                     self.present(alertController, animated: true, completion: nil)
-                    self.footerView.isSubmitting = false
+                    
                     return
                 }
                 
-                logInSuccessfulHandler(user)?
+                self.logInSuccessfulHandler?(user!)
             }
         }
     }
