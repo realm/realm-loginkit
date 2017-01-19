@@ -20,7 +20,7 @@ import UIKit
 import TORoundedTableView
 import Realm
 
-@objc enum LoginViewControllerStyle: Int {
+@objc public enum LoginViewControllerStyle: Int {
     case lightTranslucent
     case lightOpaque
     case darkTranslucent
@@ -28,7 +28,7 @@ import Realm
 }
 
 @objc(RLMLoginViewController)
-class LoginViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UIViewControllerTransitioningDelegate {
+public class LoginViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UIViewControllerTransitioningDelegate {
     
     private static let serverURLKey = "RealmLoginServerURLKey"
     private static let emailKey = "RealmLoginEmailKey"
@@ -94,7 +94,7 @@ class LoginViewController: UIViewController, UITableViewDataSource, UITableViewD
     
     //MARK: - Class Creation
     
-    init(style: LoginViewControllerStyle) {
+    public init(style: LoginViewControllerStyle) {
         super.init(nibName: nil, bundle: nil)
         self.style = style
         
@@ -111,7 +111,7 @@ class LoginViewController: UIViewController, UITableViewDataSource, UITableViewD
         self.init(style: .lightTranslucent)
     }
     
-    required init?(coder aDecoder: NSCoder) {
+    required public init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
     }
     
@@ -229,7 +229,7 @@ class LoginViewController: UIViewController, UITableViewDataSource, UITableViewD
     
     //MARK: - View Management
     
-    override func viewDidLoad() {
+    override public func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .clear
 
@@ -240,7 +240,7 @@ class LoginViewController: UIViewController, UITableViewDataSource, UITableViewD
         setUpCommonViews()
     }
 
-    override func viewDidLayoutSubviews() {
+    override public func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         layoutTableContentInset()
         copyrightView.isHidden = tableView.contentSize.height > tableView.bounds.height
@@ -302,7 +302,7 @@ class LoginViewController: UIViewController, UITableViewDataSource, UITableViewD
         
     //MARK: - Scroll View Delegate
     
-    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+    public func scrollViewDidScroll(_ scrollView: UIScrollView) {
         
         if UIApplication.shared.isStatusBarHidden {
             navigationBar.alpha = 0.0
@@ -332,11 +332,11 @@ class LoginViewController: UIViewController, UITableViewDataSource, UITableViewD
     
     //MARK: - Table View Data Source
     
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    public func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return isRegistering ? 5 : 4
     }
     
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+    public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let identifier = "CellIdentifier"
         var cell = tableView.dequeueReusableCell(withIdentifier: identifier) as? LoginTableViewCell
         if cell == nil {
@@ -474,7 +474,7 @@ class LoginViewController: UIViewController, UITableViewDataSource, UITableViewD
     
     //MARK: - View Controller Transitioning
         
-    internal func animationController(forPresented presented: UIViewController, presenting: UIViewController, source: UIViewController) -> UIViewControllerAnimatedTransitioning? {
+    public func animationController(forPresented presented: UIViewController, presenting: UIViewController, source: UIViewController) -> UIViewControllerAnimatedTransitioning? {
         let animationController = LoginViewControllerTransitioning()
         animationController.backgroundView = backgroundView
         animationController.contentView = containerView
@@ -483,7 +483,7 @@ class LoginViewController: UIViewController, UITableViewDataSource, UITableViewD
         return animationController
     }
     
-    internal func animationController(forDismissed dismissed: UIViewController) -> UIViewControllerAnimatedTransitioning? {
+    public func animationController(forDismissed dismissed: UIViewController) -> UIViewControllerAnimatedTransitioning? {
         let animationController = LoginViewControllerTransitioning()
         animationController.backgroundView = backgroundView
         animationController.contentView = containerView
