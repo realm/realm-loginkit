@@ -151,6 +151,8 @@ class LoginViewController: UIViewController, UITableViewDataSource, UITableViewD
         tableView.delaysContentTouches = false
         containerView.addSubview(tableView)
         
+        headerView.appName = Bundle.main.infoDictionary![kCFBundleNameKey as String] as? String
+        
         footerView.loginButtonTapped = {
             self.submitLogin()
         }
