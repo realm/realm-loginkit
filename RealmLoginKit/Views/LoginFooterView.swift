@@ -28,6 +28,7 @@ class LoginFooterView: UIView {
     
     private let loginButton = UIButton(type: .system)
     private let registerButton = UIButton(type: .system)
+    private let loadingIndicator = UIActivityIndicatorView(activityIndicatorStyle: .white)
     
     public var isSubmitButtonEnabled: Bool = false {
         didSet {
@@ -45,6 +46,12 @@ class LoginFooterView: UIView {
         }
         
         get { return _registering }
+    }
+    
+    var isSubmitting: Bool = false {
+        didSet {
+            updateLoadingIndicator()
+        }
     }
     
     override init(frame: CGRect) {
@@ -80,6 +87,8 @@ class LoginFooterView: UIView {
         registerButton.titleLabel?.font = UIFont.systemFont(ofSize: 15)
         registerButton.addTarget(self, action: #selector(buttonTapped(sender:)), for: .touchUpInside)
         addSubview(registerButton)
+        
+        loadingIndicator.autoresizingMask = [.flexibleTopMargin, .flexibleLeftMargin, .flexibleRightMargin, .flexibleBottomMargin]
         
         updateButtonTitles()
         updateSubmitButton()
@@ -163,6 +172,25 @@ class LoginFooterView: UIView {
         let isDarkTheme = style == .dark
         let alpha = isDarkTheme ? 0.4 : 0.7
         loginButton.alpha = isSubmitButtonEnabled ? 1.0 : CGFloat(alpha)
+    }
+    
+    private func updateLoadingIndicator() {
+        if isSubmitting {
+            loginButton.setTitle(nil, for: .normal)
+            registerButton.isEnabled = false
+            
+            loadingIndicator.frame.origin.x = loginButton.bounds.midX - loadingIndicator.bounds.midX
+            loadingIndicator.frame.origin.y = loginButton.bounds.midY - loadingIndicator.bounds.midY
+            loginButton.addSubview(loadingIndicator)
+            loadingIndicator.startAnimating()
+        }
+        else {
+            loadingIndicator.stopAnimating()
+            loadingIndicator.removeFromSuperview()
+            
+            registerButton.isEnabled = true
+            updateButtonTitles()
+        }
     }
     
     func setRegistering(_ registering: Bool, animated: Bool) {
