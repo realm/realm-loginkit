@@ -23,7 +23,7 @@ class LoginViewController: UIViewController, UITableViewDataSource, UITableViewD
     /** 
      The visual style of the login controller
     */
-    var style = LoginViewControllerStyle.lightTranslucent
+    public private(set) var style = LoginViewControllerStyle.lightTranslucent
     
     var isRegistering: Bool {
         set {
@@ -35,8 +35,10 @@ class LoginViewController: UIViewController, UITableViewDataSource, UITableViewD
     //MARK: - Private Properties
     
     /* Assets */
+    private let earthIcon = UIImage.earthIcon()
     private let lockIcon = UIImage.lockIcon()
     private let mailIcon = UIImage.mailIcon()
+    private let tickIcon = UIImage.tickIcon()
     
     /* Views */
     private let containerView = UIView()
@@ -54,9 +56,11 @@ class LoginViewController: UIViewController, UITableViewDataSource, UITableViewD
     private var keyboardHeight: CGFloat = 0.0
     
     /* Login/Register Credentials */
-    private var email: String?
-    private var password: String?
-    private var confirmPassword: String?
+    private var serverURL: String?       { didSet { validateFormItems() } }
+    private var email: String?           { didSet { validateFormItems() } }
+    private var password: String?        { didSet { validateFormItems() } }
+    private var confirmPassword: String? { didSet { validateFormItems() } }
+    private var rememberLogin: Bool = true
     
     /* Layout Constants */
     private let copyrightViewMargin: CGFloat = 45
@@ -143,13 +147,17 @@ class LoginViewController: UIViewController, UITableViewDataSource, UITableViewD
         copyrightView.frame.origin.y = view.bounds.height - copyrightViewMargin
         copyrightView.frame.origin.x = (view.bounds.width - copyrightView.frame.width) * 0.5
         containerView.addSubview(copyrightView)
+        
+        applyTheme()
     }
     
     func applyTheme() {
-
+        
+        // view accessory views
         navigationBar.barStyle  = isDarkStyle ? .blackTranslucent : .default
         copyrightView.textColor = isDarkStyle ? UIColor(white: 0.3, alpha: 1.0) : UIColor(white: 0.6, alpha: 1.0)
         
+        // view background
         if isTranslucent {
             backgroundView?.backgroundColor = UIColor(white: isDarkStyle ? 0.1 : 0.9, alpha: 0.3)
         }
@@ -159,6 +167,35 @@ class LoginViewController: UIViewController, UITableViewDataSource, UITableViewD
         
         if effectView != nil {
             effectView?.effect = UIBlurEffect(style: isDarkStyle ? .dark : .light)
+        }
+        
+        // table accessory views
+        headerView.style = isDarkStyle ? .dark : .light
+        footerView.style = isDarkStyle ? .dark : .light
+        
+        // table view and cells
+        tableView.separatorColor = isDarkStyle ? UIColor(white: 0.4, alpha: 1.0) : nil
+        tableView.cellBackgroundColor = UIColor(white: isDarkStyle ? 0.2 : 1.0, alpha: 1.0)
+    }
+    
+    func applyTheme(to tableViewCell: LoginTableViewCell) {
+        tableViewCell.imageView?.tintColor = UIColor(white: isDarkStyle ? 0.4 : 0.6, alpha: 1.0)
+        
+        // Only touch the text field if we're actively using it
+        if tableViewCell.textChangedHandler != nil {
+            tableViewCell.textField.textColor = isDarkStyle ? .white : .black
+            
+            if isDarkStyle {
+                let placeholderText = tableViewCell.textField.placeholder
+                let placeholderTextColor = UIColor(white: 0.45, alpha: 1.0)
+                let attributes = [NSForegroundColorAttributeName: placeholderTextColor]
+                tableViewCell.textField.attributedPlaceholder =  NSAttributedString(string: placeholderText!, attributes: attributes)
+            }
+            else {
+                let placeholderText = tableViewCell.textField.placeholder
+                tableViewCell.textField.attributedPlaceholder = nil //setting this as nil also sets `placeholder` to nil
+                tableViewCell.textField.placeholder = placeholderText
+            }
         }
     }
     
@@ -211,6 +248,33 @@ class LoginViewController: UIViewController, UITableViewDataSource, UITableViewD
         tableView.contentInset = edgeInsets
     }
     
+    //MARK: - State Management
+    private func validateFormItems() {
+        var formIsValid = true
+        
+        if serverURL?.range(of: ".") == nil {
+            formIsValid = false
+        }
+        
+        if email?.range(of: "@") == nil || email?.range(of: ".") == nil {
+            formIsValid = false
+        }
+        
+        if password?.characters.count == 0 {
+            formIsValid = false
+        }
+        
+        if isRegistering && confirmPassword?.characters.count == 0 {
+            formIsValid = false
+        }
+        
+        if isRegistering && password != confirmPassword {
+            formIsValid = false
+        }
+        
+        footerView.isSubmitButtonEnabled = formIsValid
+    }
+        
     //MARK: - Scroll View Delegate
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
@@ -244,68 +308,88 @@ class LoginViewController: UIViewController, UITableViewDataSource, UITableViewD
     //MARK: - Table View Data Source
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return isRegistering ? 3 : 2
+        return isRegistering ? 5 : 4
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let identifier = "CapCell"
-        var cell = tableView.dequeueReusableCell(withIdentifier: identifier)
+        let identifier = "CellIdentifier"
+        var cell = tableView.dequeueReusableCell(withIdentifier: identifier) as? LoginTableViewCell
         if cell == nil {
             cell = LoginTableViewCell(style: .default, reuseIdentifier: identifier)
-            cell?.imageView?.tintColor = UIColor(white: 0.6, alpha: 1.0)
-            cell?.selectionStyle = .none
         }
-        
-        let textFieldCell = (cell as! LoginTableViewCell)
+    
+        let lastCellIndex = !isRegistering ? 3 : 4
         
         // Configure rounded caps
-        textFieldCell.topCornersRounded = (indexPath.row == 0)
-        textFieldCell.bottomCornersRounded = (!isRegistering ? indexPath.row == 1 : indexPath.row == 2)
+        cell?.topCornersRounded    = (indexPath.row == 0)
+        cell?.bottomCornersRounded = (indexPath.row == lastCellIndex)
         
-        // Configure icons
-        textFieldCell.imageView?.image = (indexPath.row == 0 ? mailIcon : lockIcon)
+        cell?.imageView?.image = image(forRow: indexPath.row)
         
-        let textField = textFieldCell.textField
-        
-        // Configure text field
-        switch indexPath.row {
-        case 0:
-            textField.placeholder = "Email Address"
-            textField.text = email
-            textField.isSecureTextEntry = false
-            textField.keyboardType = .emailAddress
-            textField.returnKeyType = .next
-            textFieldCell.textChangedHandler = { self.email = textFieldCell.textField.text }
-            textFieldCell.returnButtonTappedHandler = { self.makeFirstResponder(atRow: 1) }
-        case 1:
-            textField.placeholder = "Password"
-            textField.text = password
-            textField.isSecureTextEntry = true
-            textField.keyboardType = .default
-            textField.returnKeyType = isRegistering ? .next : .done
-            textFieldCell.textChangedHandler = { self.password = textFieldCell.textField.text }
-            textFieldCell.returnButtonTappedHandler = {
-                if self.isRegistering {
-                    self.makeFirstResponder(atRow: 1)
+        if indexPath.row == lastCellIndex {
+            cell?.textLabel!.text = "Remember My Account"
+            cell?.switch.isOn = rememberLogin
+            cell?.switchChangedHandler = { self.rememberLogin = (cell?.switch.isOn)! }
+        }
+        else {
+            let textField = cell!.textField
+            
+            switch indexPath.row {
+            case 0:
+                textField.placeholder = "Server URL"
+                textField.text = serverURL
+                textField.keyboardType = .URL
+                cell?.textChangedHandler = { self.serverURL = textField.text }
+                cell?.returnButtonTappedHandler = { self.makeFirstResponder(atRow: 1) }
+            case 1:
+                textField.placeholder = "Email Address"
+                textField.text = email
+                textField.keyboardType = .emailAddress
+                cell?.textChangedHandler = { self.email = textField.text }
+                cell?.returnButtonTappedHandler = { self.makeFirstResponder(atRow: 2) }
+            case 2:
+                textField.placeholder = "Password"
+                textField.text = password
+                textField.isSecureTextEntry = true
+                textField.returnKeyType = isRegistering ? .next : .done
+                cell?.textChangedHandler = { self.password = textField.text }
+                cell?.returnButtonTappedHandler = {
+                    if self.isRegistering {
+                        self.makeFirstResponder(atRow: 3)
+                    }
+                    else {
+                        // Submit Form
+                    }
                 }
-                else {
-                    // Submit Form
-                }
+            case 3:
+                textField.placeholder = "Confirm Password"
+                textField.text = confirmPassword
+                textField.isSecureTextEntry = true
+                textField.returnKeyType = .done
+                cell?.textChangedHandler = { self.confirmPassword = textField.text }
+                cell?.returnButtonTappedHandler = { self.makeFirstResponder(atRow: 1) }
+                cell?.returnButtonTappedHandler = { /* Begin Submission */ }
+            default:
+                break
             }
-        case 2:
-            textField.placeholder = "Confirm Password"
-            textField.text = confirmPassword
-            textField.isSecureTextEntry = true
-            textField.keyboardType = .default
-            textField.returnKeyType = .done
-            textFieldCell.textChangedHandler = { self.confirmPassword = textFieldCell.textField.text }
-            textFieldCell.returnButtonTappedHandler = { self.makeFirstResponder(atRow: 1) }
-            textFieldCell.returnButtonTappedHandler = { /* Begin Submission */ }
-        default:
-            break
+
         }
         
-        return textFieldCell
+        // Apply the theme after all cell configuration is done
+        applyTheme(to: cell!)
+        
+        return cell!
+    }
+    
+    private func image(forRow row: Int) -> UIImage {
+        switch row {
+        case 0: return earthIcon
+        case 1: return mailIcon
+        case 2: return lockIcon
+        case 3: return isRegistering ? lockIcon : tickIcon
+        case 4: return tickIcon
+        default: return mailIcon
+        }
     }
     
     // MARK: - Login/Register Transition
@@ -319,10 +403,10 @@ class LoginViewController: UIViewController, UITableViewDataSource, UITableViewD
         
         // Insert/Delete the 'confirm password' field
         if _registering {
-            tableView.insertRows(at: [IndexPath(row: 2, section: 0)], with: .fade)
+            tableView.insertRows(at: [IndexPath(row: 3, section: 0)], with: .fade)
         }
         else {
-            tableView.deleteRows(at: [IndexPath(row: 2, section: 0)], with: .fade)
+            tableView.deleteRows(at: [IndexPath(row: 3, section: 0)], with: .fade)
         }
         
         // Reload the middle row to refresh its cap graphics
@@ -364,6 +448,7 @@ class LoginViewController: UIViewController, UITableViewDataSource, UITableViewD
     }
     
     //MARK: - View Controller Transitioning
+        
     func animationController(forPresented presented: UIViewController, presenting: UIViewController, source: UIViewController) -> UIViewControllerAnimatedTransitioning? {
         let animationController = LoginViewControllerTransitioning()
         animationController.backgroundView = backgroundView

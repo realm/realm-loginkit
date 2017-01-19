@@ -15,6 +15,10 @@ enum LoginHeaderViewStyle {
 
 class LoginHeaderView: UIView {
 
+    public var style: LoginHeaderViewStyle = .light {
+        didSet { applyTheme() }
+    }
+    
     private let viewHeight = 190 // Overall height of the view
     private let bottomMargin = 30 // Gap between the label and the bottom of the view
     
@@ -53,7 +57,11 @@ class LoginHeaderView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
+    //MARK: - View Management
+    
     private func setUpViews() {
+        realmLogoView.tintColor = .white
+        realmLogoView.logoStrokeWidth = 3.0
         addSubview(realmLogoView)
         
         titleLabel.font = UIFont.systemFont(ofSize: 28.0)
@@ -62,6 +70,7 @@ class LoginHeaderView: UIView {
         addSubview(titleLabel)
         
         updateTitleView()
+        applyTheme()
     }
     
     override func layoutSubviews() {
@@ -77,7 +86,14 @@ class LoginHeaderView: UIView {
         rect.origin.y = bounds.size.height - CGFloat(bottomMargin + Int(rect.size.height))
         titleLabel.frame = rect
     }
+    
+    private func applyTheme() {
+        let isDarkTheme = style == .dark
+        titleLabel.textColor = isDarkTheme ? .white : .black
+    }
 
+    //MARK: Current State Management
+    
     private func updateTitleView() {
         var titleName = appName
         if titleName == nil {
@@ -91,6 +107,8 @@ class LoginHeaderView: UIView {
             titleLabel.text = "Log Into \(titleName!)"
         }
     }
+    
+    //MARK: Register State Transition
     
     func setRegistering(_ registering: Bool, animated: Bool) {
         guard registering != _registering else {

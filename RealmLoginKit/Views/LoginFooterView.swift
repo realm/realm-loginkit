@@ -15,6 +15,10 @@ enum LoginFooterViewStyle {
 
 class LoginFooterView: UIView {
     
+    public var style: LoginHeaderViewStyle = .light {
+        didSet { applyTheme() }
+    }
+    
     private let viewHeight = 145 // Overall height of the view
     private let loginButtonHeight = 50
     private let loginButtonWidthScale = 0.8
@@ -61,7 +65,6 @@ class LoginFooterView: UIView {
     //MARK: - View Handling
     
     private func setUpViews() {
-        loginButton.backgroundColor = UIColor(red: 0.941, green: 0.278, blue: 0.529, alpha: 1.0)
         loginButton.layer.cornerRadius = 5
         loginButton.layer.masksToBounds = true
         loginButton.setTitleColor(.white, for: .normal)
@@ -70,20 +73,18 @@ class LoginFooterView: UIView {
         loginButton.isEnabled = false
         addSubview(loginButton)
         
-        let blueColor = UIColor(red: 0.219, green: 0.278, blue: 0.494, alpha: 1.0)
-        
         registerButton.backgroundColor = .clear
         registerButton.layer.cornerRadius = 5
-        registerButton.layer.borderColor = blueColor.cgColor
         registerButton.layer.borderWidth = 1
         registerButton.layer.masksToBounds = true
-        registerButton.setTitleColor(blueColor, for: .normal)
         registerButton.titleLabel?.font = UIFont.systemFont(ofSize: 15)
         registerButton.addTarget(self, action: #selector(buttonTapped(sender:)), for: .touchUpInside)
         addSubview(registerButton)
         
         updateButtonTitles()
         updateSubmitButton()
+        
+        applyTheme()
     }
  
     override func layoutSubviews() {
@@ -105,6 +106,27 @@ class LoginFooterView: UIView {
         registerButton.frame = rect
     }
 
+    private func applyTheme() {
+        let isDarkTheme = style == .dark
+        
+        if isDarkTheme {
+            loginButton.backgroundColor = UIColor(red: 0.941, green: 0.278, blue: 0.529, alpha: 1.0)
+            
+            let registerColor = UIColor(red: 0.533, green: 0.521, blue: 0.898, alpha: 1.0)
+            registerButton.layer.borderColor = registerColor.cgColor
+            registerButton.setTitleColor(registerColor, for: .normal)
+        }
+        else {
+            loginButton.backgroundColor = UIColor(red: 0.941, green: 0.278, blue: 0.529, alpha: 1.0)
+            
+            let registerColor = UIColor(red: 0.345, green: 0.337, blue: 0.615, alpha: 1.0)
+            registerButton.layer.borderColor = registerColor.cgColor
+            registerButton.setTitleColor(registerColor, for: .normal)
+        }
+        
+        updateSubmitButton()
+    }
+    
     func buttonTapped(sender: AnyObject?) {
         guard let sender = sender else {
             return
@@ -135,8 +157,12 @@ class LoginFooterView: UIView {
     }
     
     private func updateSubmitButton() {
+        
         loginButton.isEnabled = isSubmitButtonEnabled
-        loginButton.alpha = isSubmitButtonEnabled ? 1.0 : 0.7
+        
+        let isDarkTheme = style == .dark
+        let alpha = isDarkTheme ? 0.4 : 0.7
+        loginButton.alpha = isSubmitButtonEnabled ? 1.0 : CGFloat(alpha)
     }
     
     func setRegistering(_ registering: Bool, animated: Bool) {
