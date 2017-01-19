@@ -164,7 +164,7 @@ class LoginFooterView: UIView {
         
         if _registering {
             loginText = "Sign Up"
-            registerText = "Log Into Your Account"
+            registerText = "Log in to Your Account"
         }
         else {
             loginText = "Log In"

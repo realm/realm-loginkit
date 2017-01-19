@@ -111,10 +111,10 @@ class LoginHeaderView: UIView {
         }
         
         if isRegistering {
-            titleLabel.text = "Sign Up for \(titleName!)"
+            titleLabel.text = "Sign up for \(titleName!)"
         }
         else {
-            titleLabel.text = "Log Into \(titleName!)"
+            titleLabel.text = "Log in to \(titleName!)"
         }
     }
     
