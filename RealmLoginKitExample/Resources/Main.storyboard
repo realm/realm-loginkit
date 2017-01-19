@@ -23,7 +23,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="cTM-43-SWx" customClass="RealmLogoView" customModule="RealmLoginKit" customModuleProvider="target">
-                                <rect key="frame" x="46" y="192" width="282" height="282"/>
+                                <rect key="frame" x="66" y="212" width="242" height="242"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 <constraints>
                                     <constraint firstAttribute="width" relation="lessThanOrEqual" constant="300" id="72O-Aq-yQS">
@@ -36,15 +36,32 @@
                                     <userDefinedRuntimeAttribute type="boolean" keyPath="isWordMarkHidden" value="YES"/>
                                 </userDefinedRuntimeAttributes>
                             </view>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ofu-Mv-3wI">
+                                <rect key="frame" x="37.5" y="588" width="300" height="34"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="300" id="YBX-6N-wRC"/>
+                                    <constraint firstAttribute="height" constant="34" id="c7p-cr-ejw"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="20"/>
+                                <state key="normal" title="Log Into Realm Object Server"/>
+                                <connections>
+                                    <action selector="showLoginButtonTapped:" destination="BYZ-38-t0r" eventType="touchUpInside" id="J99-yb-S2V"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                         <constraints>
-                            <constraint firstItem="cTM-43-SWx" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" priority="250" constant="30" id="TAj-2F-3Cz"/>
+                            <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="ofu-Mv-3wI" secondAttribute="bottom" constant="25" id="6ZJ-dX-mrj"/>
+                            <constraint firstItem="ofu-Mv-3wI" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="IDq-QU-g1w"/>
+                            <constraint firstItem="cTM-43-SWx" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" priority="250" constant="50" id="TAj-2F-3Cz"/>
                             <constraint firstItem="cTM-43-SWx" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" id="aQt-K3-9EK"/>
                             <constraint firstItem="cTM-43-SWx" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="avv-q6-7Jk"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="Realm LoginKit" id="aoN-C9-GU7"/>
+                    <connections>
+                        <outlet property="realmLogoView" destination="cTM-43-SWx" id="Hda-sU-Ytf"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>

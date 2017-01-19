@@ -27,9 +27,6 @@ class ViewController: UIViewController {
 
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        
-//        let loginViewController = LoginViewController()
-//        present(loginViewController, animated: false, completion: nil)
     }
     
     func segmentedControlChanged() {
@@ -39,6 +36,11 @@ class ViewController: UIViewController {
         navigationController?.navigationBar.barStyle = isDarkMode ? .blackTranslucent : .default
         view.window?.tintColor = isDarkMode ? UIColor(red:90.0/255.0, green:120.0/255.0, blue:218.0/255.0, alpha:1.0) : nil;
         realmLogoView?.style = isDarkMode ? .monochrome : .colored
+    }
+    
+    @IBAction func showLoginButtonTapped(_ sender: AnyObject?) {
+        let loginViewController = LoginViewController()
+        present(loginViewController, animated: true, completion: nil)
     }
 }
 

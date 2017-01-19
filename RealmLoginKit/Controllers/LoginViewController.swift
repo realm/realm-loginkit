@@ -16,7 +16,7 @@ enum LoginViewControllerStyle {
     case darkOpaque
 }
 
-class LoginViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
+class LoginViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UIViewControllerTransitioningDelegate {
     
     //MARK: - Public Properties
     
@@ -39,6 +39,7 @@ class LoginViewController: UIViewController, UITableViewDataSource, UITableViewD
     private let mailIcon = UIImage.mailIcon()
     
     /* Views */
+    private let containerView = UIView()
     private let navigationBar = UINavigationBar()
     private let tableView = TORoundedTableView()
     private let headerView = LoginHeaderView()
@@ -46,7 +47,7 @@ class LoginViewController: UIViewController, UITableViewDataSource, UITableViewD
     private let copyrightView = UILabel()
     
     private var effectView: UIVisualEffectView?
-    private var dimmingView: UIView?
+    private var backgroundView: UIView?
     
     /* State tracking */
     private var _registering: Bool = false
@@ -75,6 +76,7 @@ class LoginViewController: UIViewController, UITableViewDataSource, UITableViewD
         super.init(nibName: nil, bundle: nil)
         self.style = style
         
+        transitioningDelegate = self
         modalPresentationStyle = isTranslucent ? .overFullScreen : .fullScreen
         
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow(notification:)), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
@@ -97,14 +99,18 @@ class LoginViewController: UIViewController, UITableViewDataSource, UITableViewD
         effectView?.frame = view.bounds
         effectView?.autoresizingMask = [.flexibleWidth, .flexibleHeight]
         view.addSubview(effectView!)
-        
-        dimmingView = UIView()
-        dimmingView?.frame = view.bounds
-        dimmingView?.autoresizingMask = [.flexibleWidth, .flexibleHeight]
-        view.addSubview(dimmingView!)
     }
     
     private func setUpCommonViews() {
+        backgroundView = UIView()
+        backgroundView?.frame = view.bounds
+        backgroundView?.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+        view.addSubview(backgroundView!)
+        
+        containerView.frame = view.bounds
+        containerView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+        view.addSubview(containerView)
+        
         tableView.frame = view.bounds
         tableView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
         tableView.dataSource = self
@@ -114,7 +120,7 @@ class LoginViewController: UIViewController, UITableViewDataSource, UITableViewD
         tableView.tableHeaderView = headerView
         tableView.tableFooterView = footerView
         tableView.delaysContentTouches = false
-        view.addSubview(tableView)
+        containerView.addSubview(tableView)
         
         footerView.loginButtonTapped = {
             
@@ -136,7 +142,7 @@ class LoginViewController: UIViewController, UITableViewDataSource, UITableViewD
         copyrightView.autoresizingMask = [.flexibleLeftMargin, .flexibleRightMargin, .flexibleTopMargin]
         copyrightView.frame.origin.y = view.bounds.height - copyrightViewMargin
         copyrightView.frame.origin.x = (view.bounds.width - copyrightView.frame.width) * 0.5
-        view.addSubview(copyrightView)
+        containerView.addSubview(copyrightView)
     }
     
     func applyTheme() {
@@ -144,13 +150,15 @@ class LoginViewController: UIViewController, UITableViewDataSource, UITableViewD
         navigationBar.barStyle  = isDarkStyle ? .blackTranslucent : .default
         copyrightView.textColor = isDarkStyle ? UIColor(white: 0.3, alpha: 1.0) : UIColor(white: 0.6, alpha: 1.0)
         
+        if isTranslucent {
+            backgroundView?.backgroundColor = UIColor(white: isDarkStyle ? 0.1 : 0.9, alpha: 0.3)
+        }
+        else {
+            backgroundView?.backgroundColor = UIColor(white: isDarkStyle ? 0.15 : 0.95, alpha: 1.0)
+        }
         
         if effectView != nil {
             effectView?.effect = UIBlurEffect(style: isDarkStyle ? .dark : .light)
-        }
-        
-        if dimmingView != nil {
-            dimmingView?.backgroundColor = isDarkStyle ? UIColor(white: 0.1, alpha: 0.3) : UIColor(white: 0.9, alpha: 0.3)
         }
     }
     
@@ -323,6 +331,7 @@ class LoginViewController: UIViewController, UITableViewDataSource, UITableViewD
         // Animate the content size adjustments
         animateContentInsetTransition()
         
+        // Update the accessory views
         headerView.setRegistering(_registering, animated: animated)
         footerView.setRegistering(_registering, animated: animated)
     }
@@ -352,5 +361,24 @@ class LoginViewController: UIViewController, UITableViewDataSource, UITableViewD
         // When animating the table view edge insets when its rounded, the header view
         // snaps because their width override is caught in the animation block.
         tableView.tableHeaderView?.layer.removeAllAnimations()
+    }
+    
+    //MARK: - View Controller Transitioning
+    func animationController(forPresented presented: UIViewController, presenting: UIViewController, source: UIViewController) -> UIViewControllerAnimatedTransitioning? {
+        let animationController = LoginViewControllerTransitioning()
+        animationController.backgroundView = backgroundView
+        animationController.contentView = containerView
+        animationController.effectsView = effectView
+        animationController.isDismissing = false
+        return animationController
+    }
+    
+    func animationController(forDismissed dismissed: UIViewController) -> UIViewControllerAnimatedTransitioning? {
+        let animationController = LoginViewControllerTransitioning()
+        animationController.backgroundView = backgroundView
+        animationController.contentView = containerView
+        animationController.effectsView = effectView
+        animationController.isDismissing = true
+        return animationController
     }
 }
