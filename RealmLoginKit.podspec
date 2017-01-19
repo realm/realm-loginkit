@@ -9,6 +9,6 @@ Pod::Spec.new do |s|
   s.requires_arc = true
   s.platform = :ios, '9.0'
   s.source_files = 'RealmLoginKit/**/*.{swift}'
-  s.dependency 'Realm'
+  s.dependency 'RealmSwift'
   s.dependency 'TORoundedTableView'
 end
