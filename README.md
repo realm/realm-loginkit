@@ -1,8 +1,8 @@
-# Realm LoginKit
-
 <p align="center">
 <img src="https://raw.githubusercontent.com/realm-demos/realm-loginkit/master/screenshot.jpg" width="500" style="margin:0 auto" />
 </p>
+
+# Realm LoginKit
 
 Realm LoginKit is a generic login view controller for iOS using the Realm Mobile Platform.
 
