@@ -180,6 +180,7 @@ class LoginViewController: UIViewController, UITableViewDataSource, UITableViewD
     
     func applyTheme(to tableViewCell: LoginTableViewCell) {
         tableViewCell.imageView?.tintColor = UIColor(white: isDarkStyle ? 0.4 : 0.6, alpha: 1.0)
+        tableViewCell.textLabel?.textColor = isDarkStyle ? .white : .black
         
         // Only touch the text field if we're actively using it
         if tableViewCell.textChangedHandler != nil {
@@ -215,6 +216,7 @@ class LoginViewController: UIViewController, UITableViewDataSource, UITableViewD
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         layoutTableContentInset()
+        copyrightView.isHidden = tableView.contentSize.height > tableView.bounds.height
     }
     
     func layoutTableContentInset() {
@@ -297,7 +299,7 @@ class LoginViewController: UIViewController, UITableViewDataSource, UITableViewD
             navigationBar.alpha = 0.0
         }
         else {
-            navigationBar.alpha = 1.0 - ((abs(verticalOffset) - 10) / statusBarFrameHeight)
+            navigationBar.alpha = 1.0 - ((abs(verticalOffset) - statusBarFrameHeight) / 10.0)
         }
         
         // Offset the copyright label
