@@ -7,6 +7,7 @@ target 'RealmLoginKit' do
 
   # Pods for RealmLoginKit
   pod 'TORoundedTableView'
+  pod 'RealmSwift'
 
   target 'RealmLoginKitTests' do
     inherit! :search_paths

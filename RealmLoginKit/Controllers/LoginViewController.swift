@@ -412,7 +412,7 @@ class LoginViewController: UIViewController, UITableViewDataSource, UITableViewD
         }
         
         // Reload the middle row to refresh its cap graphics
-        tableView.reloadRows(at: [IndexPath(row: 1, section: 0)], with: .none)
+        tableView.reloadRows(at: [IndexPath(row: 1, section: 0), IndexPath(row: 2, section: 0)], with: .none)
         
         // Animate the content size adjustments
         animateContentInsetTransition()
@@ -451,7 +451,7 @@ class LoginViewController: UIViewController, UITableViewDataSource, UITableViewD
     
     //MARK: - View Controller Transitioning
         
-    func animationController(forPresented presented: UIViewController, presenting: UIViewController, source: UIViewController) -> UIViewControllerAnimatedTransitioning? {
+    internal func animationController(forPresented presented: UIViewController, presenting: UIViewController, source: UIViewController) -> UIViewControllerAnimatedTransitioning? {
         let animationController = LoginViewControllerTransitioning()
         animationController.backgroundView = backgroundView
         animationController.contentView = containerView
@@ -460,7 +460,7 @@ class LoginViewController: UIViewController, UITableViewDataSource, UITableViewD
         return animationController
     }
     
-    func animationController(forDismissed dismissed: UIViewController) -> UIViewControllerAnimatedTransitioning? {
+    internal func animationController(forDismissed dismissed: UIViewController) -> UIViewControllerAnimatedTransitioning? {
         let animationController = LoginViewControllerTransitioning()
         animationController.backgroundView = backgroundView
         animationController.contentView = containerView
@@ -468,4 +468,6 @@ class LoginViewController: UIViewController, UITableViewDataSource, UITableViewD
         animationController.isDismissing = true
         return animationController
     }
+    
+    
 }

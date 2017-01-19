@@ -1,12 +1,20 @@
 PODS:
+  - Realm (2.3.0):
+    - Realm/Headers (= 2.3.0)
+  - Realm/Headers (2.3.0)
+  - RealmSwift (2.3.0):
+    - Realm (= 2.3.0)
   - TORoundedTableView (0.0.3)
 
 DEPENDENCIES:
+  - RealmSwift
   - TORoundedTableView
 
 SPEC CHECKSUMS:
+  Realm: 69d7de9aa569a11eed490aaabc8f2109e3985ecf
+  RealmSwift: dc6f99ea55e59490cec69c860f91932b6bf7efb6
   TORoundedTableView: 4155565233135d81d6626a0c4ecfba27991cf2b1
 
-PODFILE CHECKSUM: 22c91849d85f1b4f770c684fcbee0db3d1678a36
+PODFILE CHECKSUM: ac14775e254f0f672ac4327800e18c1652c1fe09
 
 COCOAPODS: 1.1.1
