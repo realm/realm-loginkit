@@ -18,7 +18,7 @@
 
 import UIKit
 import TORoundedTableView
-import RealmSwift
+import Realm
 
 @objc enum LoginViewControllerStyle: Int {
     case lightTranslucent
@@ -48,7 +48,7 @@ class LoginViewController: UIViewController, UITableViewDataSource, UITableViewD
         get { return _registering }
     }
     
-    public var logInSuccessfulHandler: ((SyncUser) -> Void)?
+    public var logInSuccessfulHandler: ((RLMSyncUser) -> Void)?
     
     //MARK: - Private Properties
     
@@ -507,8 +507,8 @@ class LoginViewController: UIViewController, UITableViewDataSource, UITableViewD
             formattedURL = "\(formattedURL!):9080"
         }
         
-        let credentials = SyncCredentials.usernamePassword(username: email!, password: password!, register: isRegistering)
-        SyncUser.logIn(with: credentials, server: URL(string: "http://\(formattedURL!)")!) { (user, error) in
+        let credentials = RLMSyncCredentials(username: email!, password: password!, register: isRegistering)
+        RLMSyncUser.__logIn(with: credentials, authServerURL: URL(string: "http://\(formattedURL!)")!, timeout: 30, onCompletion: { (user, error) in
             DispatchQueue.main.async {
                 self.footerView.isSubmitting = false
                 
@@ -522,7 +522,7 @@ class LoginViewController: UIViewController, UITableViewDataSource, UITableViewD
                 
                 self.logInSuccessfulHandler?(user!)
             }
-        }
+        })
     }
     
     private func saveLoginCredentials() {

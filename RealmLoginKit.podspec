@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name     = 'RealmLoginKit'
-  s.version  = '0.0.1'
+  s.version  = '0.0.3'
   s.license  =  { :type => 'Apache-2.0', :file => 'LICENSE' }
   s.summary  = 'A generic login view controller for apps that use the Realm Mobile Platform'
   s.homepage = 'https://realm.io'
@@ -9,6 +9,6 @@ Pod::Spec.new do |s|
   s.requires_arc = true
   s.platform = :ios, '9.0'
   s.source_files = 'RealmLoginKit/**/*.{swift}'
-  s.dependency 'RealmSwift'
+  s.dependency 'Realm'
   s.dependency 'TORoundedTableView'
 end
