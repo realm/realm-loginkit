@@ -34,14 +34,15 @@ class LoginViewControllerTransitioning: NSObject, UIViewControllerAnimatedTransi
         let duration = self.transitionDuration(using: transitionContext)
         let containerView = transitionContext.containerView
         
-        let keyName = isDismissing ? UITransitionContextViewControllerKey.from : UITransitionContextViewControllerKey.to
-        let viewController = transitionContext.viewController(forKey: keyName)
+        let fromViewController = transitionContext.viewController(forKey: UITransitionContextViewControllerKey.from)
+        let toViewController = transitionContext.viewController(forKey: UITransitionContextViewControllerKey.to)
         
         // Hold onto a reference to the effect
         let effect = effectsView?.effect
         
-        // Size the controller to full screen
-        viewController?.view.frame = containerView.bounds
+        // Make sure both view controllers are full screen
+        fromViewController?.view.frame = containerView.bounds
+        toViewController?.view.frame   = containerView.bounds
         
         // set up the initial animation state
         contentView?.frame.origin.y = !isDismissing ? containerView.frame.maxY : containerView.bounds.minY
@@ -49,7 +50,12 @@ class LoginViewControllerTransitioning: NSObject, UIViewControllerAnimatedTransi
         effectsView?.effect = !isDismissing ? nil : effect
         
         if !isDismissing {
-            containerView.addSubview(viewController!.view)
+            containerView.addSubview(toViewController!.view)
+        }
+        else {
+            if fromViewController?.modalPresentationStyle != .overFullScreen {
+                containerView.insertSubview(toViewController!.view, at: 0)
+            }
         }
         
         // perform the animation
@@ -58,10 +64,7 @@ class LoginViewControllerTransitioning: NSObject, UIViewControllerAnimatedTransi
             self.backgroundView?.alpha = !self.isDismissing ? 1.0 : 0.0
             self.effectsView?.effect = !self.isDismissing ? effect : nil
         }) { complete in
-            if self.isDismissing {
-                viewController?.view.removeFromSuperview()
-            }
-            
+            self.effectsView?.effect = effect
             transitionContext.completeTransition(!transitionContext.transitionWasCancelled)
         }
     }

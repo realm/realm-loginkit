@@ -100,6 +100,7 @@ public class LoginViewController: UIViewController, UITableViewDataSource, UITab
         
         transitioningDelegate = self
         modalPresentationStyle = isTranslucent ? .overFullScreen : .fullScreen
+        modalTransitionStyle = .crossDissolve
         
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow(notification:)), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide(notification:)), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
