@@ -12,7 +12,7 @@ It provides a form interface to allow users to log in, or even sign up for the f
 
 * Fully adaptive between iPhone and iPad size classes
 * Provides easy swapping between logging in, and signin up for the first time,
-* Light & Dark Themes: For light apps (like Realm Draw) as well as dark apps (like Relalm Tasks)
+* Light & Dark Themes: For light apps (like Realm Draw) as well as dark apps (like Realm Tasks)
 * Background can either be opaque, or translucent.
 * Can be imported and used in Objective-C.
 
