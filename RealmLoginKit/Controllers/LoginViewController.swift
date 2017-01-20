@@ -48,7 +48,7 @@ public class LoginViewController: UIViewController, UITableViewDataSource, UITab
         get { return _registering }
     }
     
-    public var logInSuccessfulHandler: ((RLMSyncUser) -> Void)?
+    public var loginSuccessfulHandler: ((RLMSyncUser) -> Void)?
     
     //MARK: - Private Properties
     
@@ -521,7 +521,7 @@ public class LoginViewController: UIViewController, UITableViewDataSource, UITab
                     return
                 }
                 
-                self.logInSuccessfulHandler?(user!)
+                self.loginSuccessfulHandler?(user!)
             }
         })
     }
