@@ -175,16 +175,15 @@ public class LoginViewController: UIViewController, UITableViewDataSource, UITab
         copyrightView.frame.origin.y = view.bounds.height - copyrightViewMargin
         copyrightView.frame.origin.x = (view.bounds.width - copyrightView.frame.width) * 0.5
         containerView.addSubview(copyrightView)
-        
+
         applyTheme()
     }
     
     func applyTheme() {
-        
         // view accessory views
         navigationBar.barStyle  = isDarkStyle ? .blackTranslucent : .default
         copyrightView.textColor = isDarkStyle ? UIColor(white: 0.3, alpha: 1.0) : UIColor(white: 0.6, alpha: 1.0)
-        
+
         // view background
         if isTranslucent {
             backgroundView?.backgroundColor = UIColor(white: isDarkStyle ? 0.1 : 0.9, alpha: 0.3)
@@ -192,28 +191,28 @@ public class LoginViewController: UIViewController, UITableViewDataSource, UITab
         else {
             backgroundView?.backgroundColor = UIColor(white: isDarkStyle ? 0.15 : 0.95, alpha: 1.0)
         }
-        
+
         if effectView != nil {
             effectView?.effect = UIBlurEffect(style: isDarkStyle ? .dark : .light)
         }
-        
+
         // table accessory views
         headerView.style = isDarkStyle ? .dark : .light
         footerView.style = isDarkStyle ? .dark : .light
-        
+
         // table view and cells
         tableView.separatorColor = isDarkStyle ? UIColor(white: 0.4, alpha: 1.0) : nil
         tableView.cellBackgroundColor = UIColor(white: isDarkStyle ? 0.2 : 1.0, alpha: 1.0)
     }
-    
+
     func applyTheme(to tableViewCell: LoginTableViewCell) {
         tableViewCell.imageView?.tintColor = UIColor(white: isDarkStyle ? 0.4 : 0.6, alpha: 1.0)
         tableViewCell.textLabel?.textColor = isDarkStyle ? .white : .black
-        
+
         // Only touch the text field if we're actively using it
         if tableViewCell.textChangedHandler != nil {
             tableViewCell.textField.textColor = isDarkStyle ? .white : .black
-            
+
             if isDarkStyle {
                 let placeholderText = tableViewCell.textField.placeholder
                 let placeholderTextColor = UIColor(white: 0.45, alpha: 1.0)
@@ -229,7 +228,7 @@ public class LoginViewController: UIViewController, UITableViewDataSource, UITab
     }
     
     //MARK: - View Management
-    
+
     override public func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .clear
@@ -237,7 +236,7 @@ public class LoginViewController: UIViewController, UITableViewDataSource, UITab
         if isTranslucent {
             setUpTranslucentViews()
         }
-        
+
         setUpCommonViews()
     }
 
@@ -246,15 +245,15 @@ public class LoginViewController: UIViewController, UITableViewDataSource, UITab
         layoutTableContentInset()
         copyrightView.isHidden = tableView.contentSize.height > tableView.bounds.height
     }
-    
+
     func layoutTableContentInset() {
-        
+
         // Vertically align the table view so the table cells are in the middle
         let boundsHeight = view.bounds.size.height - keyboardHeight // Adjusted for keyboard visibility
         let contentHeight = tableView.contentSize.height
         let sectionHeight = tableView.rect(forSection: 0).size.height
         let contentMidPoint: CGFloat //
-        
+
         // If keyboard is not visible, align the table cells to the middle of the screen,
         // else just align the whole content region
         if keyboardHeight > 0 {
@@ -263,15 +262,15 @@ public class LoginViewController: UIViewController, UITableViewDataSource, UITab
         else {
             contentMidPoint = headerView.frame.height + (sectionHeight * 0.5)
         }
-        
+
         var topPadding    = max(0, (boundsHeight * 0.5) - contentMidPoint)
         if keyboardHeight > 0 { topPadding += (UIApplication.shared.statusBarFrame.height + 10) }
-        
+
         var bottomPadding:CGFloat = 0.0
         if keyboardHeight > 0 {
             bottomPadding = keyboardHeight + 15
         }
-        
+
         var edgeInsets = tableView.contentInset
         edgeInsets.top = topPadding
         edgeInsets.bottom = bottomPadding
@@ -281,41 +280,41 @@ public class LoginViewController: UIViewController, UITableViewDataSource, UITab
     //MARK: - State Management
     private func validateFormItems() {
         var formIsValid = true
-        
+
         if serverURL == nil || (serverURL?.isEmpty)! {
             formIsValid = false
         }
-        
+
         if email?.range(of: "@") == nil || email?.range(of: ".") == nil {
             formIsValid = false
         }
-        
+
         if password == nil || (password?.isEmpty)! {
             formIsValid = false
         }
-        
+
         if isRegistering && password != confirmPassword {
             formIsValid = false
         }
-        
+
         footerView.isSubmitButtonEnabled = formIsValid
     }
-        
+
     //MARK: - Scroll View Delegate
     
     public func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        
+
         if UIApplication.shared.isStatusBarHidden {
             navigationBar.alpha = 0.0
             return
         }
-        
+
         let statusBarFrameHeight = UIApplication.shared.statusBarFrame.height
         navigationBar.frame.size.height = statusBarFrameHeight
-        
+
         // Show the navigation bar when content starts passing under the status bar
         let verticalOffset = scrollView.contentOffset.y
-        
+
         if verticalOffset >= -statusBarFrameHeight {
             navigationBar.alpha = 1.0
         }
@@ -325,14 +324,14 @@ public class LoginViewController: UIViewController, UITableViewDataSource, UITab
         else {
             navigationBar.alpha = 1.0 - ((abs(verticalOffset) - statusBarFrameHeight) / 10.0)
         }
-        
+
         // Offset the copyright label
         let normalizedOffset = verticalOffset + scrollView.contentInset.top
         copyrightView.frame.origin.y = (view.bounds.height - copyrightViewMargin) - normalizedOffset
     }
-    
+
     //MARK: - Table View Data Source
-    
+
     public func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return isRegistering ? 5 : 4
     }
@@ -343,15 +342,15 @@ public class LoginViewController: UIViewController, UITableViewDataSource, UITab
         if cell == nil {
             cell = LoginTableViewCell(style: .default, reuseIdentifier: identifier)
         }
-    
+
         let lastCellIndex = !isRegistering ? 3 : 4
-        
+
         // Configure rounded caps
         cell?.topCornersRounded    = (indexPath.row == 0)
         cell?.bottomCornersRounded = (indexPath.row == lastCellIndex)
-        
+
         cell?.imageView?.image = image(forRow: indexPath.row)
-        
+
         if indexPath.row == lastCellIndex {
             cell?.textLabel!.text = "Remember My Account"
             cell?.switch.isOn = rememberLogin
@@ -359,7 +358,7 @@ public class LoginViewController: UIViewController, UITableViewDataSource, UITab
         }
         else {
             let textField = cell!.textField
-            
+
             switch indexPath.row {
             case 0:
                 textField.placeholder = "Server URL"
@@ -400,13 +399,13 @@ public class LoginViewController: UIViewController, UITableViewDataSource, UITab
             }
 
         }
-        
+
         // Apply the theme after all cell configuration is done
         applyTheme(to: cell!)
-        
+
         return cell!
     }
-    
+
     private func image(forRow row: Int) -> UIImage {
         switch row {
         case 0: return earthIcon
@@ -417,16 +416,16 @@ public class LoginViewController: UIViewController, UITableViewDataSource, UITab
         default: return mailIcon
         }
     }
-    
+
     // MARK: - Login/Register Transition
-    
+
     func setRegistering(_ registering: Bool, animated: Bool) {
         guard _registering != registering else {
             return
         }
-        
+
         _registering = registering
-        
+
         // Insert/Delete the 'confirm password' field
         if _registering {
             tableView.insertRows(at: [IndexPath(row: 3, section: 0)], with: .fade)
