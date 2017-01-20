@@ -15,8 +15,8 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "221840A61E2CC79000E85B6E"
-               BuildableName = "RealmLoginKit.app"
-               BlueprintName = "RealmLoginKit"
+               BuildableName = "RealmLoginKitExample.app"
+               BlueprintName = "RealmLoginKitExample"
                ReferencedContainer = "container:RealmLoginKit.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -53,8 +53,8 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "221840A61E2CC79000E85B6E"
-            BuildableName = "RealmLoginKit.app"
-            BlueprintName = "RealmLoginKit"
+            BuildableName = "RealmLoginKitExample.app"
+            BlueprintName = "RealmLoginKitExample"
             ReferencedContainer = "container:RealmLoginKit.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
@@ -76,8 +76,8 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "221840A61E2CC79000E85B6E"
-            BuildableName = "RealmLoginKit.app"
-            BlueprintName = "RealmLoginKit"
+            BuildableName = "RealmLoginKitExample.app"
+            BlueprintName = "RealmLoginKitExample"
             ReferencedContainer = "container:RealmLoginKit.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
@@ -95,8 +95,8 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "221840A61E2CC79000E85B6E"
-            BuildableName = "RealmLoginKit.app"
-            BlueprintName = "RealmLoginKit"
+            BuildableName = "RealmLoginKitExample.app"
+            BlueprintName = "RealmLoginKitExample"
             ReferencedContainer = "container:RealmLoginKit.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
