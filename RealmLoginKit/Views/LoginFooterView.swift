@@ -29,22 +29,44 @@ class LoginFooterView: UIView {
         didSet { applyTheme() }
     }
     
-    private let viewHeight = 145 // Overall height of the view
-    private let loginButtonHeight = 50
-    private let loginButtonWidthScale = 0.8
-    
-    private let topMargin = 15
-    private let middleMargin = 35
-    
-    private let loginButton = UIButton(type: .system)
-    private let registerButton = UIButton(type: .system)
-    private let loadingIndicator = UIActivityIndicatorView(activityIndicatorStyle: .white)
-    
     public var isSubmitButtonEnabled: Bool = false {
         didSet {
             updateSubmitButton()
         }
     }
+    
+    public var isRegisterButtonHidden: Bool = false {
+        didSet {
+            setNeedsLayout()
+            sizeToFit()
+        }
+    }
+    
+    // Button heights
+    private let loginButtonHeight = 50
+    private let registerButtonHeight = 44
+    
+    // Scale of the buttons from the parent view width
+    private let loginButtonWidthScale = 0.8
+    
+    // Button spacing
+    private let topMargin = 15
+    private let middleMargin = 35
+    private let bottomMargin = 10
+    
+    private var viewHeight: CGFloat {
+        if !isRegisterButtonHidden {
+            return CGFloat(topMargin + loginButtonHeight + middleMargin + registerButtonHeight + bottomMargin)
+        }
+        
+        return CGFloat(topMargin + loginButtonHeight + bottomMargin)
+    }
+    
+    // Views
+    private let loginButton = UIButton(type: .system)
+    private let registerButton = UIButton(type: .system)
+    private let loadingIndicator = UIActivityIndicatorView(activityIndicatorStyle: .white)
+    
     
     var loginButtonTapped: (() -> Void)?
     var registerButtonTapped: (() -> Void)?
@@ -65,9 +87,8 @@ class LoginFooterView: UIView {
     }
     
     override init(frame: CGRect) {
-        var newRect = frame
-        newRect.size.height = CGFloat(viewHeight)
-        super.init(frame: newRect)
+        super.init(frame: frame)
+        sizeToFit()
         setUpViews()
     }
     
@@ -123,8 +144,14 @@ class LoginFooterView: UIView {
         rect.origin.y = loginButton.frame.maxY + CGFloat(middleMargin)
         rect.origin.x = (bounds.size.width - rect.size.width) * 0.5
         registerButton.frame = rect
+        
+        registerButton.isHidden = isRegisterButtonHidden
     }
 
+    override func sizeToFit() {
+        frame.size.height = viewHeight
+    }
+    
     private func applyTheme() {
         let isDarkTheme = style == .dark
         
