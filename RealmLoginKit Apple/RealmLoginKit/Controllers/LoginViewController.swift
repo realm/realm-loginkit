@@ -30,10 +30,6 @@ import Realm
 @objc(RLMLoginViewController)
 public class LoginViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UIViewControllerTransitioningDelegate {
     
-    private static let serverURLKey = "RealmLoginServerURLKey"
-    private static let emailKey = "RealmLoginEmailKey"
-    private static let passwordKey = "RealmLoginPasswordKey"
-    
     //MARK: - Public Properties
     
     /** 
@@ -41,6 +37,21 @@ public class LoginViewController: UIViewController, UITableViewDataSource, UITab
     */
     public private(set) var style = LoginViewControllerStyle.lightTranslucent
     
+    /**
+     Whether the view controller will allow new registrations, or
+     simply only allow previously registered accounts to be entered.
+    */
+    public var allowsNewAccountRegistration: Bool = true {
+        didSet {
+            footerView.isRegisterButtonHidden = !allowsNewAccountRegistration
+            tableView.reloadData()
+        }
+    }
+    
+    /**
+     Manages whether the view controller is currently logging in an existing user,
+     or registering a new user for the first time
+    */
     public var isRegistering: Bool {
         set {
             setRegistering(newValue, animated: false)
@@ -48,9 +59,18 @@ public class LoginViewController: UIViewController, UITableViewDataSource, UITab
         get { return _registering }
     }
     
+    /**
+     Upon successful login/registration, this callback block will be called,
+     providing the user account object that was returned by the server.
+    */
     public var loginSuccessfulHandler: ((RLMSyncUser) -> Void)?
     
     //MARK: - Private Properties
+    
+    /* User default keys for saving form data */
+    private static let serverURLKey = "RealmLoginServerURLKey"
+    private static let emailKey = "RealmLoginEmailKey"
+    private static let passwordKey = "RealmLoginPasswordKey"
     
     /* Assets */
     private let earthIcon = UIImage.earthIcon()
