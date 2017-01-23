@@ -92,6 +92,12 @@ public class LoginViewController: UIViewController, UITableViewDataSource, UITab
         return style == .darkTranslucent || style == .darkOpaque
     }
     
+    //MARK: - Status Bar Appearance
+    override public var prefersStatusBarHidden: Bool { return false }
+    override public var preferredStatusBarStyle: UIStatusBarStyle {
+        return isDarkStyle ? .lightContent : .default
+    }
+    
     //MARK: - Class Creation
     
     public init(style: LoginViewControllerStyle) {
@@ -101,6 +107,7 @@ public class LoginViewController: UIViewController, UITableViewDataSource, UITab
         transitioningDelegate = self
         modalPresentationStyle = isTranslucent ? .overFullScreen : .fullScreen
         modalTransitionStyle = .crossDissolve
+        modalPresentationCapturesStatusBarAppearance = true
         
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow(notification:)), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide(notification:)), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
