@@ -65,8 +65,8 @@
 		2290FFCD1E3072AA0039DACF /* LoginViewControllerTransitioning.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginViewControllerTransitioning.swift; sourceTree = "<group>"; };
 		22AEE18A1E2F3F1F00CBB40A /* LoginTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginTableViewCell.swift; sourceTree = "<group>"; };
 		22EC43581E3246FF009BBA75 /* RealmLoginKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = RealmLoginKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		22EC435A1E3246FF009BBA75 /* RealmLoginKit.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = RealmLoginKit.h; path = RealmLoginKit/RealmLoginKit.h; sourceTree = "<group>"; };
-		22EC435B1E3246FF009BBA75 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = Info.plist; path = RealmLoginKit/Info.plist; sourceTree = "<group>"; };
+		22EC435A1E3246FF009BBA75 /* RealmLoginKit.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RealmLoginKit.h; sourceTree = "<group>"; };
+		22EC435B1E3246FF009BBA75 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		2B9E1102BE07E9713B0DF556 /* Pods-RealmLoginKitExample.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RealmLoginKitExample.release.xcconfig"; path = "Pods/Target Support Files/Pods-RealmLoginKitExample/Pods-RealmLoginKitExample.release.xcconfig"; sourceTree = "<group>"; };
 		31E6129F9B4030E07885A423 /* Pods_RealmLoginKitUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_RealmLoginKitUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		33FD4046462D1AE75EE84FBB /* Pods_RealmLoginKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_RealmLoginKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -126,8 +126,6 @@
 			isa = PBXGroup;
 			children = (
 				221840F51E2CCBB900E85B6E /* RealmLoginKit */,
-				22EC435A1E3246FF009BBA75 /* RealmLoginKit.h */,
-				22EC435B1E3246FF009BBA75 /* Info.plist */,
 				221840A91E2CC79000E85B6E /* RealmLoginKitExample */,
 				221840BE1E2CC79100E85B6E /* RealmLoginKitTests */,
 				221840C91E2CC79100E85B6E /* RealmLoginKitUITests */,
@@ -219,6 +217,8 @@
 		221840F51E2CCBB900E85B6E /* RealmLoginKit */ = {
 			isa = PBXGroup;
 			children = (
+				22EC435A1E3246FF009BBA75 /* RealmLoginKit.h */,
+				22EC435B1E3246FF009BBA75 /* Info.plist */,
 				225574BB1E2DFC0500C52098 /* Extensions */,
 				221840F61E2CCBB900E85B6E /* Controllers */,
 				221840F71E2CCBB900E85B6E /* Models */,
