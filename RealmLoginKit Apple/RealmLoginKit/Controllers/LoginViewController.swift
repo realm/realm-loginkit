@@ -183,14 +183,20 @@ public class LoginViewController: UIViewController, UITableViewDataSource, UITab
         containerView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
         view.addSubview(containerView)
         
+        #if os(tvOS)
+        var rect = view.bounds
+        rect.origin.x = (rect.width - 800) * 0.5
+        rect.size.width = 800
+        tableView.frame = rect
+        tableView.autoresizingMask = [.flexibleLeftMargin, .flexibleRightMargin, .flexibleHeight]
+        #else
         tableView.frame = view.bounds
         tableView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+        tableView.maximumWidth = 500
+        #endif
         tableView.dataSource = self
         tableView.delegate = self
         tableView.backgroundColor = .clear
-        #if os(iOS)
-        tableView.maximumWidth = 500
-        #endif
         tableView.tableHeaderView = headerView
         tableView.tableFooterView = footerView
         tableView.delaysContentTouches = false
@@ -395,7 +401,7 @@ public class LoginViewController: UIViewController, UITableViewDataSource, UITab
         let identifier = "CellIdentifier"
         var cell = tableView.dequeueReusableCell(withIdentifier: identifier) as? LoginTableViewCell
         if cell == nil {
-            cell = LoginTableViewCell(style: .default, reuseIdentifier: identifier)
+            cell = LoginTableViewCell(style: .value2, reuseIdentifier: identifier)
         }
 
         let lastCellIndex = !isRegistering ? 3 : 4
@@ -478,6 +484,21 @@ public class LoginViewController: UIViewController, UITableViewDataSource, UITab
         default: return mailIcon
         }
     }
+    
+    #if os(tvOS)
+    public func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let lastCellIndex = !isRegistering ? 3 : 4
+        let cell = tableView.cellForRow(at: indexPath) as! LoginTableViewCell
+        
+        if indexPath.row < lastCellIndex {
+            cell.textField.becomeFirstResponder()
+        }
+        else {
+            rememberLogin = !rememberLogin
+            tableView.reloadRows(at: [indexPath], with: .none)
+        }
+    }
+    #endif
 
     // MARK: - Login/Register Transition
 

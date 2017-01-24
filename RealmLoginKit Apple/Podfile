@@ -8,6 +8,7 @@ end
 
 target 'RealmLoginKitExample-iOS' do
   use_frameworks!
+  pod 'Realm'
   pod 'TORoundedTableView'
 end
 

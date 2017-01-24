@@ -21,7 +21,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="1920" height="1080"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="q2U-In-jwE" customClass="RealmLogoView" customModule="RealmLoginKitExample_tvOS" customModuleProvider="target">
+                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="q2U-In-jwE" customClass="RealmLogoView" customModule="RealmLoginKitExample_tvOS" customModuleProvider="target">
                                 <rect key="frame" x="610" y="122" width="700" height="700"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
@@ -29,12 +29,9 @@
                                     <userDefinedRuntimeAttribute type="boolean" keyPath="isWordMarkHidden" value="YES"/>
                                 </userDefinedRuntimeAttributes>
                             </view>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="kjW-fh-Qg7">
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="kjW-fh-Qg7">
                                 <rect key="frame" x="588" y="906" width="745" height="86"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="86" id="aNu-yc-hw0"/>
-                                    <constraint firstAttribute="width" constant="745" id="kY0-du-ls7"/>
-                                </constraints>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <inset key="contentEdgeInsets" minX="40" minY="20" maxX="40" maxY="20"/>
                                 <state key="normal" title="Log In to Realm Object Server"/>
                                 <connections>

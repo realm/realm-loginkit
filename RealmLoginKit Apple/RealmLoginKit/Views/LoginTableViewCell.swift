@@ -22,7 +22,6 @@ import UIKit
     typealias TableViewCell = UITableViewCell
 #else
     import TORoundedTableView
-    
     typealias TableViewCell = TORoundedTableViewCapCell
 #endif
 
@@ -36,33 +35,32 @@ class LoginTableViewCell: TableViewCell, UITextFieldDelegate {
         return _textField!
     }
     
+    public var textChangedHandler: (() -> Void)? {
+        didSet {
+            if textChangedHandler != nil { setUpTextField() }
+        }
+    }
+    
     #if os(iOS)
     private var _switch: UISwitch? = nil
     public var `switch`: UISwitch {
         setUpSwitch()
         return _switch!
     }
-    #endif
     
-    var textChangedHandler: (() -> Void)? {
-        didSet {
-            if textChangedHandler != nil { setUpTextField() }
-        }
-    }
-    
-    var returnButtonTappedHandler: (() -> Void)? {
-        didSet {
-            if returnButtonTappedHandler != nil { setUpTextField() }
-        }
-    }
-    
-    #if os(iOS)
     var switchChangedHandler: (() -> Void)? {
         didSet {
             if switchChangedHandler != nil { setUpSwitch() }
         }
     }
     #endif
+    
+    public var returnButtonTappedHandler: (() -> Void)? {
+        didSet {
+            if returnButtonTappedHandler != nil { setUpTextField() }
+        }
+    }
+
     
     //MARK: - Class Creation
     
@@ -83,6 +81,7 @@ class LoginTableViewCell: TableViewCell, UITextFieldDelegate {
         _textField = UITextField()
         _textField?.autocorrectionType = .no
         _textField?.autocapitalizationType = .none
+        _textField?.backgroundColor = nil
         _textField?.delegate = self
         _textField?.addTarget(self, action: #selector(textFieldDidChange(_:)), for: .editingChanged)
         contentView.addSubview(_textField!)
@@ -104,11 +103,15 @@ class LoginTableViewCell: TableViewCell, UITextFieldDelegate {
     override func layoutSubviews() {
         super.layoutSubviews()
         
+        
+        if let _textField = _textField {
+            _textField.frame = contentView.frame
+        }
+        
         #if os(iOS)
         // The table cell's separatorInset property has only just been updated to the
         // final value at this point, so re-align the text field to match
         if let _textField = _textField {
-            _textField.frame = contentView.frame
             _textField.frame.origin.x = separatorInset.left
             _textField.frame.size.width -= separatorInset.left
         }
