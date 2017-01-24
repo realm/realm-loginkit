@@ -6,7 +6,6 @@
     <dependencies>
         <deployment identifier="tvOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11757"/>
-        <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -23,22 +22,27 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="q2U-In-jwE" customClass="RealmLogoView" customModule="RealmLoginKitExample_tvOS" customModuleProvider="target">
-                                <rect key="frame" x="610" y="190" width="700" height="700"/>
+                                <rect key="frame" x="610" y="122" width="700" height="700"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" secondItem="q2U-In-jwE" secondAttribute="height" multiplier="1:1" id="4JS-0g-TXe"/>
-                                    <constraint firstAttribute="width" constant="700" id="4vC-oC-wUC"/>
-                                </constraints>
                                 <userDefinedRuntimeAttributes>
                                     <userDefinedRuntimeAttribute type="boolean" keyPath="isWordMarkHidden" value="YES"/>
                                 </userDefinedRuntimeAttributes>
                             </view>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="kjW-fh-Qg7">
+                                <rect key="frame" x="588" y="906" width="745" height="86"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="86" id="aNu-yc-hw0"/>
+                                    <constraint firstAttribute="width" constant="745" id="kY0-du-ls7"/>
+                                </constraints>
+                                <inset key="contentEdgeInsets" minX="40" minY="20" maxX="40" maxY="20"/>
+                                <state key="normal" title="Log In to Realm Object Server"/>
+                                <connections>
+                                    <action selector="didClickLoginButton:" destination="BYZ-38-t0r" eventType="primaryActionTriggered" id="fu1-cL-m0O"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
-                        <constraints>
-                            <constraint firstItem="q2U-In-jwE" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="oO7-Lx-Xp5"/>
-                            <constraint firstItem="q2U-In-jwE" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" id="v6Q-6D-vbb"/>
-                        </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="oXW-LJ-bTH"/>
                     <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>

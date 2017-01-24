@@ -20,6 +20,9 @@ class ViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
 
-
+    @IBAction func didClickLoginButton(_ sender: AnyObject?) {
+        let loginController = LoginViewController(style: .lightTranslucent)
+        present(loginController, animated: true, completion: nil)
+    }
 }
 

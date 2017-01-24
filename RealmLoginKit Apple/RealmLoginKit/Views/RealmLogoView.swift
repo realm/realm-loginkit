@@ -44,7 +44,6 @@ class RealmLogoView: UIView
     /** In the monochrome style, the stroke thickness of the Realm Logo */
     @IBInspectable var logoStrokeWidth: Double = 8.0
 
-    
     init(frame: CGRect, style: RealmLogoStyle = .colored, wordMarkHidden: Bool = false) {
         self.style = style
         self.isWordMarkHidden = wordMarkHidden
