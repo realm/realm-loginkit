@@ -19,39 +19,36 @@
 import UIKit
 import TORoundedTableView
 
+enum LoginTableViewCellType {
+    case none
+    case textField
+    case toggleSwitch
+}
+
 class LoginTableViewCell: TORoundedTableViewCapCell, UITextFieldDelegate {
+    
+    /* Explicitly set the type of this cell so the appropriate views can be configured */
+    public var type: LoginTableViewCellType = .textField {
+        didSet {
+            configureViews()
+        }
+    }
     
     // `lazy` wasn't flexible enough, so defer to old Objective-C style
     // lazy creation for now. (https://github.com/apple/swift-evolution/blob/master/proposals/0030-property-behavior-decls.md)
     private var _textField: UITextField? = nil
-    public var textField: UITextField {
-        setUpTextField()
-        return _textField!
+    public var textField: UITextField? {
+        return _textField
     }
     
     private var _switch: UISwitch? = nil
-    public var `switch`: UISwitch {
-        setUpSwitch()
-        return _switch!
+    public var `switch`: UISwitch? {
+        return _switch
     }
     
-    var textChangedHandler: (() -> Void)? {
-        didSet {
-            if textChangedHandler != nil { setUpTextField() }
-        }
-    }
-    
-    var returnButtonTappedHandler: (() -> Void)? {
-        didSet {
-            if returnButtonTappedHandler != nil { setUpTextField() }
-        }
-    }
-    
-    var switchChangedHandler: (() -> Void)? {
-        didSet {
-            if switchChangedHandler != nil { setUpSwitch() }
-        }
-    }
+    var textChangedHandler: (() -> Void)?
+    var returnButtonTappedHandler: (() -> Void)?
+    var switchChangedHandler: (() -> Void)?
     
     //MARK: - Class Creation
     
@@ -66,24 +63,26 @@ class LoginTableViewCell: TORoundedTableViewCapCell, UITextFieldDelegate {
     
     //MARK: - View Setup
     
-    func setUpTextField() {
-        guard _textField == nil else { return }
-    
-        _textField = UITextField()
-        _textField?.autocorrectionType = .no
-        _textField?.autocapitalizationType = .none
-        _textField?.delegate = self
-        _textField?.addTarget(self, action: #selector(textFieldDidChange(_:)), for: .editingChanged)
-        contentView.addSubview(_textField!)
-        setNeedsLayout()
-    }
-    
-    func setUpSwitch() {
-        guard _switch == nil else { return }
+    func configureViews() {
+        if type == .textField && _textField == nil {
+            _textField = UITextField()
+            _textField?.autocorrectionType = .no
+            _textField?.autocapitalizationType = .none
+            _textField?.delegate = self
+            _textField?.addTarget(self, action: #selector(textFieldDidChange(_:)), for: .editingChanged)
+            contentView.addSubview(_textField!)
+        }
         
-        _switch = UISwitch()
-        _switch?.addTarget(self, action: #selector(switchDidChange(_:)), for: .valueChanged)
-        contentView.addSubview(_switch!)
+        if type == .toggleSwitch && _switch == nil {
+            _switch = UISwitch()
+            _switch?.addTarget(self, action: #selector(switchDidChange(_:)), for: .valueChanged)
+            contentView.addSubview(_switch!)
+        }
+        
+        _textField?.isHidden = type != .textField
+        _switch?.isHidden = type != .toggleSwitch
+        
+        setNeedsLayout()
     }
 
     //MARK: - View Management
