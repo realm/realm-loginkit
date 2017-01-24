@@ -14,9 +14,9 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "221840A61E2CC79000E85B6E"
-               BuildableName = "RealmLoginKitExample.app"
-               BlueprintName = "RealmLoginKitExample"
+               BlueprintIdentifier = "22EA60841E36F35C005D8AB0"
+               BuildableName = "RealmLoginKitExample-tvOS.app"
+               BlueprintName = "RealmLoginKitExample-tvOS"
                ReferencedContainer = "container:RealmLoginKit.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -28,33 +28,13 @@
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
       shouldUseLaunchSchemeArgsEnv = "YES">
       <Testables>
-         <TestableReference
-            skipped = "NO">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "221840BA1E2CC79100E85B6E"
-               BuildableName = "RealmLoginKitTests.xctest"
-               BlueprintName = "RealmLoginKitTests"
-               ReferencedContainer = "container:RealmLoginKit.xcodeproj">
-            </BuildableReference>
-         </TestableReference>
-         <TestableReference
-            skipped = "NO">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "221840C51E2CC79100E85B6E"
-               BuildableName = "RealmLoginKitUITests.xctest"
-               BlueprintName = "RealmLoginKitUITests"
-               ReferencedContainer = "container:RealmLoginKit.xcodeproj">
-            </BuildableReference>
-         </TestableReference>
       </Testables>
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "221840A61E2CC79000E85B6E"
-            BuildableName = "RealmLoginKitExample.app"
-            BlueprintName = "RealmLoginKitExample"
+            BlueprintIdentifier = "22EA60841E36F35C005D8AB0"
+            BuildableName = "RealmLoginKitExample-tvOS.app"
+            BlueprintName = "RealmLoginKitExample-tvOS"
             ReferencedContainer = "container:RealmLoginKit.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
@@ -75,9 +55,9 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "221840A61E2CC79000E85B6E"
-            BuildableName = "RealmLoginKitExample.app"
-            BlueprintName = "RealmLoginKitExample"
+            BlueprintIdentifier = "22EA60841E36F35C005D8AB0"
+            BuildableName = "RealmLoginKitExample-tvOS.app"
+            BlueprintName = "RealmLoginKitExample-tvOS"
             ReferencedContainer = "container:RealmLoginKit.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
@@ -94,9 +74,9 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "221840A61E2CC79000E85B6E"
-            BuildableName = "RealmLoginKitExample.app"
-            BlueprintName = "RealmLoginKitExample"
+            BlueprintIdentifier = "22EA60841E36F35C005D8AB0"
+            BuildableName = "RealmLoginKitExample-tvOS.app"
+            BlueprintName = "RealmLoginKitExample-tvOS"
             ReferencedContainer = "container:RealmLoginKit.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>

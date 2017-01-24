@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder.AppleTV.Storyboard" version="3.0" toolsVersion="11762" systemVersion="16C67" targetRuntime="AppleTV" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
+    <device id="appleTV" orientation="landscape">
+        <adaptation id="light"/>
+    </device>
+    <dependencies>
+        <deployment identifier="tvOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11757"/>
+        <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--RealmLoginKit-->
+        <scene sceneID="tne-QT-ifu">
+            <objects>
+                <viewController title="RealmLoginKit" id="BYZ-38-t0r" customClass="ViewController" customModule="RealmLoginKitExample_tvOS" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="y3c-jy-aDJ"/>
+                        <viewControllerLayoutGuide type="bottom" id="wfy-db-euE"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
+                        <rect key="frame" x="0.0" y="0.0" width="1920" height="1080"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="q2U-In-jwE" customClass="RealmLogoView" customModule="RealmLoginKitExample_iOS">
+                                <rect key="frame" x="610" y="190" width="700" height="700"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" secondItem="q2U-In-jwE" secondAttribute="height" multiplier="1:1" id="4JS-0g-TXe"/>
+                                </constraints>
+                            </view>
+                        </subviews>
+                        <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
+                        <constraints>
+                            <constraint firstItem="q2U-In-jwE" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" constant="45" id="8EE-bG-5hE"/>
+                            <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="q2U-In-jwE" secondAttribute="bottom" constant="190" id="Vvn-HT-BMV"/>
+                            <constraint firstItem="q2U-In-jwE" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="oO7-Lx-Xp5"/>
+                            <constraint firstItem="q2U-In-jwE" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" id="v6Q-6D-vbb"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" id="oXW-LJ-bTH"/>
+                    <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="322" y="933"/>
+        </scene>
+    </scenes>
+</document>

@@ -9,11 +9,6 @@
 /* Begin PBXBuildFile section */
 		221840C01E2CC79100E85B6E /* RealmLoginKitTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 221840BF1E2CC79100E85B6E /* RealmLoginKitTests.swift */; };
 		221840CB1E2CC79100E85B6E /* RealmLoginKitUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 221840CA1E2CC79100E85B6E /* RealmLoginKitUITests.swift */; };
-		221840E11E2CCAE300E85B6E /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 221840D81E2CCAE300E85B6E /* AppDelegate.swift */; };
-		221840F01E2CCB5100E85B6E /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 221840E81E2CCB5100E85B6E /* ViewController.swift */; };
-		221840F11E2CCB5100E85B6E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 221840EB1E2CCB5100E85B6E /* Assets.xcassets */; };
-		221840F21E2CCB5100E85B6E /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 221840EC1E2CCB5100E85B6E /* LaunchScreen.storyboard */; };
-		221840F31E2CCB5100E85B6E /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 221840ED1E2CCB5100E85B6E /* Main.storyboard */; };
 		221840FA1E2CCBC900E85B6E /* RealmLogoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 221840F91E2CCBC900E85B6E /* RealmLogoView.swift */; };
 		2246E2BD1E2D3E8100D7D499 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2246E2BC1E2D3E8100D7D499 /* LoginViewController.swift */; };
 		225574BD1E2DFC2800C52098 /* UIImage+Icons.swift in Sources */ = {isa = PBXBuildFile; fileRef = 225574BC1E2DFC2800C52098 /* UIImage+Icons.swift */; };
@@ -21,6 +16,16 @@
 		225574C11E2E14DC00C52098 /* LoginFooterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 225574C01E2E14DC00C52098 /* LoginFooterView.swift */; };
 		2290FFCE1E3072AA0039DACF /* LoginViewControllerTransitioning.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2290FFCD1E3072AA0039DACF /* LoginViewControllerTransitioning.swift */; };
 		22AEE18B1E2F3F1F00CBB40A /* LoginTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22AEE18A1E2F3F1F00CBB40A /* LoginTableViewCell.swift */; };
+		22EA60881E36F35C005D8AB0 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22EA60871E36F35C005D8AB0 /* AppDelegate.swift */; };
+		22EA608A1E36F35C005D8AB0 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22EA60891E36F35C005D8AB0 /* ViewController.swift */; };
+		22EA608D1E36F35C005D8AB0 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 22EA608B1E36F35C005D8AB0 /* Main.storyboard */; };
+		22EA608F1E36F35C005D8AB0 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 22EA608E1E36F35C005D8AB0 /* Assets.xcassets */; };
+		22EA609E1E36F3A6005D8AB0 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22EA60951E36F3A6005D8AB0 /* AppDelegate.swift */; };
+		22EA609F1E36F3A6005D8AB0 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22EA60971E36F3A6005D8AB0 /* ViewController.swift */; };
+		22EA60A01E36F3A6005D8AB0 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 22EA60991E36F3A6005D8AB0 /* Assets.xcassets */; };
+		22EA60A11E36F3A6005D8AB0 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 22EA609A1E36F3A6005D8AB0 /* LaunchScreen.storyboard */; };
+		22EA60A21E36F3A6005D8AB0 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 22EA609B1E36F3A6005D8AB0 /* Main.storyboard */; };
+		22EA60A31E36F3A6005D8AB0 /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 22EA609D1E36F3A6005D8AB0 /* Info.plist */; };
 		22EC435C1E3246FF009BBA75 /* RealmLoginKit.h in Headers */ = {isa = PBXBuildFile; fileRef = 22EC435A1E3246FF009BBA75 /* RealmLoginKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B98B730899EC7088531D1E36 /* Pods_RealmLoginKitExample.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4894F9B321A1F2C9BB56679B /* Pods_RealmLoginKitExample.framework */; };
 		D4B4937A385B565FE053D6ED /* Pods_RealmLoginKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 33FD4046462D1AE75EE84FBB /* Pods_RealmLoginKit.framework */; };
@@ -44,19 +49,13 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		221840A71E2CC79000E85B6E /* RealmLoginKitExample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RealmLoginKitExample.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		221840A71E2CC79000E85B6E /* RealmLoginKitExample-iOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "RealmLoginKitExample-iOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		221840BB1E2CC79100E85B6E /* RealmLoginKitTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = RealmLoginKitTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		221840BF1E2CC79100E85B6E /* RealmLoginKitTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealmLoginKitTests.swift; sourceTree = "<group>"; };
 		221840C11E2CC79100E85B6E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		221840C61E2CC79100E85B6E /* RealmLoginKitUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = RealmLoginKitUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		221840CA1E2CC79100E85B6E /* RealmLoginKitUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealmLoginKitUITests.swift; sourceTree = "<group>"; };
 		221840CC1E2CC79100E85B6E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		221840D81E2CCAE300E85B6E /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AppDelegate.swift; path = RealmLoginKitExample/AppDelegate.swift; sourceTree = SOURCE_ROOT; };
-		221840E81E2CCB5100E85B6E /* ViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
-		221840EB1E2CCB5100E85B6E /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		221840EC1E2CCB5100E85B6E /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
-		221840ED1E2CCB5100E85B6E /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
-		221840EF1E2CCB5100E85B6E /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		221840F91E2CCBC900E85B6E /* RealmLogoView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RealmLogoView.swift; sourceTree = "<group>"; };
 		2246E2BC1E2D3E8100D7D499 /* LoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		225574BC1E2DFC2800C52098 /* UIImage+Icons.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "UIImage+Icons.swift"; path = "Extensions/UIImage+Icons.swift"; sourceTree = "<group>"; };
@@ -64,9 +63,21 @@
 		225574C01E2E14DC00C52098 /* LoginFooterView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginFooterView.swift; sourceTree = "<group>"; };
 		2290FFCD1E3072AA0039DACF /* LoginViewControllerTransitioning.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginViewControllerTransitioning.swift; sourceTree = "<group>"; };
 		22AEE18A1E2F3F1F00CBB40A /* LoginTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginTableViewCell.swift; sourceTree = "<group>"; };
+		22EA60851E36F35C005D8AB0 /* RealmLoginKitExample-tvOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "RealmLoginKitExample-tvOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		22EA60871E36F35C005D8AB0 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		22EA60891E36F35C005D8AB0 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		22EA608C1E36F35C005D8AB0 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		22EA608E1E36F35C005D8AB0 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		22EA60901E36F35C005D8AB0 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		22EA60951E36F3A6005D8AB0 /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		22EA60971E36F3A6005D8AB0 /* ViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		22EA60991E36F3A6005D8AB0 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		22EA609A1E36F3A6005D8AB0 /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
+		22EA609B1E36F3A6005D8AB0 /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
+		22EA609D1E36F3A6005D8AB0 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		22EC43581E3246FF009BBA75 /* RealmLoginKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = RealmLoginKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		22EC435A1E3246FF009BBA75 /* RealmLoginKit.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = RealmLoginKit.h; path = RealmLoginKit/RealmLoginKit.h; sourceTree = "<group>"; };
-		22EC435B1E3246FF009BBA75 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = Info.plist; path = RealmLoginKit/Info.plist; sourceTree = "<group>"; };
+		22EC435A1E3246FF009BBA75 /* RealmLoginKit.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RealmLoginKit.h; sourceTree = "<group>"; };
+		22EC435B1E3246FF009BBA75 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		2B9E1102BE07E9713B0DF556 /* Pods-RealmLoginKitExample.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RealmLoginKitExample.release.xcconfig"; path = "Pods/Target Support Files/Pods-RealmLoginKitExample/Pods-RealmLoginKitExample.release.xcconfig"; sourceTree = "<group>"; };
 		31E6129F9B4030E07885A423 /* Pods_RealmLoginKitUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_RealmLoginKitUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		33FD4046462D1AE75EE84FBB /* Pods_RealmLoginKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_RealmLoginKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -100,6 +111,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		22EA60821E36F35C005D8AB0 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		22EC43541E3246FF009BBA75 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -126,9 +144,8 @@
 			isa = PBXGroup;
 			children = (
 				221840F51E2CCBB900E85B6E /* RealmLoginKit */,
-				22EC435A1E3246FF009BBA75 /* RealmLoginKit.h */,
-				22EC435B1E3246FF009BBA75 /* Info.plist */,
-				221840A91E2CC79000E85B6E /* RealmLoginKitExample */,
+				22EA60941E36F3A6005D8AB0 /* RealmLoginKitExample-iOS */,
+				22EA60861E36F35C005D8AB0 /* RealmLoginKitExample-tvOS */,
 				221840BE1E2CC79100E85B6E /* RealmLoginKitTests */,
 				221840C91E2CC79100E85B6E /* RealmLoginKitUITests */,
 				221840A81E2CC79000E85B6E /* Products */,
@@ -140,25 +157,13 @@
 		221840A81E2CC79000E85B6E /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				221840A71E2CC79000E85B6E /* RealmLoginKitExample.app */,
+				221840A71E2CC79000E85B6E /* RealmLoginKitExample-iOS.app */,
 				221840BB1E2CC79100E85B6E /* RealmLoginKitTests.xctest */,
 				221840C61E2CC79100E85B6E /* RealmLoginKitUITests.xctest */,
 				22EC43581E3246FF009BBA75 /* RealmLoginKit.framework */,
+				22EA60851E36F35C005D8AB0 /* RealmLoginKitExample-tvOS.app */,
 			);
 			name = Products;
-			sourceTree = "<group>";
-		};
-		221840A91E2CC79000E85B6E /* RealmLoginKitExample */ = {
-			isa = PBXGroup;
-			children = (
-				221840D81E2CCAE300E85B6E /* AppDelegate.swift */,
-				221840E71E2CCB5100E85B6E /* Controllers */,
-				221840E91E2CCB5100E85B6E /* Models */,
-				221840EA1E2CCB5100E85B6E /* Resources */,
-				221840EE1E2CCB5100E85B6E /* Support */,
-			);
-			name = RealmLoginKitExample;
-			path = RealmLoginKit;
 			sourceTree = "<group>";
 		};
 		221840BE1E2CC79100E85B6E /* RealmLoginKitTests */ = {
@@ -179,46 +184,11 @@
 			path = RealmLoginKitUITests;
 			sourceTree = "<group>";
 		};
-		221840E71E2CCB5100E85B6E /* Controllers */ = {
-			isa = PBXGroup;
-			children = (
-				221840E81E2CCB5100E85B6E /* ViewController.swift */,
-			);
-			name = Controllers;
-			path = RealmLoginKitExample/Controllers;
-			sourceTree = SOURCE_ROOT;
-		};
-		221840E91E2CCB5100E85B6E /* Models */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			name = Models;
-			path = RealmLoginKitExample/Models;
-			sourceTree = SOURCE_ROOT;
-		};
-		221840EA1E2CCB5100E85B6E /* Resources */ = {
-			isa = PBXGroup;
-			children = (
-				221840EB1E2CCB5100E85B6E /* Assets.xcassets */,
-				221840EC1E2CCB5100E85B6E /* LaunchScreen.storyboard */,
-				221840ED1E2CCB5100E85B6E /* Main.storyboard */,
-			);
-			name = Resources;
-			path = RealmLoginKitExample/Resources;
-			sourceTree = SOURCE_ROOT;
-		};
-		221840EE1E2CCB5100E85B6E /* Support */ = {
-			isa = PBXGroup;
-			children = (
-				221840EF1E2CCB5100E85B6E /* Info.plist */,
-			);
-			name = Support;
-			path = RealmLoginKitExample/Support;
-			sourceTree = SOURCE_ROOT;
-		};
 		221840F51E2CCBB900E85B6E /* RealmLoginKit */ = {
 			isa = PBXGroup;
 			children = (
+				22EC435A1E3246FF009BBA75 /* RealmLoginKit.h */,
+				22EC435B1E3246FF009BBA75 /* Info.plist */,
 				225574BB1E2DFC0500C52098 /* Extensions */,
 				221840F61E2CCBB900E85B6E /* Controllers */,
 				221840F71E2CCBB900E85B6E /* Models */,
@@ -262,6 +232,55 @@
 			name = Extensions;
 			sourceTree = "<group>";
 		};
+		22EA60861E36F35C005D8AB0 /* RealmLoginKitExample-tvOS */ = {
+			isa = PBXGroup;
+			children = (
+				22EA60871E36F35C005D8AB0 /* AppDelegate.swift */,
+				22EA60891E36F35C005D8AB0 /* ViewController.swift */,
+				22EA608B1E36F35C005D8AB0 /* Main.storyboard */,
+				22EA608E1E36F35C005D8AB0 /* Assets.xcassets */,
+				22EA60901E36F35C005D8AB0 /* Info.plist */,
+			);
+			path = "RealmLoginKitExample-tvOS";
+			sourceTree = "<group>";
+		};
+		22EA60941E36F3A6005D8AB0 /* RealmLoginKitExample-iOS */ = {
+			isa = PBXGroup;
+			children = (
+				22EA60951E36F3A6005D8AB0 /* AppDelegate.swift */,
+				22EA60961E36F3A6005D8AB0 /* Controllers */,
+				22EA60981E36F3A6005D8AB0 /* Resources */,
+				22EA609C1E36F3A6005D8AB0 /* Support */,
+			);
+			path = "RealmLoginKitExample-iOS";
+			sourceTree = "<group>";
+		};
+		22EA60961E36F3A6005D8AB0 /* Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				22EA60971E36F3A6005D8AB0 /* ViewController.swift */,
+			);
+			path = Controllers;
+			sourceTree = "<group>";
+		};
+		22EA60981E36F3A6005D8AB0 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				22EA60991E36F3A6005D8AB0 /* Assets.xcassets */,
+				22EA609A1E36F3A6005D8AB0 /* LaunchScreen.storyboard */,
+				22EA609B1E36F3A6005D8AB0 /* Main.storyboard */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		22EA609C1E36F3A6005D8AB0 /* Support */ = {
+			isa = PBXGroup;
+			children = (
+				22EA609D1E36F3A6005D8AB0 /* Info.plist */,
+			);
+			path = Support;
+			sourceTree = "<group>";
+		};
 		96C47F6BCD63CA7F9CE0AE4B /* Pods */ = {
 			isa = PBXGroup;
 			children = (
@@ -287,9 +306,9 @@
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
-		221840A61E2CC79000E85B6E /* RealmLoginKitExample */ = {
+		221840A61E2CC79000E85B6E /* RealmLoginKitExample-iOS */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 221840CF1E2CC79100E85B6E /* Build configuration list for PBXNativeTarget "RealmLoginKitExample" */;
+			buildConfigurationList = 221840CF1E2CC79100E85B6E /* Build configuration list for PBXNativeTarget "RealmLoginKitExample-iOS" */;
 			buildPhases = (
 				EC576C2FAC48F6E26EBC08E2 /* [CP] Check Pods Manifest.lock */,
 				221840A31E2CC79000E85B6E /* Sources */,
@@ -302,9 +321,9 @@
 			);
 			dependencies = (
 			);
-			name = RealmLoginKitExample;
+			name = "RealmLoginKitExample-iOS";
 			productName = RealmLoginKit;
-			productReference = 221840A71E2CC79000E85B6E /* RealmLoginKitExample.app */;
+			productReference = 221840A71E2CC79000E85B6E /* RealmLoginKitExample-iOS.app */;
 			productType = "com.apple.product-type.application";
 		};
 		221840BA1E2CC79100E85B6E /* RealmLoginKitTests */ = {
@@ -342,6 +361,23 @@
 			productName = RealmLoginKitUITests;
 			productReference = 221840C61E2CC79100E85B6E /* RealmLoginKitUITests.xctest */;
 			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+		22EA60841E36F35C005D8AB0 /* RealmLoginKitExample-tvOS */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 22EA60931E36F35C005D8AB0 /* Build configuration list for PBXNativeTarget "RealmLoginKitExample-tvOS" */;
+			buildPhases = (
+				22EA60811E36F35C005D8AB0 /* Sources */,
+				22EA60821E36F35C005D8AB0 /* Frameworks */,
+				22EA60831E36F35C005D8AB0 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "RealmLoginKitExample-tvOS";
+			productName = "RealmLoginKitExample-tvOS";
+			productReference = 22EA60851E36F35C005D8AB0 /* RealmLoginKitExample-tvOS.app */;
+			productType = "com.apple.product-type.application";
 		};
 		22EC43571E3246FF009BBA75 /* RealmLoginKit */ = {
 			isa = PBXNativeTarget;
@@ -390,6 +426,11 @@
 						ProvisioningStyle = Automatic;
 						TestTargetID = 221840A61E2CC79000E85B6E;
 					};
+					22EA60841E36F35C005D8AB0 = {
+						CreatedOnToolsVersion = 8.2;
+						DevelopmentTeam = QX5CR2FTN2;
+						ProvisioningStyle = Automatic;
+					};
 					22EC43571E3246FF009BBA75 = {
 						CreatedOnToolsVersion = 8.2;
 						DevelopmentTeam = QX5CR2FTN2;
@@ -410,10 +451,11 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				221840A61E2CC79000E85B6E /* RealmLoginKitExample */,
+				221840A61E2CC79000E85B6E /* RealmLoginKitExample-iOS */,
 				22EC43571E3246FF009BBA75 /* RealmLoginKit */,
 				221840BA1E2CC79100E85B6E /* RealmLoginKitTests */,
 				221840C51E2CC79100E85B6E /* RealmLoginKitUITests */,
+				22EA60841E36F35C005D8AB0 /* RealmLoginKitExample-tvOS */,
 			);
 		};
 /* End PBXProject section */
@@ -423,9 +465,10 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				221840F31E2CCB5100E85B6E /* Main.storyboard in Resources */,
-				221840F11E2CCB5100E85B6E /* Assets.xcassets in Resources */,
-				221840F21E2CCB5100E85B6E /* LaunchScreen.storyboard in Resources */,
+				22EA60A31E36F3A6005D8AB0 /* Info.plist in Resources */,
+				22EA60A21E36F3A6005D8AB0 /* Main.storyboard in Resources */,
+				22EA60A01E36F3A6005D8AB0 /* Assets.xcassets in Resources */,
+				22EA60A11E36F3A6005D8AB0 /* LaunchScreen.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -440,6 +483,15 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		22EA60831E36F35C005D8AB0 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				22EA608F1E36F35C005D8AB0 /* Assets.xcassets in Resources */,
+				22EA608D1E36F35C005D8AB0 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -535,12 +587,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				22EA609E1E36F3A6005D8AB0 /* AppDelegate.swift in Sources */,
 				225574C11E2E14DC00C52098 /* LoginFooterView.swift in Sources */,
 				2246E2BD1E2D3E8100D7D499 /* LoginViewController.swift in Sources */,
+				22EA609F1E36F3A6005D8AB0 /* ViewController.swift in Sources */,
 				225574BF1E2E0ACE00C52098 /* LoginHeaderView.swift in Sources */,
-				221840F01E2CCB5100E85B6E /* ViewController.swift in Sources */,
 				221840FA1E2CCBC900E85B6E /* RealmLogoView.swift in Sources */,
-				221840E11E2CCAE300E85B6E /* AppDelegate.swift in Sources */,
 				2290FFCE1E3072AA0039DACF /* LoginViewControllerTransitioning.swift in Sources */,
 				225574BD1E2DFC2800C52098 /* UIImage+Icons.swift in Sources */,
 				22AEE18B1E2F3F1F00CBB40A /* LoginTableViewCell.swift in Sources */,
@@ -563,6 +615,15 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		22EA60811E36F35C005D8AB0 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				22EA608A1E36F35C005D8AB0 /* ViewController.swift in Sources */,
+				22EA60881E36F35C005D8AB0 /* AppDelegate.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		22EC43531E3246FF009BBA75 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -575,15 +636,26 @@
 /* Begin PBXTargetDependency section */
 		221840BD1E2CC79100E85B6E /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 221840A61E2CC79000E85B6E /* RealmLoginKitExample */;
+			target = 221840A61E2CC79000E85B6E /* RealmLoginKitExample-iOS */;
 			targetProxy = 221840BC1E2CC79100E85B6E /* PBXContainerItemProxy */;
 		};
 		221840C81E2CC79100E85B6E /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 221840A61E2CC79000E85B6E /* RealmLoginKitExample */;
+			target = 221840A61E2CC79000E85B6E /* RealmLoginKitExample-iOS */;
 			targetProxy = 221840C71E2CC79100E85B6E /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		22EA608B1E36F35C005D8AB0 /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				22EA608C1E36F35C005D8AB0 /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
 		221840CD1E2CC79100E85B6E /* Debug */ = {
@@ -685,7 +757,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				DEVELOPMENT_TEAM = QX5CR2FTN2;
-				INFOPLIST_FILE = "$(SRCROOT)/RealmLoginKitExample/Support/Info.plist";
+				INFOPLIST_FILE = "$(SRCROOT)/RealmLoginKitExample-iOS/Support/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = io.realm.RealmLoginKit;
@@ -700,7 +772,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				DEVELOPMENT_TEAM = QX5CR2FTN2;
-				INFOPLIST_FILE = "$(SRCROOT)/RealmLoginKitExample/Support/Info.plist";
+				INFOPLIST_FILE = "$(SRCROOT)/RealmLoginKitExample-iOS/Support/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = io.realm.RealmLoginKit;
@@ -763,6 +835,40 @@
 			};
 			name = Release;
 		};
+		22EA60911E36F35C005D8AB0 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = "App Icon & Top Shelf Image";
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				DEVELOPMENT_TEAM = QX5CR2FTN2;
+				INFOPLIST_FILE = "RealmLoginKitExample-tvOS/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "io.realm.RealmLoginKitExample-tvOS";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = appletvos;
+				SWIFT_VERSION = 3.0;
+				TARGETED_DEVICE_FAMILY = 3;
+				TVOS_DEPLOYMENT_TARGET = 10.1;
+			};
+			name = Debug;
+		};
+		22EA60921E36F35C005D8AB0 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = "App Icon & Top Shelf Image";
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				DEVELOPMENT_TEAM = QX5CR2FTN2;
+				INFOPLIST_FILE = "RealmLoginKitExample-tvOS/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "io.realm.RealmLoginKitExample-tvOS";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = appletvos;
+				SWIFT_VERSION = 3.0;
+				TARGETED_DEVICE_FAMILY = 3;
+				TVOS_DEPLOYMENT_TARGET = 10.1;
+			};
+			name = Release;
+		};
 		22EC435E1E3246FF009BBA75 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 3AB4AD34AE761243E9861F69 /* Pods-RealmLoginKit.debug.xcconfig */;
@@ -821,7 +927,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		221840CF1E2CC79100E85B6E /* Build configuration list for PBXNativeTarget "RealmLoginKitExample" */ = {
+		221840CF1E2CC79100E85B6E /* Build configuration list for PBXNativeTarget "RealmLoginKitExample-iOS" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				221840D01E2CC79100E85B6E /* Debug */,
@@ -847,6 +953,14 @@
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
+		};
+		22EA60931E36F35C005D8AB0 /* Build configuration list for PBXNativeTarget "RealmLoginKitExample-tvOS" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				22EA60911E36F35C005D8AB0 /* Debug */,
+				22EA60921E36F35C005D8AB0 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
 		};
 		22EC435D1E3246FF009BBA75 /* Build configuration list for PBXNativeTarget "RealmLoginKit" */ = {
 			isa = XCConfigurationList;
