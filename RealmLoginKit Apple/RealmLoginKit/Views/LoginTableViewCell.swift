@@ -17,9 +17,16 @@
 ////////////////////////////////////////////////////////////////////////////
 
 import UIKit
-import TORoundedTableView
 
-class LoginTableViewCell: TORoundedTableViewCapCell, UITextFieldDelegate {
+#if os(tvOS)
+    typealias TableViewCell = UITableViewCell
+#else
+    import TORoundedTableView
+    
+    typealias TableViewCell = TORoundedTableViewCapCell
+#endif
+
+class LoginTableViewCell: TableViewCell, UITextFieldDelegate {
     
     // `lazy` wasn't flexible enough, so defer to old Objective-C style
     // lazy creation for now. (https://github.com/apple/swift-evolution/blob/master/proposals/0030-property-behavior-decls.md)
@@ -29,11 +36,13 @@ class LoginTableViewCell: TORoundedTableViewCapCell, UITextFieldDelegate {
         return _textField!
     }
     
+    #if os(iOS)
     private var _switch: UISwitch? = nil
     public var `switch`: UISwitch {
         setUpSwitch()
         return _switch!
     }
+    #endif
     
     var textChangedHandler: (() -> Void)? {
         didSet {
@@ -47,11 +56,13 @@ class LoginTableViewCell: TORoundedTableViewCapCell, UITextFieldDelegate {
         }
     }
     
+    #if os(iOS)
     var switchChangedHandler: (() -> Void)? {
         didSet {
             if switchChangedHandler != nil { setUpSwitch() }
         }
     }
+    #endif
     
     //MARK: - Class Creation
     
@@ -78,6 +89,7 @@ class LoginTableViewCell: TORoundedTableViewCapCell, UITextFieldDelegate {
         setNeedsLayout()
     }
     
+    #if os(iOS)
     func setUpSwitch() {
         guard _switch == nil else { return }
         
@@ -85,12 +97,14 @@ class LoginTableViewCell: TORoundedTableViewCapCell, UITextFieldDelegate {
         _switch?.addTarget(self, action: #selector(switchDidChange(_:)), for: .valueChanged)
         contentView.addSubview(_switch!)
     }
+    #endif
 
     //MARK: - View Management
     
     override func layoutSubviews() {
         super.layoutSubviews()
         
+        #if os(iOS)
         // The table cell's separatorInset property has only just been updated to the
         // final value at this point, so re-align the text field to match
         if let _textField = _textField {
@@ -103,13 +117,16 @@ class LoginTableViewCell: TORoundedTableViewCapCell, UITextFieldDelegate {
             _switch.frame.origin.x = (contentView.bounds.width - _switch.frame.width) - 20
             _switch.frame.origin.y = (contentView.bounds.midY - _switch.bounds.midY)
         }
+        #endif
     }
     
     //MARK: - Switch Delegate
     
+    #if os(iOS)
     @objc private func switchDidChange(_ sender: AnyObject?) {
         switchChangedHandler?()
     }
+    #endif
     
     //MARK: - Text Field Delegate
     
@@ -125,7 +142,9 @@ class LoginTableViewCell: TORoundedTableViewCapCell, UITextFieldDelegate {
     //MARK: - Class Clean Up
     
     override func prepareForReuse() {
+        #if os(iOS)
         switchChangedHandler = nil
+        #endif
         textChangedHandler = nil
         returnButtonTappedHandler = nil
         

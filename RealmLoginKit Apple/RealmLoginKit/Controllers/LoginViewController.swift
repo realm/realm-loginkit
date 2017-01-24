@@ -17,8 +17,11 @@
 ////////////////////////////////////////////////////////////////////////////
 
 import UIKit
-import TORoundedTableView
 import Realm
+
+#if os(iOS)
+import TORoundedTableView
+#endif
 
 @objc public enum LoginViewControllerStyle: Int {
     case lightTranslucent
@@ -81,7 +84,11 @@ public class LoginViewController: UIViewController, UITableViewDataSource, UITab
     /* Views */
     private let containerView = UIView()
     private let navigationBar = UINavigationBar()
+    #if os(tvOS)
+    private let tableView = UITableView()
+    #else
     private let tableView = TORoundedTableView()
+    #endif
     private let headerView = LoginHeaderView()
     private let footerView = LoginFooterView()
     private let copyrightView = UILabel()
@@ -113,10 +120,13 @@ public class LoginViewController: UIViewController, UITableViewDataSource, UITab
     }
     
     //MARK: - Status Bar Appearance
+    
+    #if os(iOS)
     override public var prefersStatusBarHidden: Bool { return false }
     override public var preferredStatusBarStyle: UIStatusBarStyle {
         return isDarkStyle ? .lightContent : .default
     }
+    #endif
     
     //MARK: - Class Creation
     
@@ -127,11 +137,14 @@ public class LoginViewController: UIViewController, UITableViewDataSource, UITab
         transitioningDelegate = self
         modalPresentationStyle = isTranslucent ? .overFullScreen : .fullScreen
         modalTransitionStyle = .crossDissolve
+        
+        #if os(iOS)
         modalPresentationCapturesStatusBarAppearance = true
         
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow(notification:)), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide(notification:)), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
-        
+        #endif
+            
         loadLoginCredentials()
     }
     
@@ -143,10 +156,12 @@ public class LoginViewController: UIViewController, UITableViewDataSource, UITab
         super.init(coder: aDecoder)
     }
     
+    #if os(iOS)
     deinit {
         NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIKeyboardWillShow, object: nil)
         NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIKeyboardWillHide, object: nil)
     }
+    #endif
     
     //MARK: - View Setup
     
@@ -173,7 +188,9 @@ public class LoginViewController: UIViewController, UITableViewDataSource, UITab
         tableView.dataSource = self
         tableView.delegate = self
         tableView.backgroundColor = .clear
+        #if os(iOS)
         tableView.maximumWidth = 500
+        #endif
         tableView.tableHeaderView = headerView
         tableView.tableFooterView = footerView
         tableView.delaysContentTouches = false
@@ -208,7 +225,10 @@ public class LoginViewController: UIViewController, UITableViewDataSource, UITab
     
     func applyTheme() {
         // view accessory views
+        #if os(iOS)
         navigationBar.barStyle  = isDarkStyle ? .blackTranslucent : .default
+        #endif
+        
         copyrightView.textColor = isDarkStyle ? UIColor(white: 0.3, alpha: 1.0) : UIColor(white: 0.6, alpha: 1.0)
 
         // view background
@@ -228,8 +248,10 @@ public class LoginViewController: UIViewController, UITableViewDataSource, UITab
         footerView.style = isDarkStyle ? .dark : .light
 
         // table view and cells
+        #if os(iOS)
         tableView.separatorColor = isDarkStyle ? UIColor(white: 0.4, alpha: 1.0) : nil
         tableView.cellBackgroundColor = UIColor(white: isDarkStyle ? 0.2 : 1.0, alpha: 1.0)
+        #endif
     }
 
     func applyTheme(to tableViewCell: LoginTableViewCell) {
@@ -291,8 +313,11 @@ public class LoginViewController: UIViewController, UITableViewDataSource, UITab
         }
 
         var topPadding    = max(0, (boundsHeight * 0.5) - contentMidPoint)
+        
+        #if os(iOS)
         if keyboardHeight > 0 { topPadding += (UIApplication.shared.statusBarFrame.height + 10) }
-
+        #endif
+            
         var bottomPadding:CGFloat = 0.0
         if keyboardHeight > 0 {
             bottomPadding = keyboardHeight + 15
@@ -330,7 +355,14 @@ public class LoginViewController: UIViewController, UITableViewDataSource, UITab
     //MARK: - Scroll View Delegate
     
     public func scrollViewDidScroll(_ scrollView: UIScrollView) {
-
+        let verticalOffset = scrollView.contentOffset.y
+        
+        // Offset the copyright label
+        let normalizedOffset = verticalOffset + scrollView.contentInset.top
+        copyrightView.frame.origin.y = (view.bounds.height - copyrightViewMargin) - normalizedOffset
+        
+        // Show the navigation bar when content starts passing under the status bar
+        #if os(iOS)
         if UIApplication.shared.isStatusBarHidden {
             navigationBar.alpha = 0.0
             return
@@ -339,8 +371,7 @@ public class LoginViewController: UIViewController, UITableViewDataSource, UITab
         let statusBarFrameHeight = UIApplication.shared.statusBarFrame.height
         navigationBar.frame.size.height = statusBarFrameHeight
 
-        // Show the navigation bar when content starts passing under the status bar
-        let verticalOffset = scrollView.contentOffset.y
+
 
         if verticalOffset >= -statusBarFrameHeight {
             navigationBar.alpha = 1.0
@@ -351,10 +382,7 @@ public class LoginViewController: UIViewController, UITableViewDataSource, UITab
         else {
             navigationBar.alpha = 1.0 - ((abs(verticalOffset) - statusBarFrameHeight) / 10.0)
         }
-
-        // Offset the copyright label
-        let normalizedOffset = verticalOffset + scrollView.contentInset.top
-        copyrightView.frame.origin.y = (view.bounds.height - copyrightViewMargin) - normalizedOffset
+        #endif
     }
 
     //MARK: - Table View Data Source
@@ -373,15 +401,22 @@ public class LoginViewController: UIViewController, UITableViewDataSource, UITab
         let lastCellIndex = !isRegistering ? 3 : 4
 
         // Configure rounded caps
+        #if os(iOS)
         cell?.topCornersRounded    = (indexPath.row == 0)
         cell?.bottomCornersRounded = (indexPath.row == lastCellIndex)
-
+        #endif
+            
         cell?.imageView?.image = image(forRow: indexPath.row)
 
         if indexPath.row == lastCellIndex {
             cell?.textLabel!.text = "Remember My Account"
+            
+            #if os(tvOS)
+            cell?.detailTextLabel?.text = rememberLogin ? "On" : "Off"
+            #else
             cell?.switch.isOn = rememberLogin
             cell?.switchChangedHandler = { self.rememberLogin = (cell?.switch.isOn)! }
+            #endif
         }
         else {
             let textField = cell!.textField
@@ -473,11 +508,13 @@ public class LoginViewController: UIViewController, UITableViewDataSource, UITab
     }
     
     // MARK: - Keyboard Handling
+    
     func makeFirstResponder(atRow row: Int) {
         let cell = tableView.cellForRow(at: IndexPath(row: row, section: 0)) as! LoginTableViewCell
         cell.textField.becomeFirstResponder()
     }
     
+    #if os(iOS)
     @objc private func keyboardWillShow(notification: Notification) {
         let keyboardFrame = notification.userInfo?[UIKeyboardFrameEndUserInfoKey] as! CGRect
         keyboardHeight = keyboardFrame.height
@@ -488,6 +525,7 @@ public class LoginViewController: UIViewController, UITableViewDataSource, UITab
         keyboardHeight = 0
         animateContentInsetTransition()
     }
+    #endif
     
     private func animateContentInsetTransition() {
         UIView.animate(withDuration: 0.6, delay: 0, usingSpringWithDamping: 1.0, initialSpringVelocity: 0.9, options: [], animations: {

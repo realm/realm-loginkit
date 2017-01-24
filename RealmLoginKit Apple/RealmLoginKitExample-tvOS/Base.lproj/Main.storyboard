@@ -22,18 +22,20 @@
                         <rect key="frame" x="0.0" y="0.0" width="1920" height="1080"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="q2U-In-jwE" customClass="RealmLogoView" customModule="RealmLoginKitExample_iOS">
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="q2U-In-jwE" customClass="RealmLogoView" customModule="RealmLoginKitExample_tvOS" customModuleProvider="target">
                                 <rect key="frame" x="610" y="190" width="700" height="700"/>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 <constraints>
                                     <constraint firstAttribute="width" secondItem="q2U-In-jwE" secondAttribute="height" multiplier="1:1" id="4JS-0g-TXe"/>
+                                    <constraint firstAttribute="width" constant="700" id="4vC-oC-wUC"/>
                                 </constraints>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="boolean" keyPath="isWordMarkHidden" value="YES"/>
+                                </userDefinedRuntimeAttributes>
                             </view>
                         </subviews>
                         <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
-                            <constraint firstItem="q2U-In-jwE" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" constant="45" id="8EE-bG-5hE"/>
-                            <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="q2U-In-jwE" secondAttribute="bottom" constant="190" id="Vvn-HT-BMV"/>
                             <constraint firstItem="q2U-In-jwE" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="oO7-Lx-Xp5"/>
                             <constraint firstItem="q2U-In-jwE" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" id="v6Q-6D-vbb"/>
                         </constraints>
