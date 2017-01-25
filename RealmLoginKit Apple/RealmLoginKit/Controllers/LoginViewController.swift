@@ -88,7 +88,7 @@ public class LoginViewController: UIViewController, UITableViewDataSource, UITab
      For cases where apps do not require logging in each time, the 'remember login'
      field can be hidden
     */
-    public var isRememberLoginFieldHidden: Bool = false {
+    public var isRememberAccountDetailsFieldHidden: Bool = false {
         didSet {
             tableView.reloadData()
         }
@@ -391,7 +391,7 @@ public class LoginViewController: UIViewController, UITableViewDataSource, UITab
     public func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         var numberOfRows = isRegistering ? 5 : 4
         if isServerURLFieldHidden { numberOfRows -= 1 }
-        if isRememberLoginFieldHidden { numberOfRows -= 1 }
+        if isRememberAccountDetailsFieldHidden { numberOfRows -= 1 }
         return numberOfRows
     }
     
