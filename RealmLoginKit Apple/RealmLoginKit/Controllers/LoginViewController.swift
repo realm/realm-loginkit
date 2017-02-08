@@ -207,9 +207,9 @@ public class LoginViewController: UIViewController, UITableViewDataSource, UITab
         tableView.tableFooterView = footerView
         tableView.delaysContentTouches = false
         containerView.addSubview(tableView)
-        
+
         headerView.appName = Bundle.main.infoDictionary![kCFBundleNameKey as String] as? String
-        
+
         footerView.loginButtonTapped = {
             self.submitLogin()
         }
@@ -298,11 +298,18 @@ public class LoginViewController: UIViewController, UITableViewDataSource, UITab
 
     override public func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
+
+        // Hide the copyright if there's not enough vertical space on the screen for it to not
+        // interfere with the rest of the content
+        copyrightView.isHidden = (tableView.contentInset.top + tableView.contentSize.height) > copyrightView.frame.minY
+
+        // Recalculate the state for the on-screen views
         layoutTableContentInset()
-        copyrightView.isHidden = tableView.contentSize.height > tableView.bounds.height
+        layoutNavigationBar()
+        layoutCopyrightView()
     }
 
-    func layoutTableContentInset() {
+    private func layoutTableContentInset() {
 
         // Vertically align the table view so the table cells are in the middle
         let boundsHeight = view.bounds.size.height - keyboardHeight // Adjusted for keyboard visibility
@@ -320,7 +327,7 @@ public class LoginViewController: UIViewController, UITableViewDataSource, UITab
         }
 
         var topPadding    = max(0, (boundsHeight * 0.5) - contentMidPoint)
-        if keyboardHeight > 0 { topPadding += (UIApplication.shared.statusBarFrame.height + 10) }
+        topPadding += (UIApplication.shared.statusBarFrame.height + 10)
 
         var bottomPadding:CGFloat = 0.0
         if keyboardHeight > 0 {
@@ -332,7 +339,41 @@ public class LoginViewController: UIViewController, UITableViewDataSource, UITab
         edgeInsets.bottom = bottomPadding
         tableView.contentInset = edgeInsets
     }
-    
+
+    private func layoutNavigationBar() {
+        if UIApplication.shared.isStatusBarHidden {
+            navigationBar.alpha = 0.0
+            return
+        }
+
+        let statusBarFrameHeight = UIApplication.shared.statusBarFrame.height
+        navigationBar.frame.size.height = statusBarFrameHeight
+
+        // Show the navigation bar when content starts passing under the status bar
+        let verticalOffset = self.tableView.contentOffset.y
+
+        if verticalOffset >= -statusBarFrameHeight {
+            navigationBar.alpha = 1.0
+        }
+        else if verticalOffset <= -(statusBarFrameHeight + 10) {
+            navigationBar.alpha = 0.0
+        }
+        else {
+            navigationBar.alpha = 1.0 - ((abs(verticalOffset) - statusBarFrameHeight) / 10.0)
+        }
+    }
+
+    private func layoutCopyrightView() {
+        guard copyrightView.isHidden == false else {
+            return
+        }
+
+        // Offset the copyright label
+        let verticalOffset = tableView.contentOffset.y
+        let normalizedOffset = verticalOffset + tableView.contentInset.top
+        copyrightView.frame.origin.y = (view.bounds.height - copyrightViewMargin) - normalizedOffset
+    }
+
     //MARK: - State Management
     private func validateFormItems() {
         var formIsValid = true
@@ -359,31 +400,8 @@ public class LoginViewController: UIViewController, UITableViewDataSource, UITab
     //MARK: - Scroll View Delegate
     
     public func scrollViewDidScroll(_ scrollView: UIScrollView) {
-
-        if UIApplication.shared.isStatusBarHidden {
-            navigationBar.alpha = 0.0
-            return
-        }
-
-        let statusBarFrameHeight = UIApplication.shared.statusBarFrame.height
-        navigationBar.frame.size.height = statusBarFrameHeight
-
-        // Show the navigation bar when content starts passing under the status bar
-        let verticalOffset = scrollView.contentOffset.y
-
-        if verticalOffset >= -statusBarFrameHeight {
-            navigationBar.alpha = 1.0
-        }
-        else if verticalOffset <= -(statusBarFrameHeight + 10) {
-            navigationBar.alpha = 0.0
-        }
-        else {
-            navigationBar.alpha = 1.0 - ((abs(verticalOffset) - statusBarFrameHeight) / 10.0)
-        }
-
-        // Offset the copyright label
-        let normalizedOffset = verticalOffset + scrollView.contentInset.top
-        copyrightView.frame.origin.y = (view.bounds.height - copyrightViewMargin) - normalizedOffset
+        layoutNavigationBar()
+        layoutCopyrightView()
     }
 
     //MARK: - Table View Data Source
@@ -537,6 +555,7 @@ public class LoginViewController: UIViewController, UITableViewDataSource, UITab
     private func animateContentInsetTransition() {
         UIView.animate(withDuration: 0.6, delay: 0, usingSpringWithDamping: 1.0, initialSpringVelocity: 0.9, options: [], animations: {
             self.layoutTableContentInset()
+            self.layoutNavigationBar()
         }, completion: nil)
         
         // When animating the table view edge insets when its rounded, the header view
