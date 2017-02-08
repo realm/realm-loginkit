@@ -595,8 +595,10 @@ public class LoginViewController: UIViewController, UITableViewDataSource, UITab
         
         saveLoginCredentials()
         
+        var scheme: String?
         var formattedURL = serverURL
         if let schemeRange = formattedURL?.range(of: "://") {
+            scheme = formattedURL?.substring(to: schemeRange.lowerBound)
             formattedURL = formattedURL?.substring(from: schemeRange.upperBound)
         }
         
@@ -605,7 +607,8 @@ public class LoginViewController: UIViewController, UITableViewDataSource, UITab
         }
         
         let credentials = RLMSyncCredentials(username: email!, password: password!, register: isRegistering)
-        RLMSyncUser.__logIn(with: credentials, authServerURL: URL(string: "http://\(formattedURL!)")!, timeout: 30, onCompletion: { (user, error) in
+        let authScheme = scheme == "realms" ? "https" : "http"
+        RLMSyncUser.__logIn(with: credentials, authServerURL: URL(string: "\(authScheme)://\(formattedURL!)")!, timeout: 30, onCompletion: { (user, error) in
             DispatchQueue.main.async {
                 self.footerView.isSubmitting = false
                 
