@@ -73,10 +73,11 @@ class LoginHeaderView: UIView {
         realmLogoView.tintColor = .white
         realmLogoView.logoStrokeWidth = 3.0
         addSubview(realmLogoView)
-        
+
         titleLabel.font = UIFont.systemFont(ofSize: 28.0)
         titleLabel.textAlignment = .center
         titleLabel.textColor = .black
+        titleLabel.adjustsFontSizeToFitWidth = true
         addSubview(titleLabel)
         
         updateTitleView()
@@ -88,11 +89,11 @@ class LoginHeaderView: UIView {
         rect.size = CGSize(width: logoSize, height: logoSize)
         rect.origin.x = (bounds.size.width - CGFloat(logoSize)) * 0.5
         realmLogoView.frame = rect
-        
+
         titleLabel.sizeToFit()
         rect = titleLabel.frame
-        rect.origin.x = 0.0
-        rect.size.width = bounds.size.width
+        rect.origin.x = 15.0
+        rect.size.width = bounds.size.width - 30.0
         rect.origin.y = bounds.size.height - CGFloat(bottomMargin + Int(rect.size.height))
         titleLabel.frame = rect
     }
