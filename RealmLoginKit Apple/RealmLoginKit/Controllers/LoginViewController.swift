@@ -635,8 +635,8 @@ public class LoginViewController: UIViewController, UITableViewDataSource, UITab
     
     private func loadLoginCredentials() {
         let userDefaults = UserDefaults.standard
-        serverURL = userDefaults.object(forKey: LoginViewController.serverURLKey) as! String?
-        email = userDefaults.object(forKey:  LoginViewController.emailKey) as! String?
-        password = userDefaults.object(forKey: LoginViewController.passwordKey) as! String?
+        serverURL = userDefaults.string(forKey: LoginViewController.serverURLKey)
+        email = userDefaults.string(forKey:  LoginViewController.emailKey)
+        password = userDefaults.string(forKey: LoginViewController.passwordKey)
     }
 }
