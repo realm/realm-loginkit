@@ -602,10 +602,6 @@ public class LoginViewController: UIViewController, UITableViewDataSource, UITab
             formattedURL = formattedURL?.substring(from: schemeRange.upperBound)
         }
         
-        if formattedURL?.range(of: ":") == nil {
-            formattedURL = "\(formattedURL!):9080"
-        }
-        
         let credentials = RLMSyncCredentials(username: email!, password: password!, register: isRegistering)
         let authScheme = scheme == "realms" ? "https" : "http"
         RLMSyncUser.__logIn(with: credentials, authServerURL: URL(string: "\(authScheme)://\(formattedURL!)")!, timeout: 30, onCompletion: { (user, error) in
