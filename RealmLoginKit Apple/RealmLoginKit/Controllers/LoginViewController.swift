@@ -274,6 +274,7 @@ public class LoginViewController: UIViewController, UITableViewDataSource, UITab
         // Only touch the text field if we're actively using it
         if tableViewCell.textChangedHandler != nil {
             tableViewCell.textField?.textColor = isDarkStyle ? .white : .black
+            tableViewCell.textField?.keyboardAppearance = isDarkStyle ? .dark : .default
 
             if isDarkStyle {
                 let placeholderText = tableViewCell.textField?.placeholder
