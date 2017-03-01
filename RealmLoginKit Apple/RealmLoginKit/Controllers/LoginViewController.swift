@@ -306,9 +306,8 @@ public class LoginViewController: UIViewController, UITableViewDataSource, UITab
     override public func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
 
-        // Hide the copyright if there's not enough vertical space on the screen for it to not
-        // interfere with the rest of the content
-        copyrightView.isHidden = (tableView.contentInset.top + tableView.contentSize.height) > copyrightView.frame.minY
+        // Hide the copyright view if there's not enough space on screen
+        updateCopyrightViewVisibility()
 
         // Recalculate the state for the on-screen views
         layoutTableContentInset()
@@ -368,6 +367,13 @@ public class LoginViewController: UIViewController, UITableViewDataSource, UITab
         else {
             navigationBar.alpha = 1.0 - ((abs(verticalOffset) - statusBarFrameHeight) / 10.0)
         }
+    }
+
+    private func updateCopyrightViewVisibility() {
+        // Hide the copyright if there's not enough vertical space on the screen for it to not
+        // interfere with the rest of the content
+        let isHidden = (tableView.contentInset.top + tableView.contentSize.height) > copyrightView.frame.minY
+        copyrightView.alpha = isHidden ? 0.0 : 1.0
     }
 
     private func layoutCopyrightView() {
@@ -540,6 +546,11 @@ public class LoginViewController: UIViewController, UITableViewDataSource, UITab
         // Update the accessory views
         headerView.setRegistering(_registering, animated: animated)
         footerView.setRegistering(_registering, animated: animated)
+
+        // Hide the copyright view if needed
+        UIView.animate(withDuration: animated ? 0.25 : 0.0) {
+            self.updateCopyrightViewVisibility()
+        }
     }
     
     // MARK: - Keyboard Handling
