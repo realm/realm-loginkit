@@ -124,6 +124,7 @@ public class LoginViewController: UIViewController, UITableViewDataSource, UITab
     
     /* Login/Register Credentials */
     public var serverURL: String?       { didSet { validateFormItems() } }
+    public var serverPort = 9080        { didSet { validateFormItems() } }
     public var email: String?           { didSet { validateFormItems() } }
     public var password: String?        { didSet { validateFormItems() } }
     public var confirmPassword: String? { didSet { validateFormItems() } }
@@ -394,6 +395,10 @@ public class LoginViewController: UIViewController, UITableViewDataSource, UITab
         if serverURL == nil || (serverURL?.isEmpty)! {
             formIsValid = false
         }
+        
+        if !(0...65535 ~= serverPort) {
+            formIsValid = false
+        }
 
         if email?.range(of: "@") == nil || email?.range(of: ".") == nil {
             formIsValid = false
@@ -607,17 +612,25 @@ public class LoginViewController: UIViewController, UITableViewDataSource, UITab
         
         saveLoginCredentials()
         
+        var authScheme = "http"
+        var scheme: String?
         var formattedURL = serverURL
         if let schemeRange = formattedURL?.range(of: "://") {
+            scheme = formattedURL?.substring(to: schemeRange.lowerBound)
+            if scheme == "realms" || scheme == "https" {
+                serverPort = 9443
+                authScheme = "https"
+            }
             formattedURL = formattedURL?.substring(from: schemeRange.upperBound)
         }
-        
-        if formattedURL?.range(of: ":") == nil {
-            formattedURL = "\(formattedURL!):9080"
+        if let portRange = formattedURL?.range(of: ":") {
+            if let portString = formattedURL?.substring(from: portRange.upperBound) {
+                serverPort = Int(portString) ?? serverPort
+            }
         }
         
         let credentials = RLMSyncCredentials(username: email!, password: password!, register: isRegistering)
-        RLMSyncUser.__logIn(with: credentials, authServerURL: URL(string: "http://\(formattedURL!)")!, timeout: 30, onCompletion: { (user, error) in
+        RLMSyncUser.__logIn(with: credentials, authServerURL: URL(string: "\(authScheme)://\(formattedURL!):\(serverPort)")!, timeout: 30, onCompletion: { (user, error) in
             DispatchQueue.main.async {
                 self.footerView.isSubmitting = false
                 
