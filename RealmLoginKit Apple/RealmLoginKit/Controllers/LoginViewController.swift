@@ -125,7 +125,7 @@ public class LoginViewController: UIViewController, UITableViewDataSource, UITab
     /* Login/Register Credentials */
     public var serverURL: String?       { didSet { validateFormItems() } }
     public var serverPort = 9080        { didSet { validateFormItems() } }
-    public var email: String?           { didSet { validateFormItems() } }
+    public var username: String?           { didSet { validateFormItems() } }
     public var password: String?        { didSet { validateFormItems() } }
     public var confirmPassword: String? { didSet { validateFormItems() } }
     public var rememberLogin: Bool = true
@@ -400,11 +400,11 @@ public class LoginViewController: UIViewController, UITableViewDataSource, UITab
             formIsValid = false
         }
 
-        if email?.range(of: "@") == nil || email?.range(of: ".") == nil {
+        if username == nil || username!.isEmpty {
             formIsValid = false
         }
 
-        if password == nil || (password?.isEmpty)! {
+        if password == nil || password!.isEmpty {
             formIsValid = false
         }
 
@@ -457,10 +457,10 @@ public class LoginViewController: UIViewController, UITableViewDataSource, UITab
         case .email:
             cell?.type = .textField
             cell?.imageView?.image = mailIcon
-            cell?.textField?.placeholder = "Email Address"
-            cell?.textField?.text = email
+            cell?.textField?.placeholder = "Username"
+            cell?.textField?.text = username
             cell?.textField?.keyboardType = .emailAddress
-            cell?.textChangedHandler = { self.email = cell?.textField?.text }
+            cell?.textChangedHandler = { self.username = cell?.textField?.text }
             cell?.returnButtonTappedHandler = { self.makeFirstResponder(atRow: indexPath.row + 1) }
         case .password:
             cell?.type = .textField
@@ -629,7 +629,7 @@ public class LoginViewController: UIViewController, UITableViewDataSource, UITab
             }
         }
         
-        let credentials = RLMSyncCredentials(username: email!, password: password!, register: isRegistering)
+        let credentials = RLMSyncCredentials(username: username!, password: password!, register: isRegistering)
         RLMSyncUser.__logIn(with: credentials, authServerURL: URL(string: "\(authScheme)://\(formattedURL!):\(serverPort)")!, timeout: 30, onCompletion: { (user, error) in
             DispatchQueue.main.async {
                 self.footerView.isSubmitting = false
@@ -652,7 +652,7 @@ public class LoginViewController: UIViewController, UITableViewDataSource, UITab
         
         if rememberLogin {
             userDefaults.set(serverURL, forKey: LoginViewController.serverURLKey)
-            userDefaults.set(email, forKey: LoginViewController.emailKey)
+            userDefaults.set(username, forKey: LoginViewController.emailKey)
             userDefaults.set(password, forKey: LoginViewController.passwordKey)
         }
         else {
@@ -667,7 +667,7 @@ public class LoginViewController: UIViewController, UITableViewDataSource, UITab
     private func loadLoginCredentials() {
         let userDefaults = UserDefaults.standard
         serverURL = userDefaults.string(forKey: LoginViewController.serverURLKey)
-        email = userDefaults.string(forKey:  LoginViewController.emailKey)
+        username = userDefaults.string(forKey:  LoginViewController.emailKey)
         password = userDefaults.string(forKey: LoginViewController.passwordKey)
     }
 }
