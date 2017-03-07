@@ -23,6 +23,7 @@ class LoginViewControllerTransitioning: NSObject, UIViewControllerAnimatedTransi
     public var isDismissing = false
     
     public var contentView: UIView? = nil
+    public var controlView: UIView? = nil
     public var effectsView: UIVisualEffectView? = nil
     public var backgroundView: UIView? = nil
     
@@ -48,6 +49,7 @@ class LoginViewControllerTransitioning: NSObject, UIViewControllerAnimatedTransi
         contentView?.frame.origin.y = !isDismissing ? containerView.frame.maxY : containerView.bounds.minY
         backgroundView?.alpha = !isDismissing ? 0.0 : 1.0
         effectsView?.effect = !isDismissing ? nil : effect
+        controlView?.alpha = !isDismissing ? 0.0 : 1.0
         
         if !isDismissing {
             containerView.addSubview(toViewController!.view)
@@ -63,6 +65,7 @@ class LoginViewControllerTransitioning: NSObject, UIViewControllerAnimatedTransi
             self.contentView?.frame.origin.y = !self.isDismissing ? containerView.bounds.minY : containerView.bounds.maxY
             self.backgroundView?.alpha = !self.isDismissing ? 1.0 : 0.0
             self.effectsView?.effect = !self.isDismissing ? effect : nil
+            self.controlView?.alpha = !self.isDismissing ? 1.0 : 0.0
         }) { complete in
             self.effectsView?.effect = effect
             transitionContext.completeTransition(!transitionContext.transitionWasCancelled)
