@@ -423,6 +423,25 @@ public class LoginViewController: UIViewController, UITableViewDataSource, UITab
         copyrightView.alpha = isHidden ? 0.0 : 1.0
     }
 
+    private func updateCloseButtonVisibility() {
+        guard let closeButton = self.closeButton else {
+            return
+        }
+
+        guard self.traitCollection.horizontalSizeClass == .compact else {
+            closeButton.alpha = 1.0
+            return
+        }
+
+        let titleLabel = self.headerView.titleLabel
+        let yOffset = titleLabel.frame.origin.y - tableView.contentOffset.y
+        let thresholdY = closeButton.frame.maxY
+        let normalizedOffset = yOffset - thresholdY
+        var alpha = normalizedOffset / 30.0
+        alpha = min(1.0, alpha); alpha = max(0.0, alpha)
+        closeButton.alpha = alpha
+    }
+
     private func layoutCopyrightView() {
         guard copyrightView.isHidden == false else {
             return
@@ -452,6 +471,7 @@ public class LoginViewController: UIViewController, UITableViewDataSource, UITab
     public func scrollViewDidScroll(_ scrollView: UIScrollView) {
         layoutNavigationBar()
         layoutCopyrightView()
+        updateCloseButtonVisibility()
     }
 
     //MARK: - Table View Data Source
@@ -625,6 +645,7 @@ public class LoginViewController: UIViewController, UITableViewDataSource, UITab
         animationController.backgroundView = backgroundView
         animationController.contentView = containerView
         animationController.effectsView = effectView
+        animationController.controlView = closeButton
         animationController.isDismissing = false
         return animationController
     }
@@ -634,6 +655,7 @@ public class LoginViewController: UIViewController, UITableViewDataSource, UITab
         animationController.backgroundView = backgroundView
         animationController.contentView = containerView
         animationController.effectsView = effectView
+        animationController.controlView = closeButton
         animationController.isDismissing = true
         return animationController
     }

@@ -28,15 +28,14 @@ class LoginHeaderView: UIView {
     public var style: LoginHeaderViewStyle = .light {
         didSet { applyTheme() }
     }
-    
+
+    public let realmLogoView = RealmLogoView(frame: CGRect.zero, style: .colored, wordMarkHidden: true)
+    public let titleLabel = UILabel()
+
     private let viewHeight = 190 // Overall height of the view
     private let bottomMargin = 30 // Gap between the label and the bottom of the view
-    
     private let logoSize = 100
-    
-    private let realmLogoView = RealmLogoView(frame: CGRect.zero, style: .colored, wordMarkHidden: true)
-    private let titleLabel = UILabel()
-    
+
     private var _registering: Bool = false
     var isRegistering: Bool {
         set {
