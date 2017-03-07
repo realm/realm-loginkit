@@ -93,13 +93,23 @@ public class LoginViewController: UIViewController, UITableViewDataSource, UITab
             tableView.reloadData()
         }
     }
-    
+
+    /** 
+     In cases where cancelling the login controller might be needed, show 
+     a close button that can dismiss the view.
+    */
+    public var isCancelButtonHidden = true {
+        didSet {
+            setUpCloseButton()
+        }
+    }
+
     //MARK: - Private Properties
     
     /* User default keys for saving form data */
     private static let serverURLKey = "RealmLoginServerURLKey"
-    private static let emailKey = "RealmLoginEmailKey"
-    private static let passwordKey = "RealmLoginPasswordKey"
+    private static let emailKey     = "RealmLoginEmailKey"
+    private static let passwordKey  = "RealmLoginPasswordKey"
     
     /* Assets */
     private let earthIcon = UIImage.earthIcon()
@@ -114,6 +124,7 @@ public class LoginViewController: UIViewController, UITableViewDataSource, UITab
     private let headerView = LoginHeaderView()
     private let footerView = LoginFooterView()
     private let copyrightView = UILabel()
+    private var closeButton: UIButton? = nil
     
     private var effectView: UIVisualEffectView?
     private var backgroundView: UIView?
@@ -132,7 +143,8 @@ public class LoginViewController: UIViewController, UITableViewDataSource, UITab
     
     /* Layout Constants */
     private let copyrightViewMargin: CGFloat = 45
-    
+    private let closeButtonInset = UIEdgeInsets(top: 15, left: 18, bottom: 0, right: 0)
+
     /* State Convienience Methods */
     private var isTranslucent: Bool  {
         return style == .lightTranslucent || style == .darkTranslucent
@@ -172,12 +184,16 @@ public class LoginViewController: UIViewController, UITableViewDataSource, UITab
     required public init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
     }
-    
+
     deinit {
         NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIKeyboardWillShow, object: nil)
         NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIKeyboardWillHide, object: nil)
     }
-    
+
+    @objc private func didTapCloseButton() {
+        dismiss(animated: true, completion: nil)
+    }
+
     //MARK: - View Setup
     
     private func setUpTranslucentViews() {
@@ -187,17 +203,8 @@ public class LoginViewController: UIViewController, UITableViewDataSource, UITab
         effectView?.autoresizingMask = [.flexibleWidth, .flexibleHeight]
         view.addSubview(effectView!)
     }
-    
-    private func setUpCommonViews() {
-        backgroundView = UIView()
-        backgroundView?.frame = view.bounds
-        backgroundView?.autoresizingMask = [.flexibleWidth, .flexibleHeight]
-        view.addSubview(backgroundView!)
-        
-        containerView.frame = view.bounds
-        containerView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
-        view.addSubview(containerView)
-        
+
+    private func setUpTableView() {
         tableView.frame = view.bounds
         tableView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
         tableView.dataSource = self
@@ -220,11 +227,41 @@ public class LoginViewController: UIViewController, UITableViewDataSource, UITab
         footerView.loginButtonTapped = {
             self.submitLogin()
         }
-        
+
         footerView.registerButtonTapped = {
             self.setRegistering(!self.isRegistering, animated: true)
         }
+    }
+
+    private func setUpCloseButton() {
+        //Check if we're already set up
+        if isCancelButtonHidden && closeButton == nil { return }
+        if !isCancelButtonHidden && closeButton != nil { return }
+
+        if isCancelButtonHidden {
+            closeButton?.removeFromSuperview()
+            closeButton = nil
+            return
+        }
+
+        let closeIcon = UIImage.closeIcon()
+        closeButton = UIButton(type: .system)
+        closeButton?.setImage(closeIcon, for: .normal)
+        closeButton?.frame = CGRect(origin: .zero, size: closeIcon.size)
+        closeButton?.addTarget(self, action: #selector(didTapCloseButton), for: .touchUpInside)
+        view.addSubview(closeButton!)
+    }
+
+    private func setUpCommonViews() {
+        backgroundView = UIView()
+        backgroundView?.frame = view.bounds
+        backgroundView?.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+        view.addSubview(backgroundView!)
         
+        containerView.frame = view.bounds
+        containerView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+        view.addSubview(containerView)
+
         navigationBar.frame = CGRect(x: 0, y: 0, width: view.bounds.size.width, height: 20)
         navigationBar.autoresizingMask = [.flexibleWidth]
         navigationBar.alpha = 0.0
@@ -238,6 +275,9 @@ public class LoginViewController: UIViewController, UITableViewDataSource, UITab
         copyrightView.frame.origin.y = view.bounds.height - copyrightViewMargin
         copyrightView.frame.origin.x = (view.bounds.width - copyrightView.frame.width) * 0.5
         containerView.addSubview(copyrightView)
+
+        setUpTableView()
+        setUpCloseButton()
 
         applyTheme()
     }
@@ -257,6 +297,11 @@ public class LoginViewController: UIViewController, UITableViewDataSource, UITab
 
         if effectView != nil {
             effectView?.effect = UIBlurEffect(style: isDarkStyle ? .dark : .light)
+        }
+
+        if closeButton != nil {
+            let greyShade = isDarkStyle ? 1.0 : 0.2
+            closeButton?.tintColor = UIColor(white: CGFloat(greyShade), alpha: 1.0)
         }
 
         // table accessory views
@@ -314,6 +359,7 @@ public class LoginViewController: UIViewController, UITableViewDataSource, UITab
         layoutTableContentInset()
         layoutNavigationBar()
         layoutCopyrightView()
+        layoutCloseButton()
     }
 
     private func layoutTableContentInset() {
@@ -388,31 +434,17 @@ public class LoginViewController: UIViewController, UITableViewDataSource, UITab
         copyrightView.frame.origin.y = (view.bounds.height - copyrightViewMargin) - normalizedOffset
     }
 
-    //MARK: - State Management
-    private func validateFormItems() {
-        var formIsValid = true
-
-        if serverURL == nil || (serverURL?.isEmpty)! {
-            formIsValid = false
-        }
-        
-        if !(0...65535 ~= serverPort) {
-            formIsValid = false
+    private func layoutCloseButton() {
+        guard let closeButton = self.closeButton else {
+            return
         }
 
-        if username == nil || username!.isEmpty {
-            formIsValid = false
-        }
+        let statusBarFrame = UIApplication.shared.statusBarFrame
 
-        if password == nil || password!.isEmpty {
-            formIsValid = false
-        }
-
-        if isRegistering && password != confirmPassword {
-            formIsValid = false
-        }
-
-        footerView.isSubmitButtonEnabled = formIsValid
+        var rect = closeButton.frame
+        rect.origin.x = closeButtonInset.left
+        rect.origin.y = statusBarFrame.size.height + closeButtonInset.top
+        closeButton.frame = rect
     }
 
     //MARK: - Scroll View Delegate
@@ -607,6 +639,32 @@ public class LoginViewController: UIViewController, UITableViewDataSource, UITab
     }
     
     //MARK: - Form Submission
+    private func validateFormItems() {
+        var formIsValid = true
+
+        if serverURL == nil || (serverURL?.isEmpty)! {
+            formIsValid = false
+        }
+
+        if !(0...65535 ~= serverPort) {
+            formIsValid = false
+        }
+
+        if username == nil || username!.isEmpty {
+            formIsValid = false
+        }
+
+        if password == nil || password!.isEmpty {
+            formIsValid = false
+        }
+
+        if isRegistering && password != confirmPassword {
+            formIsValid = false
+        }
+
+        footerView.isSubmitButtonEnabled = formIsValid
+    }
+
     private func submitLogin() {
         footerView.isSubmitting = true
         

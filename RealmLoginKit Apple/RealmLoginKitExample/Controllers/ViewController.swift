@@ -55,6 +55,7 @@ class ViewController: UIViewController {
     @IBAction func showLoginButtonTapped(_ sender: AnyObject?) {
         let style: LoginViewControllerStyle = isDarkMode ? .darkTranslucent : .lightTranslucent
         let loginViewController = LoginViewController(style: style)
+        loginViewController.isCancelButtonHidden = false
         present(loginViewController, animated: true, completion: nil)
     }
 }
