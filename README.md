@@ -16,11 +16,13 @@ It has been designed to be easily dropped into existing app codebases, and to pr
 
 # Versions
 
-Realm LoginKit only supports iOS at the moment. An Android version is currently in development, and a Xamarin version is on the roadmap.
+Realm LoginKit only supports iOS at the moment. 
 
 Please navigate to the root directory of each version for code samples and installation instructions.
 
-* [iOS Version](https://github.com/realm-demos/realm-loginkit/tree/master/RealmLoginKit%20Apple/) - Written in Swift, but also fully Objective-C compatible.
+* [iOS](https://github.com/realm-demos/realm-loginkit/tree/master/RealmLoginKit%20Apple/) - Written in Swift, but also fully Objective-C compatible.
+* Android - Currently in development, and should be finished soon.
+* Xamarin - Currently on the roadmap and development should be started soon.
 
 # License
 
