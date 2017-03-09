@@ -4,7 +4,7 @@
 
 # Realm LoginKit
 
-Realm LoginKit is a UI framework that provides a fully fleshed out login screen for apps that make use of the Realm Mobile Platform.
+Realm LoginKit is a UI framework that provides a fully featured login screen for apps that make use of the Realm Mobile Platform.
 
 It has been designed to be easily dropped into existing app codebases, and to provide a fully featured interface allowing users to either log in, or register new accounts in that app.
 
