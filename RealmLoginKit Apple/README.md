@@ -1,3 +1,7 @@
+<p align="center">
+<img src="https://raw.githubusercontent.com/realm-demos/realm-loginkit/master/screenshot.jpg" width="500" style="margin:0 auto" />
+</p>
+
 # Realm LoginKit (iOS Version)
 
 This is the iOS version of Realm LoginKit. It has been designed to be dropped into iOS projects and presented modally over
@@ -73,5 +77,3 @@ loginController.loginSuccessfulHandler = ^(RLMSyncUser *user) {
 # Technical Requirements
 
 iOS 9.0 and above
-
-
