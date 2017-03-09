@@ -4,26 +4,26 @@
 
 # Realm LoginKit
 
-Realm LoginKit is a generic login screen for apps using the Realm Mobile Platform.
+Realm LoginKit is a UI framework that provides a fully fleshed out login screen for apps that make use of the Realm Mobile Platform.
 
-It provides a form interface to allow users to log in, or even sign up for the first time with a Mobile Platform account.
+It has been designed to be easily dropped into existing app codebases, and to provide a fully featured interface allowing users to either log in, or register new accounts in that app.
+
+# Features
+* Fully adaptive to both smartphone, and tablet screen sizes.
+* Able to transition between 'log in' and 'sign up' modes.
+* Options to hide the server URL and 'remember me' form fields if desired.
+* The ability to remember username and passwords on subsequent app launches.
 
 # Versions
 
-While Realm LoginKit only supports iOS at the moment, more versions are on the way.
+Realm LoginKit only supports iOS at the moment. An Android version is currently in development, and a Xamarin version is on the roadmap.
 
-* [iOS Version](https://github.com/realm-demos/realm-loginkit/tree/master/RealmLoginKit%20Apple/)
+Please navigate to the root directory of each version for code samples and installation instructions.
 
-
-
-
-# Realm Object Server Features
-
-@TODO: __Describe how Puzzle uses ROS to keep the players in sync__
+* [iOS Version](https://github.com/realm-demos/realm-loginkit/tree/master/RealmLoginKit%20Apple/) - Written in Swift, but also fully Objective-C compatible.
 
 # License
 
-The Realm Puzzle is distributed under the terms of the  [MIT License](https://en.wikipedia.org/wiki/MIT_License)
-
+The Realm Puzzle is distributed under the terms of the [MIT License](https://en.wikipedia.org/wiki/MIT_License)
 
 Realm LoginKit is licensed under the Apache license. See the LICENSE file for details.
