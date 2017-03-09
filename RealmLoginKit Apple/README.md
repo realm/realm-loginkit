@@ -10,10 +10,34 @@ the landing view controller of any app using the Realm Mobile Platform.
 # Features
 
 * Fully adaptive between iPhone and iPad size classes
-* Provides easy swapping between logging in, and signin up for the first time,
+* Provides easy swapping between logging in, and signing up for the first time,
 * Light & Dark Themes: For light apps (like Realm Draw) as well as dark apps (like Realm Tasks)
 * Background can either be opaque, or translucent.
 * Can be imported and used in Objective-C.
+* Remembers previous login details via `NSUserDefaults`.
+
+# Installation
+
+## Prerequisites
+
+This framework requires [Cocoapods](https://www.cocoapods.org) to manage its external dependencies, and these must be installed before it can be built. 
+
+For instructions on how to install CocoaPods, visit the [Getting Started](https://guides.cocoapods.org/using/getting-started.html) guide on the CocoaPods website.
+
+Once CocoaPods is installed, navigate to this directory in Terminal.app, and run `pod install` to set up these dependencies.
+
+### Realm Mobile Platform
+
+This framework demonstrates features of the [Realm Mobile Platform](https://realm.io/products/realm-mobile-platform/) and needs to have a working instance of the Realm Object Server available in order to function properly.
+
+A copy of the Realm Mobile Platform can be [downloaded and run locally on macOS](https://realm.io/docs/get-started/installation/mac/), available on the Realm website.
+
+### Third Party Modules
+
+The following modules will be installed as part of the CocoaPods installation process:
+
+- [Realm](https://realm.io) - The Objective-C version of Realm. Realm Swift wasn't used as it would add unnecessary complexity to Objective-C projects.
+- [TORoundedTableView](https://github.com/TimOliver/TORoundedTableView) - A subclass of `UITableView` that adds rounded corners, like Settings.app on iPad.
 
 # Sample Code
 
@@ -49,13 +73,6 @@ loginController.loginSuccessfulHandler = ^(RLMSyncUser *user) {
 };
 
 ```
-
-# Using the Sample App
-
-The Realm LoginKit has several dependencies (namely, Realm itself) and these dependencies are managed via CocoaPods.
-
-When trying to run the example project for the first time, make sure you have CocoaPods installed and run `pod install`
-on the directory to set it up properly.
 
 # Technical Requirements
 
