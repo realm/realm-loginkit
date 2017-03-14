@@ -23,8 +23,10 @@ Realm LoginKit only supports iOS at the moment.
 ### [iOS](https://github.com/realm-demos/realm-loginkit/tree/master/RealmLoginKit%20Apple/) 
 * Xcode 8.0 and up
 * iOS 9.0 and up
+
 ### Android 
 Currently in development, and should be finished soon.
+
 ### Xamarin 
 Currently on the roadmap with development starting soon.
 
@@ -35,7 +37,6 @@ Currently on the roadmap with development starting soon.
 * [TORoundedTableView](https://github.com/TimOliver/TORoundedTableView) - A subclass of `UITableView` that creates rounded table sections when view on iPad.
 
 ### Example Code
-#### iOS
 
 **Swift**
 
