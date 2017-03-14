@@ -84,7 +84,7 @@ In order to run the Realm LoginKit demo app, it is necessary to install CocoaPod
 CocoaPods is the recommended way to install Realm LoginKit into an app as this will automatically manage recycling Realm Objective-C as a dependency. In your `PodFile`, simply add `pod 'RealmLoginKit'`.
 
 #### Manually
-You can also integrate Realm LoginKit manually; simply copy the `RealmLoginKit` folder to your app, and drag it into Xcode. That being said, you will also need to install the [dependencies](#Dependencies) separately as well. See their respective GitHub repositories for installation instructions.
+You can also integrate Realm LoginKit manually; simply copy the `RealmLoginKit` folder to your app, and drag it into Xcode. That being said, you will also need to install the [dependencies](#third-party-dependencies) separately as well. See their respective GitHub repositories for installation instructions.
 
 ## Contributing
 
