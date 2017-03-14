@@ -30,15 +30,15 @@ Currently in development, and should be finished soon.
 ### Xamarin 
 Currently on the roadmap with development starting soon.
 
-# Third Party Dependencies
+## Third Party Dependencies
 
 ### iOS
 * [Realm Objective-C](https://realm.io/docs/objc/latest/) - The Objective-C version of the Realm Mobile Database.
 * [TORoundedTableView](https://github.com/TimOliver/TORoundedTableView) - A subclass of `UITableView` that creates rounded table sections when view on iPad.
 
-### Example Code
+## Example Code
 
-**Swift**
+### Swift
 
 ```swift
 // Create the object
@@ -53,7 +53,7 @@ loginController.loginSuccessfulHandler = { user in
 }
 ```
 
-**Objective-C**
+### Objective-C
 
 ```objc
 // Create the object
@@ -86,7 +86,7 @@ CocoaPods is the recommended way to install Realm LoginKit into an app as this w
 #### Manually
 You can also integrate Realm LoginKit manually; simply copy the `RealmLoginKit` folder to your app, and drag it into Xcode. That being said, you will also need to install the [dependencies](#third-party-dependencies) separately as well. See their respective GitHub repositories for installation instructions.
 
-## Contributing
+# Contributing
 
 See [CONTRIBUTING.md](CONTRIBUTING.md) for more details!
 
