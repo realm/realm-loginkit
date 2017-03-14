@@ -30,13 +30,13 @@ Currently in development, and should be finished soon.
 ### Xamarin 
 Currently on the roadmap with development starting soon.
 
-## Third Party Dependencies
+# Third Party Dependencies
 
 ### iOS
 * [Realm Objective-C](https://realm.io/docs/objc/latest/) - The Objective-C version of the Realm Mobile Database.
 * [TORoundedTableView](https://github.com/TimOliver/TORoundedTableView) - A subclass of `UITableView` that creates rounded table sections when view on iPad.
 
-## Example Code
+# Example Code
 
 ### Swift
 
