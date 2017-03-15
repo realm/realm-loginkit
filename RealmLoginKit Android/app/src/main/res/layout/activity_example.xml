@@ -11,18 +11,20 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context=".ExampleActivity">
 
-    <!--<io.realm.realmloginkit.RealmLogoView-->
-        <!--android:layout_width="300dp"-->
-        <!--android:layout_height="300dp"-->
-        <!--android:layout_centerInParent="true"-->
-        <!--realm:monochromeLogo="true"-->
-        <!--realm:strokeColor="#ff0000"-->
-        <!--realm:strokeWidth="5dp"-->
-        <!--/>-->
+    <io.realm.realmloginkit.RealmLogoView
+        android:id="@+id/first"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_centerInParent="true"
+        realm:monochromeLogo="true"
+        realm:strokeColor="#333333"
+        realm:strokeWidth="1dp"
+        />
 
     <io.realm.realmloginkit.RealmLogoView
-        android:layout_width="300dp"
-        android:layout_height="300dp"
+        android:layout_below="@id/first"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
         android:layout_centerInParent="true"
         />
 

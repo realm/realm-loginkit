@@ -42,9 +42,6 @@ public class RealmLogoView extends View {
         } finally {
             typedArray.recycle();
         }
-
-        initPaints();
-        initPathsForPaints();
     }
 
     private void initPathsForPaints() {
@@ -123,6 +120,10 @@ public class RealmLogoView extends View {
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
+
+        initPaints();
+        initPathsForPaints();
+
         int t, l, outline;
         if (isMonochromeLogo) {
             t = (int) Math.floor(strokeWidthPixel / 2.0);
@@ -133,6 +134,7 @@ public class RealmLogoView extends View {
             l = 0;
             outline = 0;
         }
+
         int w = getWidth();
         int h = getHeight();
         final int measuredWidth = getMeasuredWidth();
@@ -258,5 +260,17 @@ public class RealmLogoView extends View {
         path8.lineTo(l + w * 0.93429f, t + h * 0.74794f);
         path8.setFillType(Path.FillType.EVEN_ODD);
         drawPath(canvas, path8, paint8);
+    }
+
+    public boolean isMonochromeLogo() {
+        return isMonochromeLogo;
+    }
+
+    public void setMonochromeLogo(boolean isMonochromeLogo) {
+        if (isMonochromeLogo == this.isMonochromeLogo) {
+            return;
+        }
+        this.isMonochromeLogo = isMonochromeLogo;
+        invalidate();
     }
 }
