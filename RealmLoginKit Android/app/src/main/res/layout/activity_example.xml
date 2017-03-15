@@ -17,16 +17,16 @@
         android:layout_height="100dp"
         android:layout_centerInParent="true"
         realm:monochromeLogo="true"
-        realm:strokeColor="#333333"
+        realm:strokeColor="#ffffff"
         realm:strokeWidth="1dp"
         />
 
-    <io.realm.realmloginkit.RealmLogoView
-        android:id="@+id/second"
-        android:layout_below="@id/first"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:layout_centerInParent="true"
-        />
+    <!--<io.realm.realmloginkit.RealmLogoView-->
+        <!--android:id="@+id/second"-->
+        <!--android:layout_width="100dp"-->
+        <!--android:layout_height="100dp"-->
+        <!--android:layout_below="@id/first"-->
+        <!--android:layout_centerInParent="true"-->
+        <!--/>-->
 
 </RelativeLayout>

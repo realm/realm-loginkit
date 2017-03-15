@@ -7,11 +7,12 @@ import android.graphics.Paint;
 import android.graphics.Path;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
+import android.util.TypedValue;
 import android.view.View;
 
 public class RealmLogoView extends View {
 
-    private Paint paint1, paint2, paint3, paint4, paint5, paint6, paint7, paint8, whitePaint, strokePaint;
+    private Paint paint1, paint2, paint3, paint4, paint5, paint6, paint7, paint8, backgroundPaint, strokePaint;
     private Path path1, path2, path3, path4, path5, path6, path7, path8;
     private DisplayMetrics displayMetrics;
     private float strokeWidth = -1;
@@ -72,7 +73,16 @@ public class RealmLogoView extends View {
         paint6 = makeAntiAliasPaint(255, 154, 80, 165);
         paint7 = makeAntiAliasPaint(255, 89, 86, 158);
         paint8 = makeAntiAliasPaint(255, 57, 71, 127);
-        whitePaint = makeAntiAliasPaint(255, 255, 255, 255);
+        TypedValue typedValue = new TypedValue();
+        getContext().getTheme().resolveAttribute(android.R.attr.windowBackground, typedValue, true);
+        if (typedValue.type >= TypedValue.TYPE_FIRST_COLOR_INT && typedValue.type <= TypedValue.TYPE_LAST_COLOR_INT) {
+            int color = typedValue.data;
+            backgroundPaint = new Paint();
+            backgroundPaint.setColor(color);
+            backgroundPaint.setAntiAlias(true);
+        } else {
+            backgroundPaint = makeAntiAliasPaint(255, 255, 255, 255);
+        }
         strokePaint = new Paint();
         strokePaint.setAntiAlias(true);
         strokePaint.setColor(strokeColor);
@@ -153,7 +163,7 @@ public class RealmLogoView extends View {
 
     private void drawPath(Canvas canvas, Path path, Paint paint) {
         if (isMonochromeLogo) {
-            canvas.drawPath(path, whitePaint);
+            canvas.drawPath(path, backgroundPaint);
             canvas.drawPath(path, strokePaint);
         } else {
             canvas.drawPath(path, paint);
