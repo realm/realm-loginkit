@@ -14,7 +14,7 @@ public class RealmLogoView extends View {
     private Paint paint1, paint2, paint3, paint4, paint5, paint6, paint7, paint8, whitePaint, strokePaint;
     private Path path1, path2, path3, path4, path5, path6, path7, path8;
     private DisplayMetrics displayMetrics;
-    private float strokeWidthPixel = -1;
+    private float strokeWidth = -1;
     private boolean isMonochromeLogo = false;
     private int strokeColor = 0xff000000;
 
@@ -30,13 +30,13 @@ public class RealmLogoView extends View {
         super(context, attrs, defStyleAttr);
 
         displayMetrics = getResources().getDisplayMetrics();
-        if (strokeWidthPixel < 0) {
-            strokeWidthPixel = displayMetrics.density * 2;
+        if (strokeWidth < 0) {
+            strokeWidth = displayMetrics.density * 2;
         }
 
         TypedArray typedArray = context.getTheme().obtainStyledAttributes(attrs, R.styleable.RealmLogoView, 0, 0);
         try {
-            strokeWidthPixel = typedArray.getDimension(R.styleable.RealmLogoView_strokeWidth, strokeWidthPixel);
+            strokeWidth = typedArray.getDimension(R.styleable.RealmLogoView_strokeWidth, strokeWidth);
             isMonochromeLogo = typedArray.getBoolean(R.styleable.RealmLogoView_monochromeLogo, isMonochromeLogo);
             strokeColor = typedArray.getColor(R.styleable.RealmLogoView_strokeColor, strokeColor);
         } finally {
@@ -76,7 +76,7 @@ public class RealmLogoView extends View {
         strokePaint = new Paint();
         strokePaint.setAntiAlias(true);
         strokePaint.setColor(strokeColor);
-        strokePaint.setStrokeWidth(strokeWidthPixel);
+        strokePaint.setStrokeWidth(strokeWidth);
         strokePaint.setStyle(Paint.Style.STROKE);
     }
 
@@ -126,7 +126,7 @@ public class RealmLogoView extends View {
 
         int t, l, outline;
         if (isMonochromeLogo) {
-            t = (int) Math.floor(strokeWidthPixel / 2.0);
+            t = (int) Math.floor(strokeWidth / 2.0);
             l = t;
             outline = t;
         } else {
@@ -271,6 +271,18 @@ public class RealmLogoView extends View {
             return;
         }
         this.isMonochromeLogo = isMonochromeLogo;
+        invalidate();
+    }
+
+    public float getStrokeWidth() {
+        return strokeWidth;
+    }
+
+    public void setStrokeWidth(float strokeWidth) {
+        if (strokeWidth == this.strokeWidth) {
+            return;
+        }
+        this.strokeWidth = strokeWidth;
         invalidate();
     }
 }

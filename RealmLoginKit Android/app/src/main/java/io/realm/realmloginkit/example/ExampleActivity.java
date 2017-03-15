@@ -12,12 +12,19 @@ public class ExampleActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_example);
-        findViewById(R.id.first).setOnClickListener(new View.OnClickListener() {
+        final RealmLogoView firstLogoView = (RealmLogoView) findViewById(R.id.first);
+        firstLogoView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 RealmLogoView logoView = (RealmLogoView) v;
                 boolean shouldMonoChromeLogo = logoView.isMonochromeLogo() ? false : true;
                 ((RealmLogoView) v).setMonochromeLogo(shouldMonoChromeLogo);
+            }
+        });
+        findViewById(R.id.second).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                firstLogoView.setStrokeWidth(firstLogoView.getStrokeWidth() * 2);
             }
         });
     }

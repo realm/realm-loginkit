@@ -22,6 +22,7 @@
         />
 
     <io.realm.realmloginkit.RealmLogoView
+        android:id="@+id/second"
         android:layout_below="@id/first"
         android:layout_width="100dp"
         android:layout_height="100dp"
