@@ -5,28 +5,30 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
+    android:layout_marginBottom="@dimen/activity_vertical_margin"
     tools:context=".ExampleActivity">
 
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"/>
+
     <io.realm.realmloginkit.RealmLogoView
-        android:id="@+id/first"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
+        android:id="@+id/logo"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         android:layout_centerInParent="true"
         realm:monochromeLogo="true"
         realm:strokeColor="#ffffff"
-        realm:strokeWidth="1dp"
-        />
+        realm:strokeWidth="2dp"/>
 
-    <!--<io.realm.realmloginkit.RealmLogoView-->
-        <!--android:id="@+id/second"-->
-        <!--android:layout_width="100dp"-->
-        <!--android:layout_height="100dp"-->
-        <!--android:layout_below="@id/first"-->
-        <!--android:layout_centerInParent="true"-->
-        <!--/>-->
+    <Button
+        android:id="@+id/log_in"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:text="Log Into Realm Object Server"/>
 
 </RelativeLayout>

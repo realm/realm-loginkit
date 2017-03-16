@@ -73,6 +73,7 @@ public class RealmLogoView extends View {
         paint6 = makeAntiAliasPaint(255, 154, 80, 165);
         paint7 = makeAntiAliasPaint(255, 89, 86, 158);
         paint8 = makeAntiAliasPaint(255, 57, 71, 127);
+
         TypedValue typedValue = new TypedValue();
         getContext().getTheme().resolveAttribute(android.R.attr.windowBackground, typedValue, true);
         if (typedValue.type >= TypedValue.TYPE_FIRST_COLOR_INT && typedValue.type <= TypedValue.TYPE_LAST_COLOR_INT) {
@@ -83,6 +84,7 @@ public class RealmLogoView extends View {
         } else {
             backgroundPaint = makeAntiAliasPaint(255, 255, 255, 255);
         }
+
         strokePaint = new Paint();
         strokePaint.setAntiAlias(true);
         strokePaint.setColor(strokeColor);
