@@ -26,12 +26,17 @@ public class ExampleActivity extends AppCompatActivity implements View.OnClickLi
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         isDarkMode = getIntent().getBooleanExtra(KEY_DARK_MODE, false);
-        setTheme();
+        initTheme(); // it should be invoked before setContentView()
         setContentView(R.layout.activity_example);
-        setActionBar(isDarkMode);
+
+        initActionBar(isDarkMode);
+        initLogo();
+        findViewById(R.id.log_in).setOnClickListener(this);
+    }
+
+    private void initLogo() {
         logo = (RealmLogoView) findViewById(R.id.logo);
         logo.setMonochromeLogo(isDarkMode);
-        findViewById(R.id.log_in).setOnClickListener(this);
     }
 
     private void changeLogoSize() {
@@ -61,7 +66,7 @@ public class ExampleActivity extends AppCompatActivity implements View.OnClickLi
         }, 100);
     }
 
-    private void setActionBar(boolean isDarkMode) {
+    private void initActionBar(boolean isDarkMode) {
         final ActionBar actionBar = getSupportActionBar();
         actionBar.setCustomView(R.layout.actionlayout_switch);
         actionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
@@ -79,7 +84,7 @@ public class ExampleActivity extends AppCompatActivity implements View.OnClickLi
         }
     }
 
-    private void setTheme() {
+    private void initTheme() {
         if (isDarkMode) {
             setTheme(android.support.v7.appcompat.R.style.Theme_AppCompat);
         } else {
