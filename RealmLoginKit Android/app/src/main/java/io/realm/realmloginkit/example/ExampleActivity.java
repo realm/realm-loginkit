@@ -14,7 +14,6 @@ import io.realm.realmloginkit.RealmLogoView;
 
 public class ExampleActivity extends AppCompatActivity implements View.OnClickListener {
 
-    public static final String KEY_DARK_MODE = "DARK_MODE";
     public static final double LOGO_RATIO = 0.7;
 
     private boolean isDarkMode;
@@ -25,7 +24,7 @@ public class ExampleActivity extends AppCompatActivity implements View.OnClickLi
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        isDarkMode = getIntent().getBooleanExtra(KEY_DARK_MODE, false);
+        isDarkMode = getIntent().getBooleanExtra(RealmLoginActivity.KEY_DARK_MODE, false);
         initTheme(); // it should be invoked before setContentView()
         setContentView(R.layout.activity_example);
         initThemeButtons(isDarkMode);
@@ -107,6 +106,7 @@ public class ExampleActivity extends AppCompatActivity implements View.OnClickLi
     private void handleLogIn(int viewId) {
         if (viewId == R.id.log_in) {
             final Intent intent = new Intent(this, RealmLoginActivity.class);
+            intent.putExtra(RealmLoginActivity.KEY_DARK_MODE, isDarkMode);
             startActivity(intent);
         }
     }
@@ -129,7 +129,7 @@ public class ExampleActivity extends AppCompatActivity implements View.OnClickLi
         }
 
         final Intent intent = new Intent(this, ExampleActivity.class);
-        intent.putExtra(KEY_DARK_MODE, isDarkMode ? false : true);
+        intent.putExtra(RealmLoginActivity.KEY_DARK_MODE, isDarkMode ? false : true);
         finish();
         startActivity(intent);
     }
