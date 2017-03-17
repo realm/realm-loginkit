@@ -28,8 +28,7 @@ public class ExampleActivity extends AppCompatActivity implements View.OnClickLi
         isDarkMode = getIntent().getBooleanExtra(KEY_DARK_MODE, false);
         initTheme(); // it should be invoked before setContentView()
         setContentView(R.layout.activity_example);
-
-        initActionBar(isDarkMode);
+        initThemeButtons(isDarkMode);
         initLogo();
         findViewById(R.id.log_in).setOnClickListener(this);
     }
@@ -39,7 +38,22 @@ public class ExampleActivity extends AppCompatActivity implements View.OnClickLi
         logo.setMonochromeLogo(isDarkMode);
     }
 
-    private void changeLogoSize() {
+    @Override
+    protected void onResume() {
+        super.onResume();
+        delayedResizeLogo();
+    }
+
+    private void delayedResizeLogo() {
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                resizeLogo();
+            }
+        }, 100);
+    }
+
+    private void resizeLogo() {
         final int width = getWindow().getDecorView().getWidth();
         final int height = getWindow().getDecorView().getHeight();
         final int minWidth;
@@ -54,27 +68,18 @@ public class ExampleActivity extends AppCompatActivity implements View.OnClickLi
         logo.setLayoutParams(layoutParams);
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                changeLogoSize();
-            }
-        }, 100);
-    }
-
-    private void initActionBar(boolean isDarkMode) {
+    private void initThemeButtons(boolean isDarkMode) {
         final ActionBar actionBar = getSupportActionBar();
-        actionBar.setCustomView(R.layout.actionlayout_switch);
+        actionBar.setCustomView(R.layout.theme_toggles);
         actionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
         final View customView = actionBar.getCustomView();
-        lightButton = (ToggleButton) customView.findViewById(R.id.light);
-        darkButton = (ToggleButton) customView.findViewById(R.id.dark);
+
+        lightButton = (ToggleButton) customView.findViewById(R.id.light_button);
         lightButton.setOnClickListener(this);
+
+        darkButton = (ToggleButton) customView.findViewById(R.id.dark_button);
         darkButton.setOnClickListener(this);
+
         if (isDarkMode) {
             darkButton.setChecked(true);
             lightButton.setChecked(false);
@@ -107,13 +112,13 @@ public class ExampleActivity extends AppCompatActivity implements View.OnClickLi
     }
 
     private void handleThemeIfNeeded(int viewId) {
-        if (viewId == R.id.light) {
+        if (viewId == R.id.light_button) {
             if (!isDarkMode) {
                 lightButton.setChecked(true);
                 return;
             }
             darkButton.setChecked(false);
-        } else if (viewId == R.id.dark) {
+        } else if (viewId == R.id.dark_button) {
             if (isDarkMode) {
                 darkButton.setChecked(true);
                 return;
