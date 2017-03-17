@@ -33,15 +33,22 @@ public class ExampleActivity extends AppCompatActivity implements View.OnClickLi
         findViewById(R.id.log_in).setOnClickListener(this);
     }
 
-    private void initLogo() {
-        logo = (RealmLogoView) findViewById(R.id.logo);
-        logo.setMonochromeLogo(isDarkMode);
-    }
-
     @Override
     protected void onResume() {
         super.onResume();
         delayedResizeLogo();
+    }
+
+    @Override
+    public void onClick(View v) {
+        final int viewId = v.getId();
+        handleThemeIfNeeded(viewId);
+        handleLogIn(viewId);
+    }
+
+    private void initLogo() {
+        logo = (RealmLogoView) findViewById(R.id.logo);
+        logo.setMonochromeLogo(isDarkMode);
     }
 
     private void delayedResizeLogo() {
@@ -95,13 +102,6 @@ public class ExampleActivity extends AppCompatActivity implements View.OnClickLi
         } else {
             setTheme(android.support.v7.appcompat.R.style.Theme_AppCompat_Light);
         }
-    }
-
-    @Override
-    public void onClick(View v) {
-        final int viewId = v.getId();
-        handleThemeIfNeeded(viewId);
-        handleLogIn(viewId);
     }
 
     private void handleLogIn(int viewId) {
