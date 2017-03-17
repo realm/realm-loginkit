@@ -208,6 +208,6 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:text="With ❤️️ From Realm Team, 2017."/>
+        android:text="With ❤️️ from Realm team, 2017."/>
 
 </RelativeLayout>
