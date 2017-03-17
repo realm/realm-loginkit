@@ -40,8 +40,8 @@ public class ExampleActivity extends AppCompatActivity implements View.OnClickLi
     }
 
     @Override
-    public void onClick(View v) {
-        final int viewId = v.getId();
+    public void onClick(View view) {
+        final int viewId = view.getId();
         handleThemeIfNeeded(viewId);
         handleLogIn(viewId);
     }
