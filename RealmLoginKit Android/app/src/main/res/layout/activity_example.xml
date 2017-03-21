@@ -14,7 +14,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"/>
 
-    <io.realm.realmloginkit.RealmLogoView
+    <io.realm.realmloginkit.widget.RealmLogoView
         android:id="@+id/logo"
         android:layout_width="0dp"
         android:layout_height="0dp"

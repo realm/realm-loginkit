@@ -57,6 +57,19 @@
 
         </android.support.design.widget.TextInputLayout>
 
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp">
+
+            <EditText
+                android:id="@+id/confirmation"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Confirm Password"/>
+
+        </android.support.design.widget.TextInputLayout>
+
         <CheckBox
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -78,28 +91,28 @@
         android:layout_above="@id/login_panel"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="16dp"
-        android:text="Log into RealmLoginKitExample"
+        android:text="Sign up for RealmLoginKitExample"
         android:textSize="24dp"/>
 
     <Button
-        android:id="@+id/log_in"
+        android:id="@+id/sign_up"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/login_panel"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="24dp"
         android:minWidth="270dp"
-        android:text="Log In"
+        android:text="Sign Up"
         android:theme="@style/RealmButtonColored"/>
 
     <Button
-        android:id="@+id/login"
+        android:id="@+id/log_in"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/log_in"
+        android:layout_below="@id/sign_up"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="8dp"
-        android:text="Register a New Account"/>
+        android:text="Log into Your Account"/>
 
     <TextView
         android:layout_width="wrap_content"

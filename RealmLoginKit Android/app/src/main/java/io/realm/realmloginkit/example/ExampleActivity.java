@@ -10,7 +10,7 @@ import android.view.ViewGroup;
 import android.widget.ToggleButton;
 
 import io.realm.realmloginkit.RealmLoginActivity;
-import io.realm.realmloginkit.RealmLogoView;
+import io.realm.realmloginkit.widget.RealmLogoView;
 
 public class ExampleActivity extends AppCompatActivity implements View.OnClickListener {
 
