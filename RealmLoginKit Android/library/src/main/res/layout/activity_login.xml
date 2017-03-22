@@ -58,6 +58,7 @@
         </android.support.design.widget.TextInputLayout>
 
         <CheckBox
+            android:id="@+id/remember"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="right"
@@ -93,7 +94,7 @@
         android:theme="@style/RealmButtonColored"/>
 
     <Button
-        android:id="@+id/login"
+        android:id="@+id/register"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/log_in"
