@@ -38,7 +38,7 @@
                     android:id="@+id/server_url"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Server URL"/>
+                    android:hint="@string/server_url"/>
 
             </android.support.design.widget.TextInputLayout>
 
@@ -51,7 +51,7 @@
                     android:id="@+id/email_address"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Email Address"/>
+                    android:hint="@string/email_address"/>
 
             </android.support.design.widget.TextInputLayout>
 
@@ -64,7 +64,7 @@
                     android:id="@+id/password"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Password"
+                    android:hint="@string/password"
                     android:inputType="textPassword"/>
 
             </android.support.design.widget.TextInputLayout>
@@ -74,7 +74,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="right"
-                android:text="Remember My Account"/>
+                android:text="@string/remember_my_account"/>
 
         </LinearLayout>
 
@@ -112,14 +112,14 @@
             android:layout_below="@id/log_in"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="8dp"
-            android:text="Register a New Account"/>
+            android:text="@string/register_a_new_account"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true"
-            android:text="With ❤️️ from Realm team, 2017."/>
+            android:text="@string/realm_copyright"/>
 
     </RelativeLayout>
 </FrameLayout>

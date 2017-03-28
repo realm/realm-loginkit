@@ -1,3 +1,13 @@
 <resources>
     <string name="app_name">RealmLoginKit</string>
+    <string name="default_app_title">Object Server</string>
+    <string name="server_url">Server URL</string>
+    <string name="email_address">Email Address</string>
+    <string name="password">Password</string>
+    <string name="remember_my_account">Remember My Account</string>
+    <string name="register_a_new_account">Register a New Account</string>
+    <string name="realm_copyright">With ❤️️ from Realm team, 2017.</string>
+    <string name="sign_up">Sign Up</string>
+    <string name="log_into_your_account">Log into Your Account</string>
+    <string name="confirm_password">Confirm Password</string>
 </resources>

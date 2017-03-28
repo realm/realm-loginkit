@@ -38,7 +38,7 @@ public class RealmLoginActivity extends AppCompatActivity implements View.OnClic
         super.onCreate(savedInstanceState);
         Bundle extras = getIntent().getExtras();
         isDarkMode = extras.getBoolean(Constants.KEY_DARK_MODE, false);
-        appTitle = extras.getString(Constants.KEY_APP_TITLE, "Object Server");
+        appTitle = extras.getString(Constants.KEY_APP_TITLE, getResources().getString(R.string.default_app_title));
 
         initTheme();
         setContentView(R.layout.activity_login);
@@ -105,6 +105,6 @@ public class RealmLoginActivity extends AppCompatActivity implements View.OnClic
         logInPanel.setVisibility(View.VISIBLE);
         progressBar.setVisibility(View.GONE);
         Toast.makeText(this, "Fail!", Toast.LENGTH_SHORT).show();
-        Log.e(TAG, "error: " +error);
+        Log.e(TAG, "error: " + error);
     }
 }
