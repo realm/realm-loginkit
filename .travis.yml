@@ -1,0 +1,4 @@
+language: swift
+xcode_workspace: "RealmLoginKit Apple/RealmLoginKit.xcworkspace"
+xcode_scheme: RealmLoginKitExample
+podfile: "RealmLoginKit Apple/Podfile"
