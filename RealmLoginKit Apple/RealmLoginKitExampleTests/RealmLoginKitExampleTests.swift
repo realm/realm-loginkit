@@ -11,16 +11,8 @@ import XCTest
 
 class RealmLoginKitExampleTests: XCTestCase {
 
-    func testExample() {
+    func testLoginControllerCreation() {
         let controller = LoginViewController()
-        XCTAssertNotNil(controller)
+        XCTAssertNotNil(controller.view)
     }
-    
-    func testPerformanceExample() {
-        // This is an example of a performance test case.
-        self.measure {
-            // Put the code you want to measure the time of here.
-        }
-    }
-    
 }
