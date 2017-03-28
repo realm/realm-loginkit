@@ -88,12 +88,12 @@
         android:layout_marginBottom="80dp"/>
 
     <TextView
+        android:id="@+id/welcome_sign_up"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_above="@id/login_panel"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="16dp"
-        android:text="Sign up for RealmLoginKitExample"
         android:textSize="24dp"/>
 
     <Button

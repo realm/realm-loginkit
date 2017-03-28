@@ -86,7 +86,7 @@
             android:layout_marginBottom="80dp"/>
 
         <TextView
-            android:id="@+id/log_in_title"
+            android:id="@+id/welcome_log_in"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_above="@id/login_panel"

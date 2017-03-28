@@ -2,8 +2,8 @@ package io.realm.realmloginkit;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -11,7 +11,6 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import io.realm.ObjectServerError;
 import io.realm.SyncCredentials;
@@ -43,8 +42,8 @@ public class RealmLoginActivity extends AppCompatActivity implements View.OnClic
         initTheme();
         setContentView(R.layout.activity_login);
 
-        TextView logInTitle = (TextView) findViewById(R.id.log_in_title);
-        logInTitle.setText("Log Into " + appTitle);
+        TextView welcomeLogIn = (TextView) findViewById(R.id.welcome_log_in);
+        welcomeLogIn.setText(String.format(getResources().getString(R.string.welcome_log_in), appTitle));
 
         logInPanel = (RelativeLayout) findViewById(R.id.log_in_panel);
         progressBar = (ProgressBar) findViewById(R.id.progress_bar);
@@ -91,6 +90,7 @@ public class RealmLoginActivity extends AppCompatActivity implements View.OnClic
     private void handleRegister() {
         final Intent intent = new Intent(this, RealmRegisterActivity.class);
         intent.putExtra(Constants.KEY_DARK_MODE, isDarkMode);
+        intent.putExtra(Constants.KEY_APP_TITLE, appTitle);
         startActivity(intent);
     }
 
@@ -104,7 +104,11 @@ public class RealmLoginActivity extends AppCompatActivity implements View.OnClic
     public void onError(ObjectServerError error) {
         logInPanel.setVisibility(View.VISIBLE);
         progressBar.setVisibility(View.GONE);
-        Toast.makeText(this, "Fail!", Toast.LENGTH_SHORT).show();
-        Log.e(TAG, "error: " + error);
+        final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(R.string.unable_to_sign_in)
+                .setMessage(error.getErrorMessage())
+                .setCancelable(false)
+                .setPositiveButton(R.string.ok, null);
+        builder.create().show();
     }
 }
