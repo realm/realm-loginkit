@@ -7,8 +7,11 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 import android.widget.ToggleButton;
 
+import io.realm.realmloginkit.Constants;
+import io.realm.realmloginkit.LogInHelper;
 import io.realm.realmloginkit.RealmLoginActivity;
 import io.realm.realmloginkit.widget.RealmLogoView;
 
@@ -24,7 +27,7 @@ public class ExampleActivity extends AppCompatActivity implements View.OnClickLi
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        isDarkMode = getIntent().getBooleanExtra(RealmLoginActivity.KEY_DARK_MODE, false);
+        isDarkMode = getIntent().getBooleanExtra(Constants.KEY_DARK_MODE, false);
         initTheme(); // it should be invoked before setContentView()
         setContentView(R.layout.activity_example);
         initThemeButtons(isDarkMode);
@@ -106,8 +109,9 @@ public class ExampleActivity extends AppCompatActivity implements View.OnClickLi
     private void handleLogIn(int viewId) {
         if (viewId == R.id.log_in) {
             final Intent intent = new Intent(this, RealmLoginActivity.class);
-            intent.putExtra(RealmLoginActivity.KEY_DARK_MODE, isDarkMode);
-            startActivity(intent);
+            intent.putExtra(Constants.KEY_DARK_MODE, isDarkMode);
+            intent.putExtra(Constants.KEY_APP_TITLE, "Example App");
+            startActivityForResult(intent, Constants.REQUEST_CODE_LOGIN_KIT);
         }
     }
 
@@ -129,8 +133,19 @@ public class ExampleActivity extends AppCompatActivity implements View.OnClickLi
         }
 
         final Intent intent = new Intent(this, ExampleActivity.class);
-        intent.putExtra(RealmLoginActivity.KEY_DARK_MODE, isDarkMode ? false : true);
+        intent.putExtra(Constants.KEY_DARK_MODE, isDarkMode ? false : true);
         finish();
         startActivity(intent);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        LogInHelper.onActivityResult(requestCode, resultCode, data, new LogInHelper.OnSuccess() {
+            @Override
+            public void onSuccess() {
+                Toast.makeText(ExampleActivity.this, "Success!", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 }
