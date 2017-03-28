@@ -11,7 +11,7 @@ import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import io.realm.realmloginkit.Constants;
-import io.realm.realmloginkit.LogInHelper;
+import io.realm.realmloginkit.Helper;
 import io.realm.realmloginkit.RealmLoginActivity;
 import io.realm.realmloginkit.widget.RealmLogoView;
 
@@ -141,7 +141,7 @@ public class ExampleActivity extends AppCompatActivity implements View.OnClickLi
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        LogInHelper.onActivityResult(requestCode, resultCode, data, new LogInHelper.OnSuccess() {
+        Helper.onActivityResult(requestCode, resultCode, data, new Helper.OnSuccess() {
             @Override
             public void onSuccess() {
                 Toast.makeText(ExampleActivity.this, "Success!", Toast.LENGTH_SHORT).show();

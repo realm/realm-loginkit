@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -16,10 +18,7 @@ import io.realm.ObjectServerError;
 import io.realm.SyncCredentials;
 import io.realm.SyncUser;
 
-
-public class RealmLoginActivity extends AppCompatActivity implements View.OnClickListener, SyncUser.Callback {
-
-    private static final String TAG = RealmLoginActivity.class.getName();
+public class RealmLoginActivity extends AppCompatActivity implements View.OnClickListener, SyncUser.Callback, TextWatcher {
 
     private boolean isDarkMode;
     private String appTitle;
@@ -57,6 +56,10 @@ public class RealmLoginActivity extends AppCompatActivity implements View.OnClic
         emailAddressEdit = (EditText) findViewById(R.id.email_address);
         passwordEdit = (EditText) findViewById(R.id.password);
         rememberCheckBox = (CheckBox) findViewById(R.id.remember);
+
+        serverUrlEdit.addTextChangedListener(this);
+        emailAddressEdit.addTextChangedListener(this);
+        passwordEdit.addTextChangedListener(this);
     }
 
     private void initTheme() {
@@ -84,7 +87,7 @@ public class RealmLoginActivity extends AppCompatActivity implements View.OnClic
         final SyncCredentials syncCredentials = SyncCredentials.usernamePassword(emailAddress, password);
         logInPanel.setVisibility(View.GONE);
         progressBar.setVisibility(View.VISIBLE);
-        SyncUser.loginAsync(syncCredentials, serverUrl, this);
+        SyncUser.loginAsync(syncCredentials, Helper.getValidAuthUri(serverUrl), this);
     }
 
     private void handleRegister() {
@@ -110,5 +113,25 @@ public class RealmLoginActivity extends AppCompatActivity implements View.OnClic
                 .setCancelable(false)
                 .setPositiveButton(R.string.ok, null);
         builder.create().show();
+    }
+
+    @Override
+    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+    }
+
+    @Override
+    public void onTextChanged(CharSequence s, int start, int before, int count) {
+        final String serverUrl = serverUrlEdit.getText().toString();
+        final String emailAddress = emailAddressEdit.getText().toString();
+        final String password = passwordEdit.getText().toString();
+        if (serverUrl.isEmpty() || emailAddress.isEmpty() || password.isEmpty() || !emailAddress.contains("@")) {
+            loginButton.setEnabled(false);
+        } else {
+            loginButton.setEnabled(true);
+        }
+    }
+
+    @Override
+    public void afterTextChanged(Editable s) {
     }
 }
