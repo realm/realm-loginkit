@@ -136,7 +136,7 @@ public class LoginViewController: UIViewController, UITableViewDataSource, UITab
     /* Login/Register Credentials */
     public var serverURL: String?       { didSet { validateFormItems() } }
     public var serverPort = 9080        { didSet { validateFormItems() } }
-    public var username: String?           { didSet { validateFormItems() } }
+    public var username: String?        { didSet { validateFormItems() } }
     public var password: String?        { didSet { validateFormItems() } }
     public var confirmPassword: String? { didSet { validateFormItems() } }
     public var rememberLogin: Bool = true
@@ -707,6 +707,7 @@ public class LoginViewController: UIViewController, UITableViewDataSource, UITab
             if let portString = formattedURL?.substring(from: portRange.upperBound) {
                 serverPort = Int(portString) ?? serverPort
             }
+            formattedURL = formattedURL?.substring(to: portRange.lowerBound)
         }
         
         let credentials = RLMSyncCredentials(username: username!, password: password!, register: isRegistering)
