@@ -6,10 +6,10 @@
 </p>
 
 [![CI Status](http://img.shields.io/travis/realm-demos/realm-loginkit.svg?style=flat)](http://api.travis-ci.org/realm-demos/realm-loginkit.svg)
-[![CocoaPods](https://img.shields.io/cocoapods/dt/RealmLoginKit.svg?maxAge=3600)](https://cocoapods.org/pods/TOCropViewController)
-[![Version](https://img.shields.io/cocoapods/v/RealmLoginKit.svg?style=flat)](http://cocoadocs.org/docsets/TOCropViewController)
+[![CocoaPods](https://img.shields.io/cocoapods/dt/RealmLoginKit.svg?maxAge=3600)](https://cocoapods.org/pods/RealmLoginKit)
+[![Version](https://img.shields.io/cocoapods/v/RealmLoginKit.svg?style=flat)](http://cocoadocs.org/docsets/RealmLoginKit)
 [![GitHub license](https://img.shields.io/badge/license-Apache-blue.svg)](https://raw.githubusercontent.com/realm-demos/realm-loginkit/master/LICENSE)
-[![Platform](https://img.shields.io/cocoapods/p/RealmLoginKit.svg?style=flat)](http://cocoadocs.org/docsets/TOCropViewController)
+[![Platform](https://img.shields.io/cocoapods/p/RealmLoginKit.svg?style=flat)](http://cocoadocs.org/docsets/RealmLoginKit)
 
 Realm LoginKit is a UI framework that provides a fully featured login screen for apps that make use of the Realm Mobile Platform.
 
