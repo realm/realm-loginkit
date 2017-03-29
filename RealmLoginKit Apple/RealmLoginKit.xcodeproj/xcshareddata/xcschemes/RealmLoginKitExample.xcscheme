@@ -32,19 +32,9 @@
             skipped = "NO">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "221840BA1E2CC79100E85B6E"
-               BuildableName = "RealmLoginKitTests.xctest"
-               BlueprintName = "RealmLoginKitTests"
-               ReferencedContainer = "container:RealmLoginKit.xcodeproj">
-            </BuildableReference>
-         </TestableReference>
-         <TestableReference
-            skipped = "NO">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "221840C51E2CC79100E85B6E"
-               BuildableName = "RealmLoginKitUITests.xctest"
-               BlueprintName = "RealmLoginKitUITests"
+               BlueprintIdentifier = "22BB75D91E8B144100317E4B"
+               BuildableName = "RealmLoginKitExampleTests.xctest"
+               BlueprintName = "RealmLoginKitExampleTests"
                ReferencedContainer = "container:RealmLoginKit.xcodeproj">
             </BuildableReference>
          </TestableReference>
