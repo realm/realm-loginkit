@@ -5,6 +5,12 @@
 <img src="https://raw.githubusercontent.com/realm-demos/realm-loginkit/master/screenshot.jpg" width="500" style="margin:0 auto" />
 </p>
 
+[![CI Status](http://img.shields.io/travis/realm-demos/realm-loginkit.svg?style=flat)](http://api.travis-ci.org/realm-demos/realm-loginkit.svg)
+[![CocoaPods](https://img.shields.io/cocoapods/dt/RealmLoginKit.svg?maxAge=3600)](https://cocoapods.org/pods/RealmLoginKit)
+[![Version](https://img.shields.io/cocoapods/v/RealmLoginKit.svg?style=flat)](http://cocoadocs.org/docsets/RealmLoginKit)
+[![GitHub license](https://img.shields.io/badge/license-Apache-blue.svg)](https://raw.githubusercontent.com/realm-demos/realm-loginkit/master/LICENSE)
+[![Platform](https://img.shields.io/cocoapods/p/RealmLoginKit.svg?style=flat)](http://cocoadocs.org/docsets/RealmLoginKit)
+
 Realm LoginKit is a UI framework that provides a fully featured login screen for apps that make use of the Realm Mobile Platform.
 
 It has been designed to be easily dropped into existing app codebases, and to provide a fully featured interface allowing users to either log in, or register new accounts in that app.
