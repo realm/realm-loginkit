@@ -90,12 +90,7 @@ public class ExampleActivity extends AppCompatActivity implements View.OnClickLi
     private void resizeLogo() {
         final int width = getWindow().getDecorView().getWidth();
         final int height = getWindow().getDecorView().getHeight();
-        final int minWidth;
-        if (width < height) {
-            minWidth = (int) (width * LOGO_RATIO);
-        } else {
-            minWidth = (int) (height * LOGO_RATIO);
-        }
+        final int minWidth = (int) (Math.min(width, height) * LOGO_RATIO);
         ViewGroup.LayoutParams layoutParams = logo.getLayoutParams();
         layoutParams.width = minWidth;
         layoutParams.height = minWidth;
