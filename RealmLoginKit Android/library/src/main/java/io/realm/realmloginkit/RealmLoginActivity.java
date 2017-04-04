@@ -87,7 +87,7 @@ public class RealmLoginActivity extends AppCompatActivity implements View.OnClic
         final SyncCredentials syncCredentials = SyncCredentials.usernamePassword(emailAddress, password);
         logInPanel.setVisibility(View.GONE);
         progressBar.setVisibility(View.VISIBLE);
-        SyncUser.loginAsync(syncCredentials, Helper.getValidAuthUri(serverUrl), this);
+        SyncUser.loginAsync(syncCredentials, Utils.getValidAuthUri(serverUrl), this);
     }
 
     private void handleRegister() {

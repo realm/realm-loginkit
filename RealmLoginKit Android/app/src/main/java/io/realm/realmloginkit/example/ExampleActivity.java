@@ -12,7 +12,7 @@ import android.widget.ToggleButton;
 
 import io.realm.realmloginkit.Constants;
 import io.realm.realmloginkit.Helper;
-import io.realm.realmloginkit.RealmLoginActivity;
+import io.realm.realmloginkit.LoginKit;
 import io.realm.realmloginkit.widget.RealmLogoView;
 
 public class ExampleActivity extends AppCompatActivity implements View.OnClickListener {
@@ -108,10 +108,10 @@ public class ExampleActivity extends AppCompatActivity implements View.OnClickLi
 
     private void handleLogIn(int viewId) {
         if (viewId == R.id.log_in) {
-            final Intent intent = new Intent(this, RealmLoginActivity.class);
-            intent.putExtra(Constants.KEY_DARK_MODE, isDarkMode);
-            intent.putExtra(Constants.KEY_APP_TITLE, "Example App");
-            startActivityForResult(intent, Constants.REQUEST_CODE_LOGIN_KIT);
+            LoginKit.loginKit(this)
+                    .setDarkMode(isDarkMode)
+                    .setAppTitle("Example App2")
+                    .logIn();
         }
     }
 
