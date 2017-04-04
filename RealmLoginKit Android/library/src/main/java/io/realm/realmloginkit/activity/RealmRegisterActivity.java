@@ -1,5 +1,6 @@
 package io.realm.realmloginkit.activity;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -8,6 +9,7 @@ import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
@@ -16,12 +18,12 @@ import android.widget.TextView;
 import io.realm.ObjectServerError;
 import io.realm.SyncCredentials;
 import io.realm.SyncUser;
-import io.realm.realmloginkit.util.Constants;
 import io.realm.realmloginkit.R;
+import io.realm.realmloginkit.util.Constants;
 import io.realm.realmloginkit.util.UriHelper;
 
 
-public class RealmRegisterActivity extends AppCompatActivity implements View.OnClickListener, TextWatcher, SyncUser.Callback {
+public class RealmRegisterActivity extends AppCompatActivity implements View.OnClickListener, TextWatcher, SyncUser.Callback, CompoundButton.OnCheckedChangeListener {
     private boolean isDarkMode;
     private String appTitle;
     private RelativeLayout signUpPanel;
@@ -33,6 +35,7 @@ public class RealmRegisterActivity extends AppCompatActivity implements View.OnC
     private Button signUpButton;
     private Button logInButton;
     private CheckBox rememberCheckBox;
+    private SharedPreferences sharedPreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,10 +74,24 @@ public class RealmRegisterActivity extends AppCompatActivity implements View.OnC
             serverUrlEdit.setVisibility(View.GONE);
         }
 
+        sharedPreferences = getSharedPreferences(Constants.SHARED_PREFERENCES_NAME, MODE_PRIVATE);
+
+        if (sharedPreferences.contains(Constants.SHARED_KEY_SERVER_URI)) {
+            serverUrlEdit.setText(sharedPreferences.getString(Constants.SHARED_KEY_SERVER_URI, ""));
+            emailAddressEdit.setText(sharedPreferences.getString(Constants.SHARED_KEY_EMAIL, ""));
+            final String password = sharedPreferences.getString(Constants.SHARED_KEY_PASSWORD, "");
+            passwordEdit.setText(password);
+            confirmPasswordEdit.setText(password);
+            rememberCheckBox.setChecked(true);
+        }
+
         serverUrlEdit.addTextChangedListener(this);
         emailAddressEdit.addTextChangedListener(this);
         passwordEdit.addTextChangedListener(this);
         confirmPasswordEdit.addTextChangedListener(this);
+
+        rememberCheckBox.setOnCheckedChangeListener(this);
+        validateForm();
     }
 
     private void initTheme() {
@@ -108,6 +125,18 @@ public class RealmRegisterActivity extends AppCompatActivity implements View.OnC
 
     @Override
     public void onSuccess(SyncUser user) {
+        if (rememberCheckBox.isChecked()) {
+            final String serverUrl = serverUrlEdit.getText().toString();
+            final String emailAddress = emailAddressEdit.getText().toString();
+            final String password = passwordEdit.getText().toString();
+
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putString(Constants.SHARED_KEY_SERVER_URI, serverUrl);
+            editor.putString(Constants.SHARED_KEY_EMAIL, emailAddress);
+            editor.putString(Constants.SHARED_KEY_PASSWORD, password);
+            editor.commit();
+        }
+
         setResult(Constants.RESULT_CODE_REGISTER);
         finish();
     }
@@ -130,6 +159,10 @@ public class RealmRegisterActivity extends AppCompatActivity implements View.OnC
 
     @Override
     public void onTextChanged(CharSequence s, int start, int before, int count) {
+        validateForm();
+    }
+
+    private void validateForm() {
         final String serverUrl = serverUrlEdit.getText().toString();
         final String emailAddress = emailAddressEdit.getText().toString();
         final String password = passwordEdit.getText().toString();
@@ -143,5 +176,16 @@ public class RealmRegisterActivity extends AppCompatActivity implements View.OnC
 
     @Override
     public void afterTextChanged(Editable s) {
+    }
+
+    @Override
+    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+        if (!isChecked) {
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.remove(Constants.SHARED_KEY_SERVER_URI);
+            editor.remove(Constants.SHARED_KEY_EMAIL);
+            editor.remove(Constants.SHARED_KEY_PASSWORD);
+            editor.commit();
+        }
     }
 }
