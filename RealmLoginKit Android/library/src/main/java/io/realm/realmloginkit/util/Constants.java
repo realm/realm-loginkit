@@ -8,4 +8,8 @@ public class Constants {
 
     public static final int REQUEST_CODE_LOGIN = 200;
     public static final int RESULT_CODE_LOGIN_OK = 1;
+
+    public static final int REQUEST_CODE_REGISTER = 300;
+    public static final int RESULT_CODE_REGISTER = 1;
+    public static final int RESULT_CODE_EXIT = 2;
 }

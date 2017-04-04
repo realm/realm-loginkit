@@ -17,8 +17,8 @@ import android.widget.TextView;
 import io.realm.ObjectServerError;
 import io.realm.SyncCredentials;
 import io.realm.SyncUser;
-import io.realm.realmloginkit.util.Constants;
 import io.realm.realmloginkit.R;
+import io.realm.realmloginkit.util.Constants;
 import io.realm.realmloginkit.util.UriHelper;
 
 public class RealmLoginActivity extends AppCompatActivity implements View.OnClickListener, SyncUser.Callback, TextWatcher {
@@ -105,9 +105,8 @@ public class RealmLoginActivity extends AppCompatActivity implements View.OnClic
 
     private void handleRegister() {
         final Intent intent = new Intent(this, RealmRegisterActivity.class);
-        intent.putExtra(Constants.KEY_DARK_MODE, isDarkMode);
-        intent.putExtra(Constants.KEY_APP_TITLE, appTitle);
-        startActivity(intent);
+        intent.putExtras(getIntent().getExtras());
+        startActivityForResult(intent, Constants.REQUEST_CODE_REGISTER);
     }
 
     @Override
@@ -146,5 +145,14 @@ public class RealmLoginActivity extends AppCompatActivity implements View.OnClic
 
     @Override
     public void afterTextChanged(Editable s) {
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == Constants.REQUEST_CODE_REGISTER && resultCode == Constants.RESULT_CODE_REGISTER) {
+            setResult(Constants.RESULT_CODE_LOGIN_OK);
+            finish();
+        }
     }
 }

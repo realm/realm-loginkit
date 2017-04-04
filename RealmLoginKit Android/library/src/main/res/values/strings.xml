@@ -12,6 +12,7 @@
     <string name="confirm_password">Confirm Password</string>
     <string name="welcome_log_in">Log Into %1$s</string>
     <string name="welcome_sign_up">Sign up for %1$s</string>
-    <string name="unable_to_sign_in">"Unable to Sign In"</string>
+    <string name="unable_to_sign_in">Unable to Sign In</string>
+    <string name="unable_to_sign_up">Unable to Sign Up</string>
     <string name="ok">OK</string>
 </resources>
