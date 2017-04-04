@@ -19,6 +19,45 @@
 import UIKit
 
 extension UIImage {
+    public class func closeIcon() -> UIImage {
+        UIGraphicsBeginImageContextWithOptions(CGSize(width: 20, height: 20), false, 0.0)
+
+        //// General Declarations
+        let context = UIGraphicsGetCurrentContext()!
+
+        //// Color Declarations
+        let fillColor = UIColor(red: 0.000, green: 0.000, blue: 0.000, alpha: 1.000)
+
+        //// LeftStroke Drawing
+        context.saveGState()
+        context.translateBy(x: 2.2, y: -0.6)
+        context.rotate(by: 45 * CGFloat.pi/180)
+
+        let leftStrokePath = UIBezierPath(roundedRect: CGRect(x: 0, y: 0, width: 26, height: 4), cornerRadius: 2)
+        fillColor.setFill()
+        leftStrokePath.fill()
+
+        context.restoreGState()
+
+
+        //// RightStroke Drawing
+        context.saveGState()
+        context.translateBy(x: 2.2, y: -0.6)
+        context.rotate(by: -45 * CGFloat.pi/180)
+
+        let rightStrokePath = UIBezierPath(roundedRect: CGRect(x: -15, y: 11, width: 26, height: 4), cornerRadius: 2)
+        fillColor.setFill()
+        rightStrokePath.fill()
+        
+        context.restoreGState()
+
+        let image = UIGraphicsGetImageFromCurrentImageContext()
+
+        UIGraphicsEndImageContext()
+
+        return image!.withRenderingMode(.alwaysTemplate)
+    }
+
     public class func mailIcon() -> UIImage {
         UIGraphicsBeginImageContextWithOptions(CGSize(width: 20, height: 15), false, 0.0)
         
