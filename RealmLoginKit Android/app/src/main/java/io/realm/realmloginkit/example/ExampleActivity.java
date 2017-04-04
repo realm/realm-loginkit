@@ -26,9 +26,9 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
-import io.realm.realmloginkit.util.Constants;
 import io.realm.realmloginkit.ActivityHelper;
 import io.realm.realmloginkit.LoginKit;
+import io.realm.realmloginkit.util.Constants;
 import io.realm.realmloginkit.widget.RealmLogoView;
 
 public class ExampleActivity extends AppCompatActivity implements View.OnClickListener {
@@ -60,8 +60,17 @@ public class ExampleActivity extends AppCompatActivity implements View.OnClickLi
     @Override
     public void onClick(View view) {
         final int viewId = view.getId();
-        handleThemeIfNeeded(viewId);
-        handleLogInIfNeeded(viewId);
+        switch (viewId) {
+            case R.id.log_in:
+                handleLogIn();
+                break;
+            case R.id.light_button:
+                handleLightTheme();
+                break;
+            case R.id.dark_button:
+                handleDarkTheme();
+                break;
+        }
     }
 
     private void initLogo() {
@@ -122,33 +131,33 @@ public class ExampleActivity extends AppCompatActivity implements View.OnClickLi
         }
     }
 
-    private void handleLogInIfNeeded(int viewId) {
-        if (viewId == R.id.log_in) {
-            LoginKit.loginKit(this)
-                    .setDarkMode(isDarkMode)
-                    .setAppTitle("Example App")
-                    .setServerUri("127.0.0.7", false)
-                    .logIn();
-        }
+    private void handleLogIn() {
+        LoginKit.loginKit(this)
+                .setDarkMode(isDarkMode)
+                .setAppTitle("Example App")
+                .setServerUri("127.0.0.7", false)
+                .logIn();
     }
 
-    private void handleThemeIfNeeded(int viewId) {
-        if (viewId == R.id.light_button) {
-            if (!isDarkMode) {
-                lightButton.setChecked(true);
-                return;
-            }
-            darkButton.setChecked(false);
-        } else if (viewId == R.id.dark_button) {
-            if (isDarkMode) {
-                darkButton.setChecked(true);
-                return;
-            }
-            lightButton.setChecked(false);
-        } else {
+    private void handleLightTheme() {
+        if (!isDarkMode) {
+            lightButton.setChecked(true);
             return;
         }
+        darkButton.setChecked(false);
+        changeTheme();
+    }
 
+    private void handleDarkTheme() {
+        if (isDarkMode) {
+            darkButton.setChecked(true);
+            return;
+        }
+        lightButton.setChecked(false);
+        changeTheme();
+    }
+
+    private void changeTheme() {
         final Intent intent = new Intent(this, ExampleActivity.class);
         intent.putExtra(Constants.KEY_DARK_MODE, isDarkMode ? false : true);
         finish();
