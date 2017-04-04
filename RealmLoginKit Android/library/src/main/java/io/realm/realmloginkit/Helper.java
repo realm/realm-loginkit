@@ -8,25 +8,42 @@ public class Helper {
         void onSuccess();
     }
 
-    public static void onActivityResult(int requestCode, int resultCode, Intent data, OnSuccess onSuccess) {
+    public static void onActivityResult(int requestCode, int resultCode, Intent unused, OnSuccess onSuccess) {
         if (requestCode == Constants.REQUEST_CODE_LOGIN_KIT && resultCode == Constants.RESULT_CODE_OK) {
             onSuccess.onSuccess();
         }
     }
 
     public static String getValidAuthUri(String uri) {
-        final String delimiter = "://";
         String scheme = "http";
         String host = uri;
+        String path = "/auth";
         int port = 9080;
-        int schemeEnd = uri.indexOf(delimiter);
+
+        final String delimiter = "://";
+        final int schemeEnd = uri.indexOf("://");
         if (schemeEnd != -1) {
-            if (uri.startsWith("https") || uri.startsWith("realms")) {
+            final String lowerCase = uri.toLowerCase();
+            if (lowerCase.startsWith("https") || lowerCase.startsWith("realms")) {
                 port = 9443;
                 scheme = "https";
             }
             host = host.substring(schemeEnd + delimiter.length());
         }
-        return String.format("%1$s://%2$s:%3$d/auth", scheme, host, port);
+
+        final int pathStart = host.indexOf('/');
+        if (pathStart != -1) {
+            path = host.substring(pathStart);
+            host = host.substring(0, pathStart);
+        }
+
+        final int portStart = host.indexOf(":");
+        if (portStart != -1) {
+            port = Integer.parseInt(host.substring(portStart + 1));
+            host = host.substring(0, portStart);
+        }
+
+        final String authUri = String.format("%1$s://%2$s:%3$d%4$s", scheme, host, port, path);
+        return authUri;
     }
 }
