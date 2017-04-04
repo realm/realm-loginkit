@@ -60,6 +60,16 @@ public class RealmLoginActivity extends AppCompatActivity implements View.OnClic
         passwordEdit = (EditText) findViewById(R.id.password);
         rememberCheckBox = (CheckBox) findViewById(R.id.remember);
 
+        final String presetServerUri = extras.getString(Constants.KEY_SERVER_URI);
+        if (presetServerUri != null) {
+            serverUrlEdit.setText(presetServerUri);
+            emailAddressEdit.requestFocus();
+        }
+        final boolean shouldeHideServerUri = extras.getBoolean(Constants.KEY_HIDE_SERVER_URI, false);
+        if (shouldeHideServerUri) {
+            serverUrlEdit.setVisibility(View.GONE);
+        }
+
         serverUrlEdit.addTextChangedListener(this);
         emailAddressEdit.addTextChangedListener(this);
         passwordEdit.addTextChangedListener(this);
