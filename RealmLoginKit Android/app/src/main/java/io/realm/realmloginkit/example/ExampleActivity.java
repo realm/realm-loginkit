@@ -126,8 +126,8 @@ public class ExampleActivity extends AppCompatActivity implements View.OnClickLi
         if (viewId == R.id.log_in) {
             LoginKit.loginKit(this)
                     .setDarkMode(isDarkMode)
-                    .setAppTitle("Example App2")
-                    .setServerUri("192.168.110.47", false)
+                    .setAppTitle("Example App")
+                    .setServerUri("127.0.0.7", false)
                     .logIn();
         }
     }
