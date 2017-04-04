@@ -120,6 +120,7 @@ public class RealmRegisterActivity extends AppCompatActivity implements View.OnC
 
     @Override
     public void onClick(View v) {
+        // Since resource ids of the library are not final, the following if-else cannot be replaced with switch-case.
         if (v.getId() == R.id.sign_up) {
             handleRegister();
         } else if (v.getId() == R.id.log_in) {

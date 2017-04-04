@@ -116,6 +116,7 @@ public class RealmLoginActivity extends AppCompatActivity implements View.OnClic
 
     @Override
     public void onClick(View v) {
+        // Since resource ids of the library are not final, the following if-else cannot be replaced with switch-case.
         if (v.getId() == R.id.log_in) {
             handleLogIn();
         } else if (v.getId() == R.id.register) {
