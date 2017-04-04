@@ -1,4 +1,4 @@
-package io.realm.realmloginkit;
+package io.realm.realmloginkit.activity;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -9,6 +9,9 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
+
+import io.realm.realmloginkit.util.Constants;
+import io.realm.realmloginkit.R;
 
 public class RealmRegisterActivity extends AppCompatActivity implements View.OnClickListener, TextWatcher {
 

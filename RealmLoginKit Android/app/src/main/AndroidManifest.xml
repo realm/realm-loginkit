@@ -22,9 +22,6 @@
             </intent-filter>
         </activity>
 
-        <activity android:name="io.realm.realmloginkit.RealmLoginActivity">
-
-        </activity>
     </application>
 
 </manifest>

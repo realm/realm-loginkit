@@ -2,14 +2,16 @@ package io.realm.realmloginkit;
 
 import android.content.Intent;
 
-public class Helper {
+import io.realm.realmloginkit.util.Constants;
+
+public class ActivityHelper {
 
     public interface OnSuccess {
         void onSuccess();
     }
 
     public static void onActivityResult(int requestCode, int resultCode, Intent unused, OnSuccess onSuccess) {
-        if (requestCode == Constants.REQUEST_CODE_LOGIN_KIT && resultCode == Constants.RESULT_CODE_OK) {
+        if (requestCode == Constants.REQUEST_CODE_LOGIN && resultCode == Constants.RESULT_CODE_LOGIN_OK) {
             onSuccess.onSuccess();
         }
     }

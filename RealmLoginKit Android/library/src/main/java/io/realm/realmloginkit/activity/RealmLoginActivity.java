@@ -1,4 +1,4 @@
-package io.realm.realmloginkit;
+package io.realm.realmloginkit.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -17,6 +17,9 @@ import android.widget.TextView;
 import io.realm.ObjectServerError;
 import io.realm.SyncCredentials;
 import io.realm.SyncUser;
+import io.realm.realmloginkit.util.Constants;
+import io.realm.realmloginkit.R;
+import io.realm.realmloginkit.util.UriHelper;
 
 public class RealmLoginActivity extends AppCompatActivity implements View.OnClickListener, SyncUser.Callback, TextWatcher {
 
@@ -87,7 +90,7 @@ public class RealmLoginActivity extends AppCompatActivity implements View.OnClic
         final SyncCredentials syncCredentials = SyncCredentials.usernamePassword(emailAddress, password);
         logInPanel.setVisibility(View.GONE);
         progressBar.setVisibility(View.VISIBLE);
-        SyncUser.loginAsync(syncCredentials, Utils.getValidAuthUri(serverUrl), this);
+        SyncUser.loginAsync(syncCredentials, UriHelper.getValidAuthUri(serverUrl), this);
     }
 
     private void handleRegister() {
@@ -99,7 +102,7 @@ public class RealmLoginActivity extends AppCompatActivity implements View.OnClic
 
     @Override
     public void onSuccess(SyncUser user) {
-        setResult(Constants.RESULT_CODE_OK);
+        setResult(Constants.RESULT_CODE_LOGIN_OK);
         finish();
     }
 

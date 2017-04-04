@@ -5,10 +5,10 @@
     <application
         android:label="@string/app_name"
         android:supportsRtl="true">
-        <activity android:name=".RealmLoginActivity">
+        <activity android:name=".activity.RealmLoginActivity">
         </activity>
 
-        <activity android:name=".RealmRegisterActivity">
+        <activity android:name=".activity.RealmRegisterActivity">
         </activity>
     </application>
 

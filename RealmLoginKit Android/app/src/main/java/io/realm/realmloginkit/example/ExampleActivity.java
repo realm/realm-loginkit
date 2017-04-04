@@ -10,8 +10,8 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
-import io.realm.realmloginkit.Constants;
-import io.realm.realmloginkit.Helper;
+import io.realm.realmloginkit.util.Constants;
+import io.realm.realmloginkit.ActivityHelper;
 import io.realm.realmloginkit.LoginKit;
 import io.realm.realmloginkit.widget.RealmLogoView;
 
@@ -45,7 +45,7 @@ public class ExampleActivity extends AppCompatActivity implements View.OnClickLi
     public void onClick(View view) {
         final int viewId = view.getId();
         handleThemeIfNeeded(viewId);
-        handleLogIn(viewId);
+        handleLogInIfNeeded(viewId);
     }
 
     private void initLogo() {
@@ -106,11 +106,12 @@ public class ExampleActivity extends AppCompatActivity implements View.OnClickLi
         }
     }
 
-    private void handleLogIn(int viewId) {
+    private void handleLogInIfNeeded(int viewId) {
         if (viewId == R.id.log_in) {
             LoginKit.loginKit(this)
                     .setDarkMode(isDarkMode)
                     .setAppTitle("Example App2")
+                    .setServerUri("192.168.110.47", false)
                     .logIn();
         }
     }
@@ -141,7 +142,7 @@ public class ExampleActivity extends AppCompatActivity implements View.OnClickLi
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        Helper.onActivityResult(requestCode, resultCode, data, new Helper.OnSuccess() {
+        ActivityHelper.onActivityResult(requestCode, resultCode, data, new ActivityHelper.OnSuccess() {
             @Override
             public void onSuccess() {
                 Toast.makeText(ExampleActivity.this, "Success!", Toast.LENGTH_SHORT).show();

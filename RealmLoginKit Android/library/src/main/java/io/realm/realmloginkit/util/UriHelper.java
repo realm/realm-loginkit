@@ -1,6 +1,6 @@
-package io.realm.realmloginkit;
+package io.realm.realmloginkit.util;
 
-class Utils {
+public class UriHelper {
     public static String getValidAuthUri(String uri) {
         String scheme = "http";
         String host = uri;
