@@ -20,6 +20,7 @@ import UIKit
 import TORoundedTableView
 import Realm
 
+/** The types of themes in which the controller can be styled. */
 @objc public enum LoginViewControllerStyle: Int {
     case lightTranslucent
     case lightOpaque
@@ -27,7 +28,7 @@ import Realm
     case darkOpaque
 }
 
-/* The types of inputs cells may be */
+/** The types of inputs cells may be */
 private enum LoginViewControllerCellType: Int {
     case serverURL
     case email
@@ -36,11 +37,45 @@ private enum LoginViewControllerCellType: Int {
     case rememberLogin
 }
 
+@objc(RLMAuthenticationProvider)
+public protocol AuthenticationProvider: NSObjectProtocol {
+
+    /** The credentials captured by the login controller (if set) */
+    var userName: String? { get set }
+    var password: String? { get set }
+    var signingUp: Bool   { get set }
+
+    /** Whether the user should be allowed to set the URL. */
+    var shouldExposeURL: Bool { get }
+
+    /**
+     The provider will perform the necessary requests to obtain the necessary
+     information that can then be used to create an `RLMCredentials` object for
+     input into the Object Server.
+     */
+    func authenticate(success: (RLMSyncCredentials) -> Void, error: (Error) -> Void)
+
+    /**
+     Not strictly required, but if the sign-in request needs to be cancelled,
+     this will be called to give the logic a chance to clean itself up
+     */
+    func cancelAuthentication() -> Bool
+}
+
 @objc(RLMLoginViewController)
 public class LoginViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UIViewControllerTransitioningDelegate {
     
     //MARK: - Public Properties
-    
+
+    /**
+     The authentication provider service that will be used to
+     validate the user-supplied login details before being forwarded to
+     the Object Server.
+     
+     Default value is `nil`, which defaults to the standard Realm username/password combination
+    */
+    public var authenticationProvider: AuthenticationProvider? = nil
+
     /** 
      The visual style of the login controller
     */

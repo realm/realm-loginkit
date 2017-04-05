@@ -24,6 +24,8 @@
 		225574BD1E2DFC2800C52098 /* UIImage+Icons.swift in Sources */ = {isa = PBXBuildFile; fileRef = 225574BC1E2DFC2800C52098 /* UIImage+Icons.swift */; };
 		225574BF1E2E0ACE00C52098 /* LoginHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 225574BE1E2E0ACE00C52098 /* LoginHeaderView.swift */; };
 		225574C11E2E14DC00C52098 /* LoginFooterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 225574C01E2E14DC00C52098 /* LoginFooterView.swift */; };
+		22798DA61E959DE9000538CE /* AWSCognitoAuthenticationProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22798DA51E959DE9000538CE /* AWSCognitoAuthenticationProvider.swift */; };
+		22798DA71E95AA2A000538CE /* AWSCognitoAuthenticationProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22798DA51E959DE9000538CE /* AWSCognitoAuthenticationProvider.swift */; };
 		2290FFCE1E3072AA0039DACF /* LoginViewControllerTransitioning.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2290FFCD1E3072AA0039DACF /* LoginViewControllerTransitioning.swift */; };
 		22AEE18B1E2F3F1F00CBB40A /* LoginTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22AEE18A1E2F3F1F00CBB40A /* LoginTableViewCell.swift */; };
 		22BB75DD1E8B144100317E4B /* RealmLoginKitExampleTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22BB75DC1E8B144100317E4B /* RealmLoginKitExampleTests.swift */; };
@@ -56,6 +58,7 @@
 		225574BC1E2DFC2800C52098 /* UIImage+Icons.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "UIImage+Icons.swift"; path = "Extensions/UIImage+Icons.swift"; sourceTree = "<group>"; };
 		225574BE1E2E0ACE00C52098 /* LoginHeaderView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginHeaderView.swift; sourceTree = "<group>"; };
 		225574C01E2E14DC00C52098 /* LoginFooterView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginFooterView.swift; sourceTree = "<group>"; };
+		22798DA51E959DE9000538CE /* AWSCognitoAuthenticationProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AWSCognitoAuthenticationProvider.swift; sourceTree = "<group>"; };
 		2290FFCD1E3072AA0039DACF /* LoginViewControllerTransitioning.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginViewControllerTransitioning.swift; sourceTree = "<group>"; };
 		22AEE18A1E2F3F1F00CBB40A /* LoginTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginTableViewCell.swift; sourceTree = "<group>"; };
 		22BB75DA1E8B144100317E4B /* RealmLoginKitExampleTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = RealmLoginKitExampleTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -214,6 +217,7 @@
 			isa = PBXGroup;
 			children = (
 				2290FFCD1E3072AA0039DACF /* LoginViewControllerTransitioning.swift */,
+				22798DA51E959DE9000538CE /* AWSCognitoAuthenticationProvider.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -537,6 +541,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				22798DA71E95AA2A000538CE /* AWSCognitoAuthenticationProvider.swift in Sources */,
 				225574C11E2E14DC00C52098 /* LoginFooterView.swift in Sources */,
 				2246E2BD1E2D3E8100D7D499 /* LoginViewController.swift in Sources */,
 				225574BF1E2E0ACE00C52098 /* LoginHeaderView.swift in Sources */,
@@ -563,6 +568,7 @@
 			files = (
 				223C7A9E1E85E8C90075328E /* UIImage+Icons.swift in Sources */,
 				223C7A9D1E85E8C80075328E /* LoginViewController.swift in Sources */,
+				22798DA61E959DE9000538CE /* AWSCognitoAuthenticationProvider.swift in Sources */,
 				223C7A9C1E85E8C60075328E /* LoginViewControllerTransitioning.swift in Sources */,
 				223C7A981E85E8C30075328E /* RealmLogoView.swift in Sources */,
 				223C7A991E85E8C30075328E /* LoginHeaderView.swift in Sources */,
@@ -813,6 +819,7 @@
 				22BB75E31E8B144100317E4B /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		22EC435D1E3246FF009BBA75 /* Build configuration list for PBXNativeTarget "RealmLoginKit" */ = {
 			isa = XCConfigurationList;
