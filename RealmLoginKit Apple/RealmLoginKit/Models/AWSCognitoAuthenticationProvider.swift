@@ -44,13 +44,15 @@ class AWSCognitoAuthenticationProvider: NSObject, AuthenticationProvider {
 
     func authenticate(success: (RLMSyncCredentials) -> Void, error: (Error) -> Void) {
         let serviceConfiguration = AWSServiceConfiguration(region: self.serviceRegion, credentialsProvider: nil)
-        let poolConfiguration = AWSCognitoIdentityUserPoolConfiguration(clientId: self.clientID, clientSecret: "SECRET", poolId: self.userPoolID)
+        let poolConfiguration = AWSCognitoIdentityUserPoolConfiguration(clientId: self.clientID, clientSecret: nil, poolId: self.userPoolID)
 
         AWSCognitoIdentityUserPool.register(with: serviceConfiguration, userPoolConfiguration:poolConfiguration, forKey:"UserPool")
         userPool = AWSCognitoIdentityUserPool(forKey: "UserPool")
 
+        let attributes = [AWSCognitoIdentityUserAttributeType(name: "email", value: userName!)]
+
         if self.signingUp {
-            let user = userPool!.signUp(userName!, password: password!, userAttributes: nil, validationData: nil)
+            let user = userPool!.signUp(userName!, password: password!, userAttributes: attributes, validationData: nil)
             print(user)
         }
     }
