@@ -27,12 +27,12 @@ class AWSCognitoAuthenticationProvider: NSObject, AuthenticationProvider {
     public var password: String? = nil
     public var signingUp: Bool = false
 
-    
-
     // AWS Account Credentials
     private let serviceRegion: AWSRegionType
     private let userPoolID: String
     private let clientID: String
+
+    public var shouldExposeURL: Bool { return false }
 
     private var userPool: AWSCognitoIdentityUserPool? = nil
 

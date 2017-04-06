@@ -74,7 +74,13 @@ public class LoginViewController: UIViewController, UITableViewDataSource, UITab
      
      Default value is `nil`, which defaults to the standard Realm username/password combination
     */
-    public var authenticationProvider: AuthenticationProvider? = nil
+    public var authenticationProvider: AuthenticationProvider? = nil {
+        didSet {
+            if let authenticationProvider = authenticationProvider {
+                self.isServerURLFieldHidden = !(authenticationProvider.shouldExposeURL)
+            }
+        }
+    }
 
     /** 
      The visual style of the login controller
@@ -699,12 +705,14 @@ public class LoginViewController: UIViewController, UITableViewDataSource, UITab
     private func validateFormItems() {
         var formIsValid = true
 
-        if serverURL == nil || (serverURL?.isEmpty)! {
-            formIsValid = false
-        }
+        if authenticationProvider == nil {
+            if serverURL == nil || (serverURL?.isEmpty)! {
+                formIsValid = false
+            }
 
-        if !(0...65535 ~= serverPort) {
-            formIsValid = false
+            if !(0...65535 ~= serverPort) {
+                formIsValid = false
+            }
         }
 
         if username == nil || username!.isEmpty {
@@ -727,6 +735,24 @@ public class LoginViewController: UIViewController, UITableViewDataSource, UITab
         
         saveLoginCredentials()
         
+        if let authenticationProvider = authenticationProvider {
+            authenticationProvider.userName = username!
+            authenticationProvider.password = password!
+            authenticationProvider.signingUp = isRegistering
+
+            authenticationProvider.authenticate(success: { (credentials) in
+
+            }, error: { error in
+
+            })
+
+            return
+        }
+
+        submitLoginToRealmProvider()
+    }
+
+    private func submitLoginToRealmProvider() {
         var authScheme = "http"
         var scheme: String?
         var formattedURL = serverURL
@@ -744,25 +770,25 @@ public class LoginViewController: UIViewController, UITableViewDataSource, UITab
             }
             formattedURL = formattedURL?.substring(to: portRange.lowerBound)
         }
-        
+
         let credentials = RLMSyncCredentials(username: username!, password: password!, register: isRegistering)
         RLMSyncUser.__logIn(with: credentials, authServerURL: URL(string: "\(authScheme)://\(formattedURL!):\(serverPort)")!, timeout: 30, onCompletion: { (user, error) in
             DispatchQueue.main.async {
                 self.footerView.isSubmitting = false
-                
+
                 if let error = error {
                     let alertController = UIAlertController(title: "Unable to Sign In", message: error.localizedDescription, preferredStyle: .alert)
                     alertController.addAction(UIAlertAction(title: "Okay", style: .default, handler: nil))
                     self.present(alertController, animated: true, completion: nil)
-                    
+
                     return
                 }
-                
+
                 self.loginSuccessfulHandler?(user!)
             }
         })
     }
-    
+
     private func saveLoginCredentials() {
         let userDefaults = UserDefaults.standard
         
