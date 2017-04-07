@@ -36,13 +36,13 @@ class AWSCognitoAuthenticationProvider: NSObject, AuthenticationProvider, AWSCog
 
     public var shouldExposeURL: Bool { return false }
 
-    init(serviceRegion: AWSRegionType, userPoolID: String, clientID: String) {
+    init(serviceRegion: AWSRegionType, userPoolID: String, clientID: String, clientSecret: String) {
         self.serviceRegion = serviceRegion
         self.userPoolID = userPoolID
         self.clientID = clientID
 
         let serviceConfiguration = AWSServiceConfiguration(region: self.serviceRegion, credentialsProvider: nil)
-        let poolConfiguration = AWSCognitoIdentityUserPoolConfiguration(clientId: self.clientID, clientSecret: nil, poolId: self.userPoolID)
+        let poolConfiguration = AWSCognitoIdentityUserPoolConfiguration(clientId: self.clientID, clientSecret: clientSecret, poolId: self.userPoolID)
 
         AWSCognitoIdentityUserPool.register(with: serviceConfiguration, userPoolConfiguration:poolConfiguration, forKey:"RealmLoginKit")
         self.userPool = AWSCognitoIdentityUserPool(forKey: "RealmLoginKit")
@@ -90,7 +90,8 @@ class AWSCognitoAuthenticationProvider: NSObject, AuthenticationProvider, AWSCog
                     }
 
                     let userSession = task.result!
-                    print(userSession.accessToken)
+                    let credentials = RLMSyncCredentials(customToken: userSession.accessToken!.tokenString, provider: RLMIdentityProvider(rawValue: "fooauth"), userInfo: nil)
+                    success?(credentials)
                 }
 
                 return nil
