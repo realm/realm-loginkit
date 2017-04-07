@@ -53,7 +53,7 @@ public protocol AuthenticationProvider: NSObjectProtocol {
      information that can then be used to create an `RLMCredentials` object for
      input into the Object Server.
      */
-    func authenticate(success: (RLMSyncCredentials) -> Void, error: (Error) -> Void)
+    func authenticate(success: ((RLMSyncCredentials) -> Void)?, error: ((Error) -> Void)?)
 
     /**
      Not strictly required, but if the sign-in request needs to be cancelled,
