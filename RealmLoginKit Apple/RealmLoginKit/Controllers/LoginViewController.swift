@@ -741,18 +741,24 @@ public class LoginViewController: UIViewController, UITableViewDataSource, UITab
             authenticationProvider.signingUp = isRegistering
 
             authenticationProvider.authenticate(success: { (credentials) in
-
+                self.logIn(credentials: credentials)
             }, error: { error in
-
+                DispatchQueue.main.async {
+                    self.footerView.isSubmitting = false
+                    let alertController = UIAlertController(title: "Unable to Sign In", message: error.localizedDescription, preferredStyle: .alert)
+                    alertController.addAction(UIAlertAction(title: "Okay", style: .default, handler: nil))
+                    self.present(alertController, animated: true, completion: nil)
+                }
             })
 
             return
         }
 
-        submitLoginToRealmProvider()
+        let credentials = RLMSyncCredentials(username: username!, password: password!, register: isRegistering)
+        logIn(credentials: credentials)
     }
 
-    private func submitLoginToRealmProvider() {
+    private func logIn(credentials: RLMSyncCredentials) {
         var authScheme = "http"
         var scheme: String?
         var formattedURL = serverURL
@@ -771,7 +777,6 @@ public class LoginViewController: UIViewController, UITableViewDataSource, UITab
             formattedURL = formattedURL?.substring(to: portRange.lowerBound)
         }
 
-        let credentials = RLMSyncCredentials(username: username!, password: password!, register: isRegistering)
         RLMSyncUser.__logIn(with: credentials, authServerURL: URL(string: "\(authScheme)://\(formattedURL!):\(serverPort)")!, timeout: 30, onCompletion: { (user, error) in
             DispatchQueue.main.async {
                 self.footerView.isSubmitting = false
