@@ -21,7 +21,7 @@ import Realm
 import AWSCore
 import AWSCognitoIdentityProvider
 
-class AWSCognitoAuthenticationProvider: NSObject, AuthenticationProvider {
+class AWSCognitoAuthenticationProvider: NSObject, AuthenticationProvider, AWSCognitoIdentityInteractiveAuthenticationDelegate {
 
     public var userName: String? = nil
     public var password: String? = nil
@@ -32,28 +32,69 @@ class AWSCognitoAuthenticationProvider: NSObject, AuthenticationProvider {
     private let userPoolID: String
     private let clientID: String
 
-    public var shouldExposeURL: Bool { return false }
+    private let userPool: AWSCognitoIdentityUserPool
 
-    private var userPool: AWSCognitoIdentityUserPool? = nil
+    public var shouldExposeURL: Bool { return false }
 
     init(serviceRegion: AWSRegionType, userPoolID: String, clientID: String) {
         self.serviceRegion = serviceRegion
         self.userPoolID = userPoolID
         self.clientID = clientID
-    }
 
-    func authenticate(success: (RLMSyncCredentials) -> Void, error: (Error) -> Void) {
         let serviceConfiguration = AWSServiceConfiguration(region: self.serviceRegion, credentialsProvider: nil)
         let poolConfiguration = AWSCognitoIdentityUserPoolConfiguration(clientId: self.clientID, clientSecret: nil, poolId: self.userPoolID)
 
-        AWSCognitoIdentityUserPool.register(with: serviceConfiguration, userPoolConfiguration:poolConfiguration, forKey:"UserPool")
-        userPool = AWSCognitoIdentityUserPool(forKey: "UserPool")
+        AWSCognitoIdentityUserPool.register(with: serviceConfiguration, userPoolConfiguration:poolConfiguration, forKey:"RealmLoginKit")
+        self.userPool = AWSCognitoIdentityUserPool(forKey: "RealmLoginKit")
 
-        let attributes = [AWSCognitoIdentityUserAttributeType(name: "email", value: userName!)]
+        super.init()
+        
+        self.userPool.delegate = self
+    }
 
+    func authenticate(success: ((RLMSyncCredentials) -> Void)?, error: ((Error) -> Void)?) {
         if self.signingUp {
-            let user = userPool!.signUp(userName!, password: password!, userAttributes: attributes, validationData: nil)
-            print(user)
+            let attributes = [AWSCognitoIdentityUserAttributeType(name: "email", value: userName!)]
+            self.userPool.signUp(userName!, password: password!, userAttributes: attributes, validationData: nil).continueWith(block: { task -> Any? in
+                DispatchQueue.main.async {
+                    if (task.error != nil) {
+                        error?(task.error!)
+                        return
+                    }
+
+                    let response = task.result!
+                    response.user.getSession().continueWith(block: { task -> Any? in
+                        DispatchQueue.main.async {
+                            if (task.error != nil) {
+                                error?(task.error!)
+                                return
+                            }
+
+                            let session = task.result!
+                            print("Access token is \(session.accessToken!)")
+                        }
+                        return nil
+                    })
+                }
+
+                return nil
+            })
+        }
+        else {
+            let user = self.userPool.getUser(userName!)
+            user.getSession(userName!, password: password!, validationData: nil).continueWith(block: { task -> Any? in
+                DispatchQueue.main.async {
+                    if (task.error != nil) {
+                        error?(task.error!)
+                        return
+                    }
+
+                    let userSession = task.result!
+                    print(userSession.accessToken)
+                }
+
+                return nil
+            })
         }
     }
 
