@@ -22,22 +22,22 @@ import TORoundedTableView
 class LoginView: UIView {
 
     /* Subviews */
-    private let containerView = UIView()
-    private let navigationBar = UINavigationBar()
-    private let tableView = TORoundedTableView()
-    private let headerView = LoginHeaderView()
-    private let footerView = LoginFooterView()
-    private let copyrightView = UILabel()
-    private var closeButton: UIButton? = nil
+    public let containerView = UIView()
+    public let navigationBar = UINavigationBar()
+    public let tableView     = TORoundedTableView()
+    public let headerView    = LoginHeaderView()
+    public let footerView    = LoginFooterView()
+    public let copyrightView = UILabel()
+    public var closeButton: UIButton? = nil
 
-    private var effectView: UIVisualEffectView?
-    private var backgroundView: UIView?
+    public var effectView: UIVisualEffectView?
+    public var backgroundView: UIView?
 
     // MARK: - View Creation -
 
     override init(frame: CGRect) {
         super.init(frame: frame)
-
+        
     }
     
     required init?(coder aDecoder: NSCoder) {
