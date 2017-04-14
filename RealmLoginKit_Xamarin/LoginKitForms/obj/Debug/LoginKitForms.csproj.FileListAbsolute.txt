@@ -1,0 +1,13 @@
+C:\Users\denta\dev\Realm\realm-loginkit\RealmLoginKit_Xamarin\LoginKitForms\bin\Debug\LoginKitForms.dll
+C:\Users\denta\dev\Realm\realm-loginkit\RealmLoginKit_Xamarin\LoginKitForms\bin\Debug\LoginKitForms.pdb
+C:\Users\denta\dev\Realm\realm-loginkit\RealmLoginKit_Xamarin\LoginKitForms\bin\Debug\Xamarin.Forms.Core.dll
+C:\Users\denta\dev\Realm\realm-loginkit\RealmLoginKit_Xamarin\LoginKitForms\bin\Debug\Xamarin.Forms.Platform.dll
+C:\Users\denta\dev\Realm\realm-loginkit\RealmLoginKit_Xamarin\LoginKitForms\bin\Debug\Xamarin.Forms.Xaml.dll
+C:\Users\denta\dev\Realm\realm-loginkit\RealmLoginKit_Xamarin\LoginKitForms\bin\Debug\Xamarin.Forms.Core.pdb
+C:\Users\denta\dev\Realm\realm-loginkit\RealmLoginKit_Xamarin\LoginKitForms\bin\Debug\Xamarin.Forms.Core.xml
+C:\Users\denta\dev\Realm\realm-loginkit\RealmLoginKit_Xamarin\LoginKitForms\bin\Debug\Xamarin.Forms.Platform.pdb
+C:\Users\denta\dev\Realm\realm-loginkit\RealmLoginKit_Xamarin\LoginKitForms\bin\Debug\Xamarin.Forms.Xaml.pdb
+C:\Users\denta\dev\Realm\realm-loginkit\RealmLoginKit_Xamarin\LoginKitForms\bin\Debug\Xamarin.Forms.Xaml.xml
+C:\Users\denta\dev\Realm\realm-loginkit\RealmLoginKit_Xamarin\LoginKitForms\obj\Debug\LoginKitForms.csprojResolveAssemblyReference.cache
+C:\Users\denta\dev\Realm\realm-loginkit\RealmLoginKit_Xamarin\LoginKitForms\obj\Debug\LoginKitForms.dll
+C:\Users\denta\dev\Realm\realm-loginkit\RealmLoginKit_Xamarin\LoginKitForms\obj\Debug\LoginKitForms.pdb
