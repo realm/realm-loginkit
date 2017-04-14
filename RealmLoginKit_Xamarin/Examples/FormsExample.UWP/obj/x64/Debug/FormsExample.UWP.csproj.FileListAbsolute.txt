@@ -217,3 +217,5 @@ C:\Users\denta\dev\Realm\realm-loginkit\RealmLoginKit_Xamarin\Examples\FormsExam
 C:\Users\denta\dev\Realm\realm-loginkit\RealmLoginKit_Xamarin\Examples\FormsExample.UWP\obj\x64\Debug\MultipleQualifiersPerDimensionFound.txt
 C:\Users\denta\dev\Realm\realm-loginkit\RealmLoginKit_Xamarin\Examples\FormsExample.UWP\obj\x64\Debug\Xamarin.Forms.Platform.UAP.pri.xml
 C:\Users\denta\dev\Realm\realm-loginkit\RealmLoginKit_Xamarin\Examples\FormsExample.UWP\obj\x64\Debug\ProjectArchitectures.txt
+C:\Users\denta\dev\Realm\realm-loginkit\RealmLoginKit_Xamarin\Examples\FormsExample.UWP\bin\x64\Debug\LoginKitForms.dll
+C:\Users\denta\dev\Realm\realm-loginkit\RealmLoginKit_Xamarin\Examples\FormsExample.UWP\bin\x64\Debug\LoginKitForms.pdb

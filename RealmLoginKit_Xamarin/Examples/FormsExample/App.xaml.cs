@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using LoginKitForms;
 
 using Xamarin.Forms;
 
@@ -13,7 +14,9 @@ namespace FormsExample
 		{
 			InitializeComponent();
 
-			MainPage = new FormsExample.MainPage();
+			// MainPage = new FormsExample.MainPage();
+            // temporary
+		    MainPage = new LoginPage();
 		}
 
 		protected override void OnStart ()

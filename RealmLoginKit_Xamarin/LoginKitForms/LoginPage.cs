@@ -6,8 +6,8 @@ using System.Text;
 using Xamarin.Forms;
 
 namespace LoginKitForms {
-    public class LoginKitForms : ContentPage {
-        public LoginKitForms()
+    public class LoginPage : ContentPage {
+        public LoginPage()
         {
             var button = new Button
             {

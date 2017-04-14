@@ -2157,6 +2157,9 @@
         "build": {
           "build/portable-win+net45+wp80+win81+wpa81+MonoAndroid10+Xamarin.iOS10+xamarinmac20/Xamarin.Forms.targets": {}
         }
+      },
+      "LoginKitForms/1.0.0": {
+        "type": "project"
       }
     },
     "UAP,Version=v10.0/win10-arm": {
@@ -4423,6 +4426,9 @@
         "build": {
           "build/portable-win+net45+wp80+win81+wpa81+MonoAndroid10+Xamarin.iOS10+xamarinmac20/Xamarin.Forms.targets": {}
         }
+      },
+      "LoginKitForms/1.0.0": {
+        "type": "project"
       }
     },
     "UAP,Version=v10.0/win10-arm-aot": {
@@ -6728,6 +6734,9 @@
         "build": {
           "build/portable-win+net45+wp80+win81+wpa81+MonoAndroid10+Xamarin.iOS10+xamarinmac20/Xamarin.Forms.targets": {}
         }
+      },
+      "LoginKitForms/1.0.0": {
+        "type": "project"
       }
     },
     "UAP,Version=v10.0/win10-x64": {
@@ -9003,6 +9012,9 @@
         "build": {
           "build/portable-win+net45+wp80+win81+wpa81+MonoAndroid10+Xamarin.iOS10+xamarinmac20/Xamarin.Forms.targets": {}
         }
+      },
+      "LoginKitForms/1.0.0": {
+        "type": "project"
       }
     },
     "UAP,Version=v10.0/win10-x64-aot": {
@@ -11317,6 +11329,9 @@
         "build": {
           "build/portable-win+net45+wp80+win81+wpa81+MonoAndroid10+Xamarin.iOS10+xamarinmac20/Xamarin.Forms.targets": {}
         }
+      },
+      "LoginKitForms/1.0.0": {
+        "type": "project"
       }
     },
     "UAP,Version=v10.0/win10-x86": {
@@ -13592,6 +13607,9 @@
         "build": {
           "build/portable-win+net45+wp80+win81+wpa81+MonoAndroid10+Xamarin.iOS10+xamarinmac20/Xamarin.Forms.targets": {}
         }
+      },
+      "LoginKitForms/1.0.0": {
+        "type": "project"
       }
     },
     "UAP,Version=v10.0/win10-x86-aot": {
@@ -15906,6 +15924,9 @@
         "build": {
           "build/portable-win+net45+wp80+win81+wpa81+MonoAndroid10+Xamarin.iOS10+xamarinmac20/Xamarin.Forms.targets": {}
         }
+      },
+      "LoginKitForms/1.0.0": {
+        "type": "project"
       }
     }
   },
@@ -22238,6 +22259,11 @@
         "xamarin.forms.2.3.3.193.nupkg.sha512",
         "xamarin.forms.nuspec"
       ]
+    },
+    "LoginKitForms/1.0.0": {
+      "type": "project",
+      "path": "../../LoginKitForms/LoginKitForms.csproj",
+      "msbuildProject": "../../LoginKitForms/LoginKitForms.csproj"
     }
   },
   "projectFileDependencyGroups": {
@@ -22256,7 +22282,16 @@
       "projectName": "FormsExample.UWP",
       "projectPath": "C:\\Users\\denta\\dev\\Realm\\realm-loginkit\\RealmLoginKit_Xamarin\\Examples\\FormsExample.UWP\\FormsExample.UWP.csproj",
       "projectJsonPath": "C:\\Users\\denta\\dev\\Realm\\realm-loginkit\\RealmLoginKit_Xamarin\\Examples\\FormsExample.UWP\\project.json",
-      "projectStyle": "ProjectJson"
+      "projectStyle": "ProjectJson",
+      "frameworks": {
+        "uap10.0": {
+          "projectReferences": {
+            "C:\\Users\\denta\\dev\\Realm\\realm-loginkit\\RealmLoginKit_Xamarin\\LoginKitForms\\LoginKitForms.csproj": {
+              "projectPath": "C:\\Users\\denta\\dev\\Realm\\realm-loginkit\\RealmLoginKit_Xamarin\\LoginKitForms\\LoginKitForms.csproj"
+            }
+          }
+        }
+      }
     },
     "dependencies": {
       "Microsoft.NETCore.UniversalWindowsPlatform": "5.2.2",

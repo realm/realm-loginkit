@@ -382,6 +382,9 @@
     <AppxPackagedFile Include="C:\Users\denta\.nuget\packages\Xamarin.Forms\2.3.3.193\lib\uap10.0\Xamarin.Forms.Xaml.dll">
       <PackagePath>Xamarin.Forms.Xaml.dll</PackagePath>
     </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\denta\dev\Realm\realm-loginkit\RealmLoginKit_Xamarin\LoginKitForms\bin\Debug\LoginKitForms.dll">
+      <PackagePath>LoginKitForms.dll</PackagePath>
+    </AppxPackagedFile>
     <AppxPackagedFile Include="C:\Users\denta\dev\Realm\realm-loginkit\RealmLoginKit_Xamarin\Examples\FormsExample.UWP\Properties\Default.rd.xml">
       <PackagePath>Properties\Default.rd.xml</PackagePath>
     </AppxPackagedFile>

@@ -31,13 +31,13 @@
     <AppXManifest Include="C:\Users\denta\dev\Realm\realm-loginkit\RealmLoginKit_Xamarin\Examples\FormsExample.UWP\bin\x64\Debug\Core\AppxManifest.xml">
       <PackagePath>AppxManifest.xml</PackagePath>
       <ReRegisterAppIfChanged>true</ReRegisterAppIfChanged>
-      <Modified>2017-04-14T02:49:07.628</Modified>
+      <Modified>2017-04-14T03:59:00.730</Modified>
     </AppXManifest>
   </ItemGroup>
   <ItemGroup>
     <AppxPackagedFile Include="C:\Users\denta\dev\Realm\realm-loginkit\RealmLoginKit_Xamarin\Examples\FormsExample.UWP\bin\x64\Debug\FormsExample.UWP.exe">
       <PackagePath>entrypoint\FormsExample.UWP.exe</PackagePath>
-      <Modified>2017-04-14T02:49:02.578</Modified>
+      <Modified>2017-04-14T03:58:59.064</Modified>
     </AppxPackagedFile>
     <AppxPackagedFile Include="C:\Users\denta\.nuget\packages\Microsoft.CSharp\4.0.1\lib\netcore50\Microsoft.CSharp.dll">
       <PackagePath>Microsoft.CSharp.dll</PackagePath>
@@ -511,6 +511,10 @@
       <PackagePath>Xamarin.Forms.Xaml.dll</PackagePath>
       <Modified>2017-01-31T03:27:52.000</Modified>
     </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\denta\dev\Realm\realm-loginkit\RealmLoginKit_Xamarin\LoginKitForms\bin\Debug\LoginKitForms.dll">
+      <PackagePath>LoginKitForms.dll</PackagePath>
+      <Modified>2017-04-14T03:58:56.283</Modified>
+    </AppxPackagedFile>
     <AppxPackagedFile Include="C:\Users\denta\dev\Realm\realm-loginkit\RealmLoginKit_Xamarin\Examples\FormsExample.UWP\Properties\Default.rd.xml">
       <PackagePath>Properties\Default.rd.xml</PackagePath>
       <Modified>2017-03-31T09:18:08.535</Modified>
@@ -664,11 +668,11 @@
     <AppxPackagedFile Include="C:\Users\denta\dev\Realm\realm-loginkit\RealmLoginKit_Xamarin\Examples\FormsExample.UWP\bin\x64\Debug\resources.pri">
       <PackagePath>resources.pri</PackagePath>
       <ReRegisterAppIfChanged>true</ReRegisterAppIfChanged>
-      <Modified>2017-04-14T02:49:06.832</Modified>
+      <Modified>2017-04-14T03:59:00.225</Modified>
     </AppxPackagedFile>
     <AppxPackagedFile Include="C:\Users\denta\dev\Realm\realm-loginkit\RealmLoginKit_Xamarin\Examples\FormsExample.UWP\bin\x64\Debug\Core\FormsExample.UWP.exe">
       <PackagePath>FormsExample.UWP.exe</PackagePath>
-      <Modified>2017-04-14T02:49:07.609</Modified>
+      <Modified>2017-04-14T03:59:00.715</Modified>
     </AppxPackagedFile>
   </ItemGroup>
   <ItemGroup>

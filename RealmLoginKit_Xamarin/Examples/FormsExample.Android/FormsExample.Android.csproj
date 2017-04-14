@@ -115,6 +115,12 @@
   <ItemGroup>
     <None Include="Properties\AndroidManifest.xml" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\LoginKitForms\LoginKitForms.csproj">
+      <Project>{67f9d3a8-f71e-4428-913f-c37ae82cdb24}</Project>
+      <Name>LoginKitForms</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="..\Examples\FormsExample.projitems" Label="Shared" Condition="Exists('..\Examples\FormsExample.projitems')" />
   <Import Project="..\FormsExample\FormsExample.projitems" Label="Shared" />
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />

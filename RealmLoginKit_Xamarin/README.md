@@ -1,7 +1,16 @@
 # Realm LoginKit for Xamarin
 > A general purpose account login user interface for apps implementing the Realm Mobile Platform.
 
-**TODO replace image with images from Xamarin version**
+## TODO
+
+* once have network, cleanup by branching again from master and merging in this code, as due to absence of .gitignore, added tons of stuff should have excluded
+* replace Readme image with images from Xamarin version
+* review README against my goals of features
+* copy feature list here from Evernote from Mac
+* for example maybe use XS on Mac to create simple navigation path invoking loginkit - decide on how to invoke within a UI as modal? Should modality be part of the kit and how can users customise.
+* for now can have the example just invoke the loginpage
+
+
 
 <p align="center">
 <img src="https://raw.githubusercontent.com/realm-demos/realm-loginkit/master/screenshot.jpg" width="500" style="margin:0 auto" />
