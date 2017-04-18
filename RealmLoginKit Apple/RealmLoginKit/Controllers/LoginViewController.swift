@@ -28,7 +28,7 @@ import Realm
 }
 
 @objc(RLMLoginViewController)
-public class LoginViewController: UIViewController, UIViewControllerTransitioningDelegate {
+public class LoginViewController: UIViewController {
     
     //MARK: - Public Properties
     
@@ -54,7 +54,7 @@ public class LoginViewController: UIViewController, UIViewControllerTransitionin
         set {
             setRegistering(newValue, animated: false)
         }
-        get { return _registering }
+        get { return _isRegistering }
     }
     
     /**
@@ -101,14 +101,16 @@ public class LoginViewController: UIViewController, UIViewControllerTransitionin
     /* A view model object to manage the table view */
     private let tableDataSource = LoginTableViewDataSource()
 
+    /* A model object to manage receiving keyboard resize events from the system. */
+    private let keyboardManager = LoginKeyboardManager()
+
     /* User default keys for saving form data */
     private static let serverURLKey = "RealmLoginServerURLKey"
     private static let emailKey     = "RealmLoginEmailKey"
     private static let passwordKey  = "RealmLoginPasswordKey"
     
     /* State tracking */
-    private var _registering: Bool = false
-    private var keyboardHeight: CGFloat = 0.0
+    private var _isRegistering: Bool = false
     
     /* Login/Register Credentials */
     public var  serverURL: String?      { didSet { validateFormItems() } }
@@ -138,16 +140,6 @@ public class LoginViewController: UIViewController, UIViewControllerTransitionin
     public init(style: LoginViewControllerStyle) {
         super.init(nibName: nil, bundle: nil)
         self.style = style
-        
-        transitioningDelegate = self
-        modalPresentationStyle = isTranslucent ? .overFullScreen : .fullScreen
-        modalTransitionStyle = .crossDissolve
-        modalPresentationCapturesStatusBarAppearance = true
-        
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow(notification:)), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide(notification:)), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
-        
-        loadLoginCredentials()
     }
     
     convenience init() {
@@ -158,11 +150,6 @@ public class LoginViewController: UIViewController, UIViewControllerTransitionin
         super.init(coder: aDecoder)
     }
 
-    deinit {
-        NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIKeyboardWillShow, object: nil)
-        NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIKeyboardWillHide, object: nil)
-    }
-    
     //MARK: - View Management
 
     override public func loadView() {
@@ -173,87 +160,38 @@ public class LoginViewController: UIViewController, UIViewControllerTransitionin
     override public func viewDidLoad() {
         super.viewDidLoad()
 
-        // Set up the datasource for the table view
+        transitioningDelegate = loginView
+        modalPresentationStyle = isTranslucent ? .overFullScreen : .fullScreen
+        modalTransitionStyle = .crossDissolve
+        modalPresentationCapturesStatusBarAppearance = true
+
+        // Set up the data source for the table view
         tableDataSource.isDarkStyle = isDarkStyle
-        loginView.tableView.dataSource = tableDataSource
+        tableDataSource.tableView = loginView.tableView
+
         loginView.didTapCloseHandler = { self.dismiss(animated: true, completion: nil) }
+
+        // Configure the keyboard manager for the login view
+        keyboardManager.keyboardHeightDidChangeHandler = { newHeight in
+            self.loginView.keyboardHeight = newHeight
+            self.loginView.animateContentInsetTransition()
+        }
+
+        // Set up the handler for when the 'Register' button is tapped
+        loginView.didTapRegisterHandler = { self.setRegistering(!self.isRegistering, animated: true) }
+
+        loadLoginCredentials()
     }
 
-    override public func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-
-        // Hide the copyright view if there's not enough space on screen
-        loginView.updateCopyrightViewVisibility()
-
-        // Recalculate the state for the on-screen views
-        loginView.layoutTableContentInset()
-        loginView.layoutNavigationBar()
-        loginView.layoutCopyrightView()
-        loginView.layoutCloseButton()
-    }
-    
-    @objc private func keyboardWillShow(notification: Notification) {
-        let keyboardFrame = notification.userInfo?[UIKeyboardFrameEndUserInfoKey] as! CGRect
-        keyboardHeight = keyboardFrame.height
-        animateContentInsetTransition()
-    }
-    
-    @objc private func keyboardWillHide(notification: Notification) {
-        keyboardHeight = 0
-        animateContentInsetTransition()
-    }
-    
-    private func animateContentInsetTransition() {
-        UIView.animate(withDuration: 0.6, delay: 0, usingSpringWithDamping: 1.0, initialSpringVelocity: 0.9, options: [], animations: {
-            self.loginView.layoutTableContentInset()
-            self.loginView.layoutNavigationBar()
-        }, completion: nil)
-        
-        // When animating the table view edge insets when its rounded, the header view
-        // snaps because their width override is caught in the animation block.
-        loginView.tableView.tableHeaderView?.layer.removeAllAnimations()
-    }
-
-    func setRegistering(_ registering: Bool, animated: Bool) {
-        guard _registering != registering else {
+    func setRegistering(_ isRegistering: Bool, animated: Bool) {
+        guard _isRegistering != isRegistering else {
             return
         }
 
-        _registering = registering
+        _isRegistering = isRegistering
 
-        // Animate the content size adjustments
-        animateContentInsetTransition()
-
-        // Update the accessory views
-        loginView.headerView.setRegistering(_registering, animated: animated)
-        loginView.footerView.setRegistering(_registering, animated: animated)
-
-        // Hide the copyright view if needed
-        UIView.animate(withDuration: animated ? 0.25 : 0.0) {
-            self.loginView.updateCopyrightViewVisibility()
-        }
-    }
-
-    //MARK: - View Controller Transitioning
-        
-    public func animationController(forPresented presented: UIViewController, presenting: UIViewController, source: UIViewController) -> UIViewControllerAnimatedTransitioning? {
-        let animationController = LoginViewControllerTransitioning()
-        animationController.backgroundView = loginView.backgroundView
-        animationController.contentView = loginView.containerView
-        animationController.effectsView = loginView.effectView
-        animationController.controlView = loginView.closeButton
-        animationController.isDismissing = false
-        return animationController
-    }
-    
-    public func animationController(forDismissed dismissed: UIViewController) -> UIViewControllerAnimatedTransitioning? {
-        let animationController = LoginViewControllerTransitioning()
-        animationController.backgroundView = loginView.backgroundView
-        animationController.contentView = loginView.containerView
-        animationController.effectsView = loginView.effectView
-        animationController.controlView = loginView.closeButton
-        animationController.isDismissing = true
-        return animationController
+        tableDataSource.setRegistering(isRegistering, animated: animated)
+        loginView.setRegistering(isRegistering, animated: animated)
     }
     
     //MARK: - Form Submission
