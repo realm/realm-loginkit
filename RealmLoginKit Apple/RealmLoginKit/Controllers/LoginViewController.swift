@@ -91,6 +91,63 @@ public class LoginViewController: UIViewController {
         get { return self.loginView.isCancelButtonHidden }
     }
 
+    /**
+     The server address URL that will form the basis of the Realm authentication
+     server request URL. Including the port number will override the value in `serverPort`.
+     Declaring either scheme, 'https', 'realms', will make this a secure request
+    */
+    public var serverURL: String? {
+        set { tableDataSource.serverURL = newValue }
+        get { return tableDataSource.serverURL }
+    }
+
+    /**
+     The port number that will be appended to the server URL when constructing the final
+     authentication URL. Default value is 9080. Specifying 'https' or 'realms' in the `serverURL`
+     field will override the value to 9443.
+    */
+    public var serverPort: Int {
+        set { tableDataSource.serverPort = newValue }
+        get { return tableDataSource.serverPort }
+    }
+
+    /**
+     The username of the account that will either be logged in, or registered. While an email
+     address is preferred, there are no specific formatting checks, so any string is valid.
+     */
+    public var username: String? {
+        set { tableDataSource.username = newValue }
+        get { return tableDataSource.username }
+    }
+
+    /**
+     The pasword for this account that is being logged in, or registered. By default, there are
+     no password security policies in place.
+    */
+    public var password: String? {
+        set { tableDataSource.password = newValue }
+        get { return tableDataSource.password }
+    }
+
+    /**
+     When registering a new account, this field is used to confirm the password is as the user intended.
+     The form validation check will fail if the form state is set to registering, and this string doesn't
+     match `password` exactly.
+    */
+    public var confirmPassword: String? {
+        set { tableDataSource.confirmPassword = newValue }
+        get { return tableDataSource.confirmPassword }
+    }
+
+    /**
+     When true, the credentials of the last login will be persisted and will prefill the login form
+     the next time it is opened.
+    */
+    public var rememberLogin: Bool {
+        set { tableDataSource.rememberLogin = newValue }
+        get { return tableDataSource.rememberLogin }
+    }
+
     //MARK: - Private Properties
 
     /* The `UIView` subclass that manages all view content in this view controller */
@@ -111,14 +168,6 @@ public class LoginViewController: UIViewController {
     
     /* State tracking */
     private var _isRegistering: Bool = false
-    
-    /* Login/Register Credentials */
-    public var  serverURL: String?      { didSet { validateFormItems() } }
-    public var serverPort = 9080        { didSet { validateFormItems() } }
-    public var username: String?        { didSet { validateFormItems() } }
-    public var password: String?        { didSet { validateFormItems() } }
-    public var confirmPassword: String? { didSet { validateFormItems() } }
-    public var rememberLogin: Bool = true
 
     /* State Convienience Methods */
     private var isTranslucent: Bool  {

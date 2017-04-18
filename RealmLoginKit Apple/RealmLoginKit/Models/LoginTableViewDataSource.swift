@@ -48,10 +48,11 @@ class LoginTableViewDataSource: NSObject, UITableViewDataSource {
     }
 
     /* Login Credentials */
-    public var serverURL:String?
-    public var userName:String?
-    public var password:String?
-    public var confirmPassword:String?
+    public var serverURL: String?
+    public var serverPort = 9080
+    public var username: String?
+    public var password: String?
+    public var confirmPassword: String?
     public var rememberLogin = true
 
     public var isRegistering: Bool {
@@ -61,6 +62,7 @@ class LoginTableViewDataSource: NSObject, UITableViewDataSource {
 
     /* Interaction Callbacks */
     public var didTapSubmitHandler: (() -> ())?
+    public var formInputChanhedHandler: (() -> ())?
 
     //MARK: - Private Properties -
 
