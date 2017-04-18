@@ -28,7 +28,7 @@ import Realm
 }
 
 @objc(RLMLoginViewController)
-public class LoginViewController: UIViewController, UITableViewDelegate, UIViewControllerTransitioningDelegate {
+public class LoginViewController: UIViewController, UIViewControllerTransitioningDelegate {
     
     //MARK: - Public Properties
     
@@ -162,21 +162,21 @@ public class LoginViewController: UIViewController, UITableViewDelegate, UIViewC
         NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIKeyboardWillShow, object: nil)
         NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIKeyboardWillHide, object: nil)
     }
-
-    @objc private func didTapCloseButton() {
-        dismiss(animated: true, completion: nil)
-    }
     
     //MARK: - View Management
 
     override public func loadView() {
         super.loadView()
-        self.view = LoginView(frame: UIScreen.main.bounds)
+        self.view = LoginView(darkStyle: isDarkStyle, translucentStyle: isTranslucent)
     }
 
     override public func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .clear
+
+        // Set up the datasource for the table view
+        tableDataSource.isDarkStyle = isDarkStyle
+        loginView.tableView.dataSource = tableDataSource
+        loginView.didTapCloseHandler = { self.dismiss(animated: true, completion: nil) }
     }
 
     override public func viewDidLayoutSubviews() {
@@ -191,15 +191,7 @@ public class LoginViewController: UIViewController, UITableViewDelegate, UIViewC
         loginView.layoutCopyrightView()
         loginView.layoutCloseButton()
     }
-
-    //MARK: - Scroll View Delegate
     
-    public func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        loginView.layoutNavigationBar()
-        loginView.layoutCopyrightView()
-        loginView.updateCloseButtonVisibility()
-    }
-
     @objc private func keyboardWillShow(notification: Notification) {
         let keyboardFrame = notification.userInfo?[UIKeyboardFrameEndUserInfoKey] as! CGRect
         keyboardHeight = keyboardFrame.height
