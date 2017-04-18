@@ -166,29 +166,6 @@ public class LoginViewController: UIViewController, UITableViewDelegate, UIViewC
     @objc private func didTapCloseButton() {
         dismiss(animated: true, completion: nil)
     }
-
-    func applyTheme(to tableViewCell: LoginTableViewCell) {
-        tableViewCell.imageView?.tintColor = UIColor(white: isDarkStyle ? 0.4 : 0.6, alpha: 1.0)
-        tableViewCell.textLabel?.textColor = isDarkStyle ? .white : .black
-
-        // Only touch the text field if we're actively using it
-        if tableViewCell.textChangedHandler != nil {
-            tableViewCell.textField?.textColor = isDarkStyle ? .white : .black
-            tableViewCell.textField?.keyboardAppearance = isDarkStyle ? .dark : .default
-
-            if isDarkStyle {
-                let placeholderText = tableViewCell.textField?.placeholder
-                let placeholderTextColor = UIColor(white: 0.45, alpha: 1.0)
-                let attributes = [NSForegroundColorAttributeName: placeholderTextColor]
-                tableViewCell.textField?.attributedPlaceholder =  NSAttributedString(string: placeholderText!, attributes: attributes)
-            }
-            else {
-                let placeholderText = tableViewCell.textField?.placeholder
-                tableViewCell.textField?.attributedPlaceholder = nil //setting this as nil also sets `placeholder` to nil
-                tableViewCell.textField?.placeholder = placeholderText
-            }
-        }
-    }
     
     //MARK: - View Management
 
@@ -206,27 +183,23 @@ public class LoginViewController: UIViewController, UITableViewDelegate, UIViewC
         super.viewDidLayoutSubviews()
 
         // Hide the copyright view if there's not enough space on screen
-        updateCopyrightViewVisibility()
+        loginView.updateCopyrightViewVisibility()
 
         // Recalculate the state for the on-screen views
-        layoutTableContentInset()
-        layoutNavigationBar()
-        layoutCopyrightView()
-        layoutCloseButton()
+        loginView.layoutTableContentInset()
+        loginView.layoutNavigationBar()
+        loginView.layoutCopyrightView()
+        loginView.layoutCloseButton()
     }
-
-
 
     //MARK: - Scroll View Delegate
     
     public func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        layoutNavigationBar()
-        layoutCopyrightView()
-        updateCloseButtonVisibility()
+        loginView.layoutNavigationBar()
+        loginView.layoutCopyrightView()
+        loginView.updateCloseButtonVisibility()
     }
 
-
-    
     @objc private func keyboardWillShow(notification: Notification) {
         let keyboardFrame = notification.userInfo?[UIKeyboardFrameEndUserInfoKey] as! CGRect
         keyboardHeight = keyboardFrame.height
@@ -240,13 +213,13 @@ public class LoginViewController: UIViewController, UITableViewDelegate, UIViewC
     
     private func animateContentInsetTransition() {
         UIView.animate(withDuration: 0.6, delay: 0, usingSpringWithDamping: 1.0, initialSpringVelocity: 0.9, options: [], animations: {
-            self.layoutTableContentInset()
-            self.layoutNavigationBar()
+            self.loginView.layoutTableContentInset()
+            self.loginView.layoutNavigationBar()
         }, completion: nil)
         
         // When animating the table view edge insets when its rounded, the header view
         // snaps because their width override is caught in the animation block.
-        tableView.tableHeaderView?.layer.removeAllAnimations()
+        loginView.tableView.tableHeaderView?.layer.removeAllAnimations()
     }
 
     func setRegistering(_ registering: Bool, animated: Bool) {
@@ -265,7 +238,7 @@ public class LoginViewController: UIViewController, UITableViewDelegate, UIViewC
 
         // Hide the copyright view if needed
         UIView.animate(withDuration: animated ? 0.25 : 0.0) {
-            self.updateCopyrightViewVisibility()
+            self.loginView.updateCopyrightViewVisibility()
         }
     }
 
@@ -273,20 +246,20 @@ public class LoginViewController: UIViewController, UITableViewDelegate, UIViewC
         
     public func animationController(forPresented presented: UIViewController, presenting: UIViewController, source: UIViewController) -> UIViewControllerAnimatedTransitioning? {
         let animationController = LoginViewControllerTransitioning()
-        animationController.backgroundView = backgroundView
-        animationController.contentView = containerView
-        animationController.effectsView = effectView
-        animationController.controlView = closeButton
+        animationController.backgroundView = loginView.backgroundView
+        animationController.contentView = loginView.containerView
+        animationController.effectsView = loginView.effectView
+        animationController.controlView = loginView.closeButton
         animationController.isDismissing = false
         return animationController
     }
     
     public func animationController(forDismissed dismissed: UIViewController) -> UIViewControllerAnimatedTransitioning? {
         let animationController = LoginViewControllerTransitioning()
-        animationController.backgroundView = backgroundView
-        animationController.contentView = containerView
-        animationController.effectsView = effectView
-        animationController.controlView = closeButton
+        animationController.backgroundView = loginView.backgroundView
+        animationController.contentView = loginView.containerView
+        animationController.effectsView = loginView.effectView
+        animationController.controlView = loginView.closeButton
         animationController.isDismissing = true
         return animationController
     }
@@ -315,11 +288,11 @@ public class LoginViewController: UIViewController, UITableViewDelegate, UIViewC
             formIsValid = false
         }
 
-        footerView.isSubmitButtonEnabled = formIsValid
+        loginView.footerView.isSubmitButtonEnabled = formIsValid
     }
 
     private func submitLogin() {
-        footerView.isSubmitting = true
+        loginView.footerView.isSubmitting = true
         
         saveLoginCredentials()
         
@@ -344,7 +317,7 @@ public class LoginViewController: UIViewController, UITableViewDelegate, UIViewC
         let credentials = RLMSyncCredentials(username: username!, password: password!, register: isRegistering)
         RLMSyncUser.__logIn(with: credentials, authServerURL: URL(string: "\(authScheme)://\(formattedURL!):\(serverPort)")!, timeout: 30, onCompletion: { (user, error) in
             DispatchQueue.main.async {
-                self.footerView.isSubmitting = false
+                self.loginView.footerView.isSubmitting = false
                 
                 if let error = error {
                     let alertController = UIAlertController(title: "Unable to Sign In", message: error.localizedDescription, preferredStyle: .alert)
