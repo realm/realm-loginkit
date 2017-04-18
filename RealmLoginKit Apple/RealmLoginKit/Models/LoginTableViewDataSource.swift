@@ -22,6 +22,9 @@ class LoginTableViewDataSource: NSObject, UITableViewDataSource {
     /** The table view managed by this data source */
     public var tableView: UITableView?
 
+    /** Whether to configure cells with the light or dark theme */
+    public var isDarkStyle = false
+
     /** Sets whether to show the Realm server URL or not */
     public var isServerURLFieldHidden = false {
         didSet { tableView?.reloadData() }
@@ -130,6 +133,29 @@ class LoginTableViewDataSource: NSObject, UITableViewDataSource {
         applyTheme(to: cell!)
 
         return cell!
+    }
+
+    func applyTheme(to tableViewCell: LoginTableViewCell) {
+        tableViewCell.imageView?.tintColor = UIColor(white: isDarkStyle ? 0.4 : 0.6, alpha: 1.0)
+        tableViewCell.textLabel?.textColor = isDarkStyle ? .white : .black
+
+        // Only touch the text field if we're actively using it
+        if tableViewCell.textChangedHandler != nil {
+            tableViewCell.textField?.textColor = isDarkStyle ? .white : .black
+            tableViewCell.textField?.keyboardAppearance = isDarkStyle ? .dark : .default
+
+            if isDarkStyle {
+                let placeholderText = tableViewCell.textField?.placeholder
+                let placeholderTextColor = UIColor(white: 0.45, alpha: 1.0)
+                let attributes = [NSForegroundColorAttributeName: placeholderTextColor]
+                tableViewCell.textField?.attributedPlaceholder =  NSAttributedString(string: placeholderText!, attributes: attributes)
+            }
+            else {
+                let placeholderText = tableViewCell.textField?.placeholder
+                tableViewCell.textField?.attributedPlaceholder = nil //setting this as nil also sets `placeholder` to nil
+                tableViewCell.textField?.placeholder = placeholderText
+            }
+        }
     }
 
     private func cellType(for rowIndex: Int) -> LoginViewControllerCellType {

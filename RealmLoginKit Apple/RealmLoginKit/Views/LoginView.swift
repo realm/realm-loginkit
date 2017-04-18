@@ -49,35 +49,42 @@ class LoginView: UIView {
     public var effectView: UIVisualEffectView?
     public var backgroundView: UIView?
 
-    public var isDarkStyle = false
-    public var isTranslucentStyle = true
+    public let isDarkStyle: Bool
+    public let isTranslucentStyle: Bool
 
-    /* Layout Constants */
-    private let copyrightViewMargin: CGFloat = 45
-    private let closeButtonInset = UIEdgeInsets(top: 15, left: 18, bottom: 0, right: 0)
+    /* Layout Constraints */
+    public var keyboardHeight: CGFloat = 0.0
+    public var copyrightViewMargin: CGFloat = 45
+    public var closeButtonInset = UIEdgeInsets(top: 15, left: 18, bottom: 0, right: 0)
 
     // MARK: - View Creation -
 
     override init(frame: CGRect) {
+        self.isDarkStyle = false
+        self.isTranslucentStyle = true
         super.init(frame: frame)
     }
 
     init(darkStyle: Bool, translucentStyle: Bool) {
-        super.init(frame: CGRect.zero)
         self.isDarkStyle = darkStyle
         self.isTranslucentStyle = translucentStyle
-        setUpAllViews()
+        super.init(frame: CGRect.zero)
+        setUpViews()
+        applyTheme()
     }
 
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
-    private func setUpAllViews() {
-        
+    private func setUpViews() {
+        setUpCommonViews()
+        setUpTableView()
+        setUpCloseButton()
     }
 
     private func setUpTranslucentViews() {
+        guard isTranslucentStyle == true else { return }
         effectView = UIVisualEffectView()
         effectView?.effect = UIBlurEffect(style: isDarkStyle ? .dark : .light)
         effectView?.frame = bounds
@@ -133,7 +140,7 @@ class LoginView: UIView {
         containerView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
         self.addSubview(containerView)
 
-        navigationBar.frame = CGRect(x: 0, y: 0, width: view.bounds.size.width, height: 20)
+        navigationBar.frame = CGRect(x: 0, y: 0, width: bounds.size.width, height: 20)
         navigationBar.autoresizingMask = [.flexibleWidth]
         navigationBar.alpha = 0.0
         self.addSubview(navigationBar)
@@ -159,7 +166,7 @@ class LoginView: UIView {
         copyrightView.textColor = isDarkStyle ? UIColor(white: 0.3, alpha: 1.0) : UIColor(white: 0.6, alpha: 1.0)
 
         // view background
-        if isTranslucent {
+        if isTranslucentStyle {
             backgroundView?.backgroundColor = UIColor(white: isDarkStyle ? 0.1 : 0.9, alpha: 0.3)
         }
         else {
@@ -189,7 +196,7 @@ class LoginView: UIView {
     public func layoutTableContentInset() {
 
         // Vertically align the table view so the table cells are in the middle
-        let boundsHeight = view.bounds.size.height - keyboardHeight // Adjusted for keyboard visibility
+        let boundsHeight = bounds.size.height - keyboardHeight // Adjusted for keyboard visibility
         let contentHeight = tableView.contentSize.height
         let sectionHeight = tableView.rect(forSection: 0).size.height
         let contentMidPoint: CGFloat //
@@ -274,7 +281,7 @@ class LoginView: UIView {
         // Offset the copyright label
         let verticalOffset = tableView.contentOffset.y
         let normalizedOffset = verticalOffset + tableView.contentInset.top
-        copyrightView.frame.origin.y = (view.bounds.height - copyrightViewMargin) - normalizedOffset
+        copyrightView.frame.origin.y = (bounds.height - copyrightViewMargin) - normalizedOffset
     }
 
     public func layoutCloseButton() {
