@@ -30,7 +30,9 @@ public enum LoginViewControllerCellType: Int {
 class LoginTableViewDataSource: NSObject, UITableViewDataSource {
 
     /** The table view managed by this data source */
-    public var tableView: UITableView?
+    public var tableView: UITableView? {
+        didSet { self.tableView?.dataSource = self }
+    }
 
     /** Whether to configure cells with the light or dark theme */
     public var isDarkStyle = false
