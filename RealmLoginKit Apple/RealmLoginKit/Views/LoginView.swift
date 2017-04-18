@@ -19,7 +19,7 @@
 import UIKit
 import TORoundedTableView
 
-class LoginView: UIView {
+class LoginView: UIView, UITableViewDelegate {
 
     public var canRegisterNewAccounts = true {
         didSet {
@@ -63,6 +63,8 @@ class LoginView: UIView {
         self.isDarkStyle = false
         self.isTranslucentStyle = true
         super.init(frame: frame)
+        setUpViews()
+        applyTheme()
     }
 
     init(darkStyle: Bool, translucentStyle: Bool) {
@@ -78,6 +80,9 @@ class LoginView: UIView {
     }
 
     private func setUpViews() {
+        backgroundColor = .clear
+
+        setUpTranslucentViews()
         setUpCommonViews()
         setUpTableView()
         setUpCloseButton()
@@ -100,6 +105,7 @@ class LoginView: UIView {
         tableView.tableHeaderView = headerView
         tableView.tableFooterView = footerView
         tableView.delaysContentTouches = false
+        tableView.delegate = self
         containerView.addSubview(tableView)
 
         let infoDictionary = Bundle.main.infoDictionary!
@@ -192,6 +198,12 @@ class LoginView: UIView {
     }
 
     // MARK: - View Layout -
+
+    public func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        layoutNavigationBar()
+        layoutCopyrightView()
+        updateCloseButtonVisibility()
+    }
 
     public func layoutTableContentInset() {
 
