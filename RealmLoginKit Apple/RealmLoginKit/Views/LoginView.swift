@@ -19,8 +19,9 @@
 import UIKit
 import TORoundedTableView
 
-class LoginView: UIView, UITableViewDelegate {
+class LoginView: UIView, UITableViewDelegate, UIViewControllerTransitioningDelegate {
 
+    /* Controls whether the 'Register' button is visible or not. */
     public var canRegisterNewAccounts = true {
         didSet {
             footerView.isRegisterButtonHidden = !canRegisterNewAccounts
@@ -28,6 +29,7 @@ class LoginView: UIView, UITableViewDelegate {
         }
     }
 
+    /* Controls whether to show the 'close' button or not. */
     public var isCancelButtonHidden = true {
         didSet {
             setUpCloseButton()
@@ -36,6 +38,25 @@ class LoginView: UIView, UITableViewDelegate {
 
     /* Closure called when the user taps the 'Close' button */
     public var didTapCloseHandler: (() ->())?
+
+    /* Closure called when the footer register button is tapped */
+    public var didTapRegisterHandler: (() -> ())? {
+        set { footerView.registerButtonTappedHandler = newValue }
+        get { return footerView.registerButtonTappedHandler }
+    }
+
+    /* Closure called the the 'submit' button is tapped */
+    public var didTapLogInHandler: (() -> ())? {
+        set { footerView.loginButtonTappedHandler = newValue }
+        get { return footerView.loginButtonTappedHandler }
+    }
+
+    /* Whether the view is in a state of registration or not */
+    private var _registering = false
+    public var isRegistering: Bool {
+        set { self.setRegistering(newValue, animated: false) }
+        get { return _registering }
+    }
 
     /* Subviews */
     public let containerView = UIView()
@@ -57,14 +78,13 @@ class LoginView: UIView, UITableViewDelegate {
     public var copyrightViewMargin: CGFloat = 45
     public var closeButtonInset = UIEdgeInsets(top: 15, left: 18, bottom: 0, right: 0)
 
-    // MARK: - View Creation -
+    // MARK: - Class Creation -
 
     override init(frame: CGRect) {
         self.isDarkStyle = false
         self.isTranslucentStyle = true
         super.init(frame: frame)
         setUpViews()
-        applyTheme()
     }
 
     init(darkStyle: Bool, translucentStyle: Bool) {
@@ -72,12 +92,13 @@ class LoginView: UIView, UITableViewDelegate {
         self.isTranslucentStyle = translucentStyle
         super.init(frame: CGRect.zero)
         setUpViews()
-        applyTheme()
     }
 
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+
+    // MARK: - View Setup -
 
     private func setUpViews() {
         backgroundColor = .clear
@@ -86,6 +107,7 @@ class LoginView: UIView, UITableViewDelegate {
         setUpCommonViews()
         setUpTableView()
         setUpCloseButton()
+        applyTheme()
     }
 
     private func setUpTranslucentViews() {
@@ -134,6 +156,8 @@ class LoginView: UIView, UITableViewDelegate {
         closeButton?.frame = CGRect(origin: .zero, size: closeIcon.size)
         closeButton?.addTarget(self, action: #selector(didTapCloseButton), for: .touchUpInside)
         self.addSubview(closeButton!)
+
+        applyTheme()
     }
 
     private func setUpCommonViews() {
@@ -197,12 +221,37 @@ class LoginView: UIView, UITableViewDelegate {
         tableView.cellBackgroundColor = UIColor(white: isDarkStyle ? 0.2 : 1.0, alpha: 1.0)
     }
 
-    // MARK: - View Layout -
-
+    // MARK: - Table View Layout -
     public func scrollViewDidScroll(_ scrollView: UIScrollView) {
         layoutNavigationBar()
         layoutCopyrightView()
         updateCloseButtonVisibility()
+    }
+
+    // MARK: - View Layout -
+
+    public override func layoutSubviews() {
+        super.layoutSubviews()
+
+        // Hide the copyright view if there's not enough space on screen
+        updateCopyrightViewVisibility()
+
+        // Recalculate the state for the on-screen views
+        layoutTableContentInset()
+        layoutNavigationBar()
+        layoutCopyrightView()
+        layoutCloseButton()
+    }
+
+    public func animateContentInsetTransition() {
+        UIView.animate(withDuration: 0.6, delay: 0, usingSpringWithDamping: 1.0, initialSpringVelocity: 0.9, options: [], animations: {
+            self.layoutTableContentInset()
+            self.layoutNavigationBar()
+        }, completion: nil)
+
+        // When animating the table view edge insets when its rounded, the header view
+        // snaps because their width override is caught in the animation block.
+        tableView.tableHeaderView?.layer.removeAllAnimations()
     }
 
     public func layoutTableContentInset() {
@@ -234,6 +283,12 @@ class LoginView: UIView, UITableViewDelegate {
         edgeInsets.top = topPadding
         edgeInsets.bottom = bottomPadding
         tableView.contentInset = edgeInsets
+
+        // Align the scroll view offset so it's centered vertically
+        if boundsHeight < contentHeight {
+            let verticalOffset = tableView.tableHeaderView!.frame.size.height - topPadding
+            tableView.contentOffset = CGPoint(x: 0.0, y: verticalOffset)
+        }
     }
 
     public func layoutNavigationBar() {
@@ -309,8 +364,50 @@ class LoginView: UIView, UITableViewDelegate {
         closeButton.frame = rect
     }
 
+    //MARK: - State Management -
+    public func setRegistering(_ isRegistering: Bool, animated: Bool) {
+        guard isRegistering != _registering else { return }
+
+        _registering = isRegistering
+
+        // Animate the content size adjustments
+        animateContentInsetTransition()
+
+        // Update the accessory views
+        headerView.setRegistering(isRegistering, animated: animated)
+        footerView.setRegistering(isRegistering, animated: animated)
+
+        // Hide the copyright view if needed
+        UIView.animate(withDuration: animated ? 0.25 : 0.0) {
+            self.updateCopyrightViewVisibility()
+        }
+    }
+
     //MARK: - Interactions -
+
     @objc private func didTapCloseButton(sender: AnyObject?) {
         didTapCloseHandler?()
+    }
+
+    //MARK: - View Presentation Transitioning
+
+    public func animationController(forPresented presented: UIViewController, presenting: UIViewController, source: UIViewController) -> UIViewControllerAnimatedTransitioning? {
+        let animationController = LoginViewControllerTransitioning()
+        animationController.backgroundView = backgroundView
+        animationController.contentView = containerView
+        animationController.effectsView = effectView
+        animationController.controlView = closeButton
+        animationController.isDismissing = false
+        return animationController
+    }
+
+    public func animationController(forDismissed dismissed: UIViewController) -> UIViewControllerAnimatedTransitioning? {
+        let animationController = LoginViewControllerTransitioning()
+        animationController.backgroundView = backgroundView
+        animationController.contentView = containerView
+        animationController.effectsView = effectView
+        animationController.controlView = closeButton
+        animationController.isDismissing = true
+        return animationController
     }
 }
