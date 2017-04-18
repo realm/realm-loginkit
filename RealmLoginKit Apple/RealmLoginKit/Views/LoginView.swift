@@ -34,6 +34,9 @@ class LoginView: UIView {
         }
     }
 
+    /* Closure called when the user taps the 'Close' button */
+    public var didTapCloseHandler: (() ->())?
+
     /* Subviews */
     public let containerView = UIView()
     public let navigationBar = UINavigationBar()
@@ -85,8 +88,6 @@ class LoginView: UIView {
     private func setUpTableView() {
         tableView.frame = bounds
         tableView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
-//        tableView.dataSource = self
-//        tableView.delegate = self
         tableView.backgroundColor = .clear
         tableView.maximumWidth = 500
         tableView.tableHeaderView = headerView
@@ -105,14 +106,14 @@ class LoginView: UIView {
 
     private func setUpCloseButton() {
         //Check if we're already set up
-//        if isCancelButtonHidden && closeButton == nil { return }
-//        if !isCancelButtonHidden && closeButton != nil { return }
-//
-//        if isCancelButtonHidden {
-//            closeButton?.removeFromSuperview()
-//            closeButton = nil
-//            return
-//        }
+        if isCancelButtonHidden && closeButton == nil { return }
+        if !isCancelButtonHidden && closeButton != nil { return }
+
+        if isCancelButtonHidden {
+            closeButton?.removeFromSuperview()
+            closeButton = nil
+            return
+        }
 
         let closeIcon = UIImage.closeIcon()
         closeButton = UIButton(type: .system)
@@ -287,5 +288,10 @@ class LoginView: UIView {
         rect.origin.x = closeButtonInset.left
         rect.origin.y = statusBarFrame.size.height + closeButtonInset.top
         closeButton.frame = rect
+    }
+
+    //MARK: - Interactions -
+    @objc private func didTapCloseButton(sender: AnyObject?) {
+        didTapCloseHandler?()
     }
 }
