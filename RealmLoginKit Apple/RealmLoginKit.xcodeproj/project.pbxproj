@@ -7,10 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		2202A3921E984AB100231CF2 /* LoginViewControllerTransitioning.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2202A3911E984AB100231CF2 /* LoginViewControllerTransitioning.swift */; };
 		2202A3941E984B4500231CF2 /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2202A3931E984B4500231CF2 /* LoginView.swift */; };
 		2202A3951E984B4500231CF2 /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2202A3931E984B4500231CF2 /* LoginView.swift */; };
-		2202A3961E984B4D00231CF2 /* LoginViewControllerTransitioning.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2202A3911E984AB100231CF2 /* LoginViewControllerTransitioning.swift */; };
 		221840E11E2CCAE300E85B6E /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 221840D81E2CCAE300E85B6E /* AppDelegate.swift */; };
 		221840F01E2CCB5100E85B6E /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 221840E81E2CCB5100E85B6E /* ViewController.swift */; };
 		221840F11E2CCB5100E85B6E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 221840EB1E2CCB5100E85B6E /* Assets.xcassets */; };
@@ -27,6 +25,10 @@
 		225574BD1E2DFC2800C52098 /* UIImage+Icons.swift in Sources */ = {isa = PBXBuildFile; fileRef = 225574BC1E2DFC2800C52098 /* UIImage+Icons.swift */; };
 		225574BF1E2E0ACE00C52098 /* LoginHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 225574BE1E2E0ACE00C52098 /* LoginHeaderView.swift */; };
 		225574C11E2E14DC00C52098 /* LoginFooterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 225574C01E2E14DC00C52098 /* LoginFooterView.swift */; };
+		228AA5851EA564360039ABD0 /* LoginTableViewDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 228AA5841EA564360039ABD0 /* LoginTableViewDataSource.swift */; };
+		228AA5861EA564360039ABD0 /* LoginTableViewDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 228AA5841EA564360039ABD0 /* LoginTableViewDataSource.swift */; };
+		228AA5881EA5797B0039ABD0 /* LoginViewControllerTransitioning.swift in Sources */ = {isa = PBXBuildFile; fileRef = 228AA5871EA5797B0039ABD0 /* LoginViewControllerTransitioning.swift */; };
+		228AA5891EA5797B0039ABD0 /* LoginViewControllerTransitioning.swift in Sources */ = {isa = PBXBuildFile; fileRef = 228AA5871EA5797B0039ABD0 /* LoginViewControllerTransitioning.swift */; };
 		22AEE18B1E2F3F1F00CBB40A /* LoginTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22AEE18A1E2F3F1F00CBB40A /* LoginTableViewCell.swift */; };
 		22BB75DD1E8B144100317E4B /* RealmLoginKitExampleTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22BB75DC1E8B144100317E4B /* RealmLoginKitExampleTests.swift */; };
 		22EC435C1E3246FF009BBA75 /* RealmLoginKit.h in Headers */ = {isa = PBXBuildFile; fileRef = 22EC435A1E3246FF009BBA75 /* RealmLoginKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -46,7 +48,6 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		2202A3911E984AB100231CF2 /* LoginViewControllerTransitioning.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginViewControllerTransitioning.swift; sourceTree = "<group>"; };
 		2202A3931E984B4500231CF2 /* LoginView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
 		221840A71E2CC79000E85B6E /* RealmLoginKitExample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RealmLoginKitExample.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		221840D81E2CCAE300E85B6E /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AppDelegate.swift; path = RealmLoginKitExample/AppDelegate.swift; sourceTree = SOURCE_ROOT; };
@@ -60,6 +61,8 @@
 		225574BC1E2DFC2800C52098 /* UIImage+Icons.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "UIImage+Icons.swift"; path = "Extensions/UIImage+Icons.swift"; sourceTree = "<group>"; };
 		225574BE1E2E0ACE00C52098 /* LoginHeaderView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginHeaderView.swift; sourceTree = "<group>"; };
 		225574C01E2E14DC00C52098 /* LoginFooterView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginFooterView.swift; sourceTree = "<group>"; };
+		228AA5841EA564360039ABD0 /* LoginTableViewDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginTableViewDataSource.swift; sourceTree = "<group>"; };
+		228AA5871EA5797B0039ABD0 /* LoginViewControllerTransitioning.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginViewControllerTransitioning.swift; sourceTree = "<group>"; };
 		22AEE18A1E2F3F1F00CBB40A /* LoginTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginTableViewCell.swift; sourceTree = "<group>"; };
 		22BB75DA1E8B144100317E4B /* RealmLoginKitExampleTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = RealmLoginKitExampleTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		22BB75DC1E8B144100317E4B /* RealmLoginKitExampleTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealmLoginKitExampleTests.swift; sourceTree = "<group>"; };
@@ -118,14 +121,6 @@
 				7372E20192B833D085000C85 /* Pods_RealmLoginKitExampleTests.framework */,
 			);
 			name = Frameworks;
-			sourceTree = "<group>";
-		};
-		2202A3901E984AB100231CF2 /* ViewTransitioning */ = {
-			isa = PBXGroup;
-			children = (
-				2202A3911E984AB100231CF2 /* LoginViewControllerTransitioning.swift */,
-			);
-			path = ViewTransitioning;
 			sourceTree = "<group>";
 		};
 		2218409E1E2CC79000E85B6E = {
@@ -224,7 +219,8 @@
 		221840F71E2CCBB900E85B6E /* Models */ = {
 			isa = PBXGroup;
 			children = (
-				2202A3901E984AB100231CF2 /* ViewTransitioning */,
+				228AA5871EA5797B0039ABD0 /* LoginViewControllerTransitioning.swift */,
+				228AA5841EA564360039ABD0 /* LoginTableViewDataSource.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -555,7 +551,8 @@
 				2202A3941E984B4500231CF2 /* LoginView.swift in Sources */,
 				221840F01E2CCB5100E85B6E /* ViewController.swift in Sources */,
 				221840FA1E2CCBC900E85B6E /* RealmLogoView.swift in Sources */,
-				2202A3961E984B4D00231CF2 /* LoginViewControllerTransitioning.swift in Sources */,
+				228AA5881EA5797B0039ABD0 /* LoginViewControllerTransitioning.swift in Sources */,
+				228AA5851EA564360039ABD0 /* LoginTableViewDataSource.swift in Sources */,
 				221840E11E2CCAE300E85B6E /* AppDelegate.swift in Sources */,
 				225574BD1E2DFC2800C52098 /* UIImage+Icons.swift in Sources */,
 				22AEE18B1E2F3F1F00CBB40A /* LoginTableViewCell.swift in Sources */,
@@ -578,8 +575,9 @@
 				223C7A9D1E85E8C80075328E /* LoginViewController.swift in Sources */,
 				223C7A981E85E8C30075328E /* RealmLogoView.swift in Sources */,
 				223C7A991E85E8C30075328E /* LoginHeaderView.swift in Sources */,
-				2202A3921E984AB100231CF2 /* LoginViewControllerTransitioning.swift in Sources */,
 				223C7A9A1E85E8C30075328E /* LoginFooterView.swift in Sources */,
+				228AA5891EA5797B0039ABD0 /* LoginViewControllerTransitioning.swift in Sources */,
+				228AA5861EA564360039ABD0 /* LoginTableViewDataSource.swift in Sources */,
 				2202A3951E984B4500231CF2 /* LoginView.swift in Sources */,
 				223C7A9B1E85E8C30075328E /* LoginTableViewCell.swift in Sources */,
 			);
