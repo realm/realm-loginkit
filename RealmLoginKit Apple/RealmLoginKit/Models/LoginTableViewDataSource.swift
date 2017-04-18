@@ -33,16 +33,19 @@ class LoginTableViewDataSource: NSObject, UITableViewDataSource {
     }
 
     /* Login Credentials */
-    public var serverURL = ""
-    public var userName = ""
-    public var password = ""
-    public var confirmPassword = ""
+    public var serverURL:String?
+    public var userName:String?
+    public var password:String?
+    public var confirmPassword:String?
     public var rememberLogin = true
 
     public var isRegistering: Bool {
         get { return _isRegistering }
         set { setRegistering(newValue, animated: false) }
     }
+
+    /* Interaction Callbacks */
+    public var didTapSubmitHandler: (() -> ())?
 
     //MARK: - Private Properties -
 
@@ -90,9 +93,9 @@ class LoginTableViewDataSource: NSObject, UITableViewDataSource {
             cell?.type = .textField
             cell?.imageView?.image = mailIcon
             cell?.textField?.placeholder = "Username"
-            cell?.textField?.text = username
+            cell?.textField?.text = userName
             cell?.textField?.keyboardType = .emailAddress
-            cell?.textChangedHandler = { self.username = cell?.textField?.text }
+            cell?.textChangedHandler = { self.userName = cell?.textField?.text }
             cell?.returnButtonTappedHandler = { self.makeFirstResponder(atRow: indexPath.row + 1) }
         case .password:
             cell?.type = .textField
@@ -104,7 +107,7 @@ class LoginTableViewDataSource: NSObject, UITableViewDataSource {
             cell?.textChangedHandler = { self.password = cell?.textField?.text }
             cell?.returnButtonTappedHandler = {
                 if self.isRegistering { self.makeFirstResponder(atRow: indexPath.row + 1) }
-                else { self.submitLogin() }
+                else { self.didTapSubmitHandler?() }
             }
         case .confirmPassword:
             cell?.type = .textField
@@ -114,7 +117,7 @@ class LoginTableViewDataSource: NSObject, UITableViewDataSource {
             cell?.textField?.isSecureTextEntry = true
             cell?.textField?.returnKeyType = .done
             cell?.textChangedHandler = { self.confirmPassword = cell?.textField?.text }
-            cell?.returnButtonTappedHandler = { self.submitLogin() }
+            cell?.returnButtonTappedHandler = { self.didTapSubmitHandler?() }
         case .rememberLogin:
             cell?.type = .toggleSwitch
             cell?.imageView?.image = tickIcon
