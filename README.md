@@ -34,7 +34,7 @@ Realm LoginKit only supports iOS at the moment.
 Currently in development, and should be finished soon.
 
 ### Xamarin 
-Currently on the roadmap with development starting soon.
+Currently on the roadmap with development starting soon. See the `RealmLoginKit_Xamarin/README.md` for details on the Xamarin version.
 
 # Third Party Dependencies
 
