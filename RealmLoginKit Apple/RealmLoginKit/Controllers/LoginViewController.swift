@@ -148,6 +148,11 @@ public class LoginViewController: UIViewController {
         get { return tableDataSource.rememberLogin }
     }
 
+    /**
+     A model object that exposes the input validation logic of the form
+     */
+    public lazy var formValidationManager: LoginFormValidationProtocol = LoginFormValidation()
+
     //MARK: - Private Properties
 
     /* The `UIView` subclass that manages all view content in this view controller */
@@ -244,7 +249,7 @@ public class LoginViewController: UIViewController {
     }
     
     //MARK: - Form Submission
-    private func validateFormItems() {
+    private func isReadyToSubmit() -> Bool  {
         var formIsValid = true
 
         if serverURL == nil || (serverURL?.isEmpty)! {
