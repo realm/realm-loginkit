@@ -47,13 +47,32 @@ class LoginTableViewDataSource: NSObject, UITableViewDataSource {
         didSet { tableView?.reloadData() }
     }
 
-    /* Login Credentials */
-    public var serverURL: String?
+    /* Server Address */
+    public var serverURL: String? {
+        didSet { setTextFieldText(serverURL, for: .serverURL) }
+    }
+
     public var serverPort = 9080
-    public var username: String?
-    public var password: String?
-    public var confirmPassword: String?
-    public var rememberLogin = true
+
+    /** Username */
+    public var username: String? {
+        didSet { setTextFieldText(username, for: .email) }
+    }
+
+    /** Password */
+    public var password: String? {
+        didSet { setTextFieldText(password, for: .password) }
+    }
+
+    /** Confirm Password */
+    public var confirmPassword: String? {
+        didSet { setTextFieldText(confirmPassword, for: .confirmPassword) }
+    }
+
+    /** Remember login details */
+    public var rememberLogin = true {
+        didSet { setSwitchValue(rememberLogin, for: .rememberLogin) }
+    }
 
     public var isRegistering: Bool {
         get { return _isRegistering }
@@ -62,7 +81,7 @@ class LoginTableViewDataSource: NSObject, UITableViewDataSource {
 
     /* Interaction Callbacks */
     public var didTapSubmitHandler: (() -> ())?
-    public var formInputChanhedHandler: (() -> ())?
+    public var formInputChangedHandler: (() -> ())?
 
     //MARK: - Private Properties -
 
@@ -104,15 +123,15 @@ class LoginTableViewDataSource: NSObject, UITableViewDataSource {
             cell?.textField?.placeholder = "Server URL"
             cell?.textField?.text = serverURL
             cell?.textField?.keyboardType = .URL
-            cell?.textChangedHandler = { self.serverURL = cell?.textField?.text }
+            cell?.textChangedHandler = { self.serverURL = cell?.textField?.text; self.formInputChangedHandler?() }
             cell?.returnButtonTappedHandler = { self.makeFirstResponder(atRow: indexPath.row + 1) }
         case .email:
             cell?.type = .textField
             cell?.imageView?.image = mailIcon
             cell?.textField?.placeholder = "Username"
-            cell?.textField?.text = userName
+            cell?.textField?.text = username
             cell?.textField?.keyboardType = .emailAddress
-            cell?.textChangedHandler = { self.userName = cell?.textField?.text }
+            cell?.textChangedHandler = { self.username = cell?.textField?.text; self.formInputChangedHandler?() }
             cell?.returnButtonTappedHandler = { self.makeFirstResponder(atRow: indexPath.row + 1) }
         case .password:
             cell?.type = .textField
@@ -121,7 +140,7 @@ class LoginTableViewDataSource: NSObject, UITableViewDataSource {
             cell?.textField?.text = password
             cell?.textField?.isSecureTextEntry = true
             cell?.textField?.returnKeyType = isRegistering ? .next : .done
-            cell?.textChangedHandler = { self.password = cell?.textField?.text }
+            cell?.textChangedHandler = { self.password = cell?.textField?.text; self.formInputChangedHandler?() }
             cell?.returnButtonTappedHandler = {
                 if self.isRegistering { self.makeFirstResponder(atRow: indexPath.row + 1) }
                 else { self.didTapSubmitHandler?() }
@@ -133,14 +152,14 @@ class LoginTableViewDataSource: NSObject, UITableViewDataSource {
             cell?.textField?.text = confirmPassword
             cell?.textField?.isSecureTextEntry = true
             cell?.textField?.returnKeyType = .done
-            cell?.textChangedHandler = { self.confirmPassword = cell?.textField?.text }
+            cell?.textChangedHandler = { self.confirmPassword = cell?.textField?.text; self.formInputChangedHandler?() }
             cell?.returnButtonTappedHandler = { self.didTapSubmitHandler?() }
         case .rememberLogin:
             cell?.type = .toggleSwitch
             cell?.imageView?.image = tickIcon
             cell?.textLabel!.text = "Remember My Account"
             cell?.switch?.isOn = rememberLogin
-            cell?.switchChangedHandler = { self.rememberLogin = (cell?.switch?.isOn)! }
+            cell?.switchChangedHandler = { self.rememberLogin = (cell?.switch?.isOn)!; self.formInputChangedHandler?() }
         }
 
         // Apply the theme after all cell configuration is done
@@ -197,6 +216,41 @@ class LoginTableViewDataSource: NSObject, UITableViewDataSource {
         default: return .email
         }
 
+    }
+
+    private func tableIndexPath(for cellType: LoginViewControllerCellType) -> IndexPath? {
+        var rowIndex = 0
+
+        switch cellType {
+        case .serverURL: rowIndex = isServerURLFieldHidden ? -1 : 0
+        case .email: rowIndex = isServerURLFieldHidden ? 0 : 1
+        case .password: rowIndex = isServerURLFieldHidden ? 1 : 2
+        case .confirmPassword:
+            rowIndex = -1
+            if isRegistering { rowIndex = isServerURLFieldHidden ? 2 : 3}
+        case .rememberLogin:
+            rowIndex = -1
+            if !isRememberAccountDetailsFieldHidden {
+                if isRegistering { rowIndex = isServerURLFieldHidden ? 3 : 4 }
+                else { rowIndex = isServerURLFieldHidden ? 2 : 3 }
+            }
+        }
+
+        guard rowIndex >= 0 else { return nil }
+        return IndexPath(row: rowIndex, section: 0)
+    }
+
+    private func setTextFieldText(_ text: String?, for cellType: LoginViewControllerCellType) {
+        guard let text = text else { return }
+        guard let indexPath = tableIndexPath(for: cellType) else { return }
+        guard let cell = tableView?.cellForRow(at: indexPath) as? LoginTableViewCell else { return }
+        cell.textField?.text = text
+    }
+
+    private func setSwitchValue(_ on: Bool, for cellType: LoginViewControllerCellType) {
+        guard let indexPath = tableIndexPath(for: cellType) else { return }
+        guard let cell = tableView?.cellForRow(at: indexPath) as? LoginTableViewCell else { return }
+        cell.switch?.isOn = on
     }
 
     // MARK: - Login/Register Transition
