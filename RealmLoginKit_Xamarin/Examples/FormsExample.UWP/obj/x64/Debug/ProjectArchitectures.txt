@@ -1,2 +1,0 @@
-C:\Users\denta\dev\Realm\realm-loginkit\RealmLoginKit_Xamarin\Examples\FormsExample.UWP\FormsExample.UWP.csproj;x64
-C:\Users\denta\dev\Realm\realm-loginkit\RealmLoginKit_Xamarin\LoginKitForms\LoginKitForms.csproj;neutral
