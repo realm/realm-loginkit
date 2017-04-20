@@ -33,6 +33,8 @@
 		228AA5861EA564360039ABD0 /* LoginTableViewDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 228AA5841EA564360039ABD0 /* LoginTableViewDataSource.swift */; };
 		228AA5881EA5797B0039ABD0 /* LoginViewControllerTransitioning.swift in Sources */ = {isa = PBXBuildFile; fileRef = 228AA5871EA5797B0039ABD0 /* LoginViewControllerTransitioning.swift */; };
 		228AA5891EA5797B0039ABD0 /* LoginViewControllerTransitioning.swift in Sources */ = {isa = PBXBuildFile; fileRef = 228AA5871EA5797B0039ABD0 /* LoginViewControllerTransitioning.swift */; };
+		22AA46C41EA972F10016FF82 /* String+URLComponents.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22AA46C31EA972F10016FF82 /* String+URLComponents.swift */; };
+		22AA46C51EA978780016FF82 /* String+URLComponents.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22AA46C31EA972F10016FF82 /* String+URLComponents.swift */; };
 		22AEE18B1E2F3F1F00CBB40A /* LoginTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22AEE18A1E2F3F1F00CBB40A /* LoginTableViewCell.swift */; };
 		22BB75DD1E8B144100317E4B /* RealmLoginKitExampleTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22BB75DC1E8B144100317E4B /* RealmLoginKitExampleTests.swift */; };
 		22EC435C1E3246FF009BBA75 /* RealmLoginKit.h in Headers */ = {isa = PBXBuildFile; fileRef = 22EC435A1E3246FF009BBA75 /* RealmLoginKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -69,6 +71,7 @@
 		225574C01E2E14DC00C52098 /* LoginFooterView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginFooterView.swift; sourceTree = "<group>"; };
 		228AA5841EA564360039ABD0 /* LoginTableViewDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginTableViewDataSource.swift; sourceTree = "<group>"; };
 		228AA5871EA5797B0039ABD0 /* LoginViewControllerTransitioning.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginViewControllerTransitioning.swift; sourceTree = "<group>"; };
+		22AA46C31EA972F10016FF82 /* String+URLComponents.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "String+URLComponents.swift"; path = "Extensions/String+URLComponents.swift"; sourceTree = "<group>"; };
 		22AEE18A1E2F3F1F00CBB40A /* LoginTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginTableViewCell.swift; sourceTree = "<group>"; };
 		22BB75DA1E8B144100317E4B /* RealmLoginKitExampleTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = RealmLoginKitExampleTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		22BB75DC1E8B144100317E4B /* RealmLoginKitExampleTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealmLoginKitExampleTests.swift; sourceTree = "<group>"; };
@@ -249,6 +252,7 @@
 			isa = PBXGroup;
 			children = (
 				225574BC1E2DFC2800C52098 /* UIImage+Icons.swift */,
+				22AA46C31EA972F10016FF82 /* String+URLComponents.swift */,
 			);
 			name = Extensions;
 			sourceTree = "<group>";
@@ -553,6 +557,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				22AA46C51EA978780016FF82 /* String+URLComponents.swift in Sources */,
 				225574C11E2E14DC00C52098 /* LoginFooterView.swift in Sources */,
 				222764C71EA6ECBB00F67C84 /* LoginFormValidation.swift in Sources */,
 				2246E2BD1E2D3E8100D7D499 /* LoginViewController.swift in Sources */,
@@ -589,6 +594,7 @@
 				223C7A9A1E85E8C30075328E /* LoginFooterView.swift in Sources */,
 				228AA5891EA5797B0039ABD0 /* LoginViewControllerTransitioning.swift in Sources */,
 				228AA5861EA564360039ABD0 /* LoginTableViewDataSource.swift in Sources */,
+				22AA46C41EA972F10016FF82 /* String+URLComponents.swift in Sources */,
 				2202A3951E984B4500231CF2 /* LoginView.swift in Sources */,
 				222764C81EA6ECBB00F67C84 /* LoginFormValidation.swift in Sources */,
 				223C7A9B1E85E8C30075328E /* LoginTableViewCell.swift in Sources */,

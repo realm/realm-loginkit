@@ -18,16 +18,27 @@
 
 import UIKit
 
-@objc public protocol LoginFormValidationProtocol {
+
+@objc public protocol LoginCredentialsValidationProtocol {
+    /** Provides basic sanitation check to ensure URL is valid */
     func isValidServerURL(_ serverURL: String?) -> Bool
+
+    /** Provides basic check to port number is a correct value. */
     func isValidPortNumber(_ portNumber: Int) -> Bool
+
+    /** Provides basic check to ensure a valid username value was set */
     func isValidUsername(_ username: String?) -> Bool
+
+    /** Provides a basic check to ensure a valid password value was set */
     func isValidPassword(_ password: String?) -> Bool
+
+    /** Provides a basic check to make sure `password` matches with `confirmPassword` */
     func isPassword(_ password: String?, matching confirmPassword: String?) -> Bool
 }
 
-@objc(RLMLoginFormValidation)
-public class LoginFormValidation: NSObject, LoginFormValidationProtocol {
+@objc(RLMLoginCredentialsValidation)
+public class LoginCredentialsValidation: NSObject, LoginCredentialsValidationProtocol {
+    
     public func isValidServerURL(_ serverURL: String?) -> Bool {
         guard let serverURL = serverURL else { return false }
         return !serverURL.isEmpty
@@ -49,6 +60,7 @@ public class LoginFormValidation: NSObject, LoginFormValidationProtocol {
 
     public func isPassword(_ password: String?, matching confirmPassword: String?) -> Bool {
         guard let password = password, let confirmPassword = confirmPassword else { return false }
+
         return password == confirmPassword
     }
 }
