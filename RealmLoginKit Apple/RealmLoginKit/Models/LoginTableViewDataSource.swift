@@ -52,8 +52,6 @@ class LoginTableViewDataSource: NSObject, UITableViewDataSource {
         didSet { setTextFieldText(serverURL, for: .serverURL) }
     }
 
-    public var serverPort = 9080
-
     /** Username */
     public var username: String? {
         didSet { setTextFieldText(username, for: .email) }

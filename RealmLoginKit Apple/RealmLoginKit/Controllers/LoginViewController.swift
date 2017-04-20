@@ -36,7 +36,94 @@ public class LoginViewController: UIViewController {
      The visual style of the login controller
     */
     public private(set) var style = LoginViewControllerStyle.lightTranslucent
-    
+
+    /**
+     The server address URL that will form the basis of the Realm authentication
+     server request URL. Including the port number will override the value in `serverPort`.
+     Declaring either scheme, 'https', 'realms', will make this a secure request
+     */
+    public var serverURL: String? {
+        set { tableDataSource.serverURL = newValue }
+        get { return tableDataSource.serverURL }
+    }
+
+    /**
+     Whether the request to the authentication server will occur over HTTPS, or plain
+     HTTP.
+     
+     Setting this value to `true` will always force a secure connection. It may be optionally
+     enabled if the server URL is prefixed with a protocol ending in 's' (eg 'https', 'realms')
+     */
+    public var isSecureConnection: Bool {
+        get {
+            if _isSecureConnection { return true }
+            if let scheme = serverURL?.URLScheme {
+                return scheme.characters.last! == "s"
+            }
+
+            return false
+        }
+        set { _isSecureConnection = newValue }
+    }
+
+    /**
+     The port number that will be appended to the server URL when constructing the final
+     authentication URL, if the server has been set as unsecure. Default value is 9080.
+     Specifying a port in `serverURL` will override this value.
+     */
+    public var serverPortNumber: Int {
+        set { _defaultPortNumber = newValue }
+        get {
+            if let portNumber = serverURL?.URLPortNumber { return portNumber }
+            return _defaultPortNumber
+        }
+    }
+
+    public var serverSecurePortNumber: Int {
+        set { _defaultSecurePortNumber = newValue }
+        get {
+            if let portNumber = serverURL?.URLPortNumber { return portNumber }
+            return _defaultSecurePortNumber
+        }
+    }
+
+    /**
+     The username of the account that will either be logged in, or registered. While an email
+     address is preferred, there are no specific formatting checks, so any string is valid.
+     */
+    public var username: String? {
+        set { tableDataSource.username = newValue }
+        get { return tableDataSource.username }
+    }
+
+    /**
+     The pasword for this account that is being logged in, or registered. By default, there are
+     no password security policies in place.
+     */
+    public var password: String? {
+        set { tableDataSource.password = newValue }
+        get { return tableDataSource.password }
+    }
+
+    /**
+     When registering a new account, this field is used to confirm the password is as the user intended.
+     The form validation check will fail if the form state is set to registering, and this string doesn't
+     match `password` exactly.
+     */
+    public var confirmPassword: String? {
+        set { tableDataSource.confirmPassword = newValue }
+        get { return tableDataSource.confirmPassword }
+    }
+
+    /**
+     When true, the credentials of the last login will be persisted and will prefill the login form
+     the next time it is opened.
+     */
+    public var rememberLogin: Bool {
+        set { tableDataSource.rememberLogin = newValue }
+        get { return tableDataSource.rememberLogin }
+    }
+
     /**
      Whether the view controller will allow new registrations, or
      simply only allow previously registered accounts to be entered.
@@ -92,68 +179,17 @@ public class LoginViewController: UIViewController {
     }
 
     /**
-     The server address URL that will form the basis of the Realm authentication
-     server request URL. Including the port number will override the value in `serverPort`.
-     Declaring either scheme, 'https', 'realms', will make this a secure request
-    */
-    public var serverURL: String? {
-        set { tableDataSource.serverURL = newValue }
-        get { return tableDataSource.serverURL }
-    }
-
-    /**
-     The port number that will be appended to the server URL when constructing the final
-     authentication URL. Default value is 9080. Specifying 'https' or 'realms' in the `serverURL`
-     field will override the value to 9443.
-    */
-    public var serverPort: Int {
-        set { tableDataSource.serverPort = newValue }
-        get { return tableDataSource.serverPort }
-    }
-
-    /**
-     The username of the account that will either be logged in, or registered. While an email
-     address is preferred, there are no specific formatting checks, so any string is valid.
-     */
-    public var username: String? {
-        set { tableDataSource.username = newValue }
-        get { return tableDataSource.username }
-    }
-
-    /**
-     The pasword for this account that is being logged in, or registered. By default, there are
-     no password security policies in place.
-    */
-    public var password: String? {
-        set { tableDataSource.password = newValue }
-        get { return tableDataSource.password }
-    }
-
-    /**
-     When registering a new account, this field is used to confirm the password is as the user intended.
-     The form validation check will fail if the form state is set to registering, and this string doesn't
-     match `password` exactly.
-    */
-    public var confirmPassword: String? {
-        set { tableDataSource.confirmPassword = newValue }
-        get { return tableDataSource.confirmPassword }
-    }
-
-    /**
-     When true, the credentials of the last login will be persisted and will prefill the login form
-     the next time it is opened.
-    */
-    public var rememberLogin: Bool {
-        set { tableDataSource.rememberLogin = newValue }
-        get { return tableDataSource.rememberLogin }
-    }
-
-    /**
      A model object that exposes the input validation logic of the form
      */
-    public lazy var formValidationManager: LoginFormValidationProtocol = LoginFormValidation()
+    public lazy var formValidationManager: LoginCredentialsValidationProtocol = LoginCredentialsValidation()
 
     //MARK: - Private Properties
+
+    /* State tracking */
+    private var _isRegistering = false
+    private var _isSecureConnection = false
+    private var _defaultPortNumber = 9080
+    private var _defaultSecurePortNumber = 9443
 
     /* The `UIView` subclass that manages all view content in this view controller */
     private var loginView: LoginView {
@@ -171,8 +207,7 @@ public class LoginViewController: UIViewController {
     private static let emailKey     = "RealmLoginEmailKey"
     private static let passwordKey  = "RealmLoginPasswordKey"
     
-    /* State tracking */
-    private var _isRegistering: Bool = false
+
 
     /* State Convienience Methods */
     private var isTranslucent: Bool  {
@@ -222,6 +257,7 @@ public class LoginViewController: UIViewController {
         // Set up the data source for the table view
         tableDataSource.isDarkStyle = isDarkStyle
         tableDataSource.tableView = loginView.tableView
+        tableDataSource.formInputChangedHandler = { self.prepareForSubmission() }
 
         loginView.didTapCloseHandler = { self.dismiss(animated: true, completion: nil) }
 
@@ -249,65 +285,37 @@ public class LoginViewController: UIViewController {
     }
     
     //MARK: - Form Submission
-    private func isReadyToSubmit() -> Bool  {
-        var formIsValid = true
+    private func prepareForSubmission() {
+        // Validate the supplied credentials
+        var isFormValid = true
 
-        if serverURL == nil || (serverURL?.isEmpty)! {
-            formIsValid = false
+        // Check each credential against our external validator
+        isFormValid = formValidationManager.isValidServerURL(serverURL) && isFormValid
+        isFormValid = formValidationManager.isValidUsername(username) && isFormValid
+        isFormValid = formValidationManager.isValidPassword(password) && isFormValid
+
+        // If registering, confirm password matches the confirm password field too
+        if isRegistering {
+            isFormValid = isFormValid && formValidationManager.isPassword(password, matching: confirmPassword)
         }
 
-        if !(0...65535 ~= serverPort) {
-            formIsValid = false
-        }
-
-        if username == nil || username!.isEmpty {
-            formIsValid = false
-        }
-
-        if password == nil || password!.isEmpty {
-            formIsValid = false
-        }
-
-        if isRegistering && password != confirmPassword {
-            formIsValid = false
-        }
-
-        loginView.footerView.isSubmitButtonEnabled = formIsValid
+        // Enable the 'submit' button if all is valid
+        loginView.footerView.isSubmitButtonEnabled = isFormValid
     }
 
-    private func submitLogin() {
+    private func submitCredentials() {
         loginView.footerView.isSubmitting = true
-        
         saveLoginCredentials()
-        
-        var authScheme = "http"
-        var scheme: String?
-        var formattedURL = serverURL
-        if let schemeRange = formattedURL?.range(of: "://") {
-            scheme = formattedURL?.substring(to: schemeRange.lowerBound)
-            if scheme == "realms" || scheme == "https" {
-                serverPort = 9443
-                authScheme = "https"
-            }
-            formattedURL = formattedURL?.substring(from: schemeRange.upperBound)
-        }
-        if let portRange = formattedURL?.range(of: ":") {
-            if let portString = formattedURL?.substring(from: portRange.upperBound) {
-                serverPort = Int(portString) ?? serverPort
-            }
-            formattedURL = formattedURL?.substring(to: portRange.lowerBound)
-        }
-        
+
+
+
         let credentials = RLMSyncCredentials(username: username!, password: password!, register: isRegistering)
         RLMSyncUser.__logIn(with: credentials, authServerURL: URL(string: "\(authScheme)://\(formattedURL!):\(serverPort)")!, timeout: 30, onCompletion: { (user, error) in
             DispatchQueue.main.async {
                 self.loginView.footerView.isSubmitting = false
                 
                 if let error = error {
-                    let alertController = UIAlertController(title: "Unable to Sign In", message: error.localizedDescription, preferredStyle: .alert)
-                    alertController.addAction(UIAlertAction(title: "Okay", style: .default, handler: nil))
-                    self.present(alertController, animated: true, completion: nil)
-                    
+                    self.showError(title: "Unable to Sign In", message: error.localizedDescription)
                     return
                 }
                 
@@ -315,7 +323,13 @@ public class LoginViewController: UIViewController {
             }
         })
     }
-    
+
+    private func showError(title: String, message: String) {
+        let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        alertController.addAction(UIAlertAction(title: "Okay", style: .default, handler: nil))
+        self.present(alertController, animated: true, completion: nil)
+    }
+
     private func saveLoginCredentials() {
         let userDefaults = UserDefaults.standard
         
@@ -336,7 +350,7 @@ public class LoginViewController: UIViewController {
     private func loadLoginCredentials() {
         let userDefaults = UserDefaults.standard
         serverURL = userDefaults.string(forKey: LoginViewController.serverURLKey)
-        username = userDefaults.string(forKey:  LoginViewController.emailKey)
+        username = userDefaults.string(forKey: LoginViewController.emailKey)
         password = userDefaults.string(forKey: LoginViewController.passwordKey)
     }
 }
