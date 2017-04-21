@@ -35,6 +35,7 @@
 		228AA5891EA5797B0039ABD0 /* LoginViewControllerTransitioning.swift in Sources */ = {isa = PBXBuildFile; fileRef = 228AA5871EA5797B0039ABD0 /* LoginViewControllerTransitioning.swift */; };
 		22AA46C41EA972F10016FF82 /* String+URLComponents.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22AA46C31EA972F10016FF82 /* String+URLComponents.swift */; };
 		22AA46C51EA978780016FF82 /* String+URLComponents.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22AA46C31EA972F10016FF82 /* String+URLComponents.swift */; };
+		22ADC2651EA9C845003CC74E /* LoginStringExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22ADC2641EA9C845003CC74E /* LoginStringExtension.swift */; };
 		22AEE18B1E2F3F1F00CBB40A /* LoginTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22AEE18A1E2F3F1F00CBB40A /* LoginTableViewCell.swift */; };
 		22BB75DD1E8B144100317E4B /* RealmLoginKitExampleTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22BB75DC1E8B144100317E4B /* RealmLoginKitExampleTests.swift */; };
 		22EC435C1E3246FF009BBA75 /* RealmLoginKit.h in Headers */ = {isa = PBXBuildFile; fileRef = 22EC435A1E3246FF009BBA75 /* RealmLoginKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -72,6 +73,7 @@
 		228AA5841EA564360039ABD0 /* LoginTableViewDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginTableViewDataSource.swift; sourceTree = "<group>"; };
 		228AA5871EA5797B0039ABD0 /* LoginViewControllerTransitioning.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginViewControllerTransitioning.swift; sourceTree = "<group>"; };
 		22AA46C31EA972F10016FF82 /* String+URLComponents.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "String+URLComponents.swift"; path = "Extensions/String+URLComponents.swift"; sourceTree = "<group>"; };
+		22ADC2641EA9C845003CC74E /* LoginStringExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginStringExtension.swift; sourceTree = "<group>"; };
 		22AEE18A1E2F3F1F00CBB40A /* LoginTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginTableViewCell.swift; sourceTree = "<group>"; };
 		22BB75DA1E8B144100317E4B /* RealmLoginKitExampleTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = RealmLoginKitExampleTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		22BB75DC1E8B144100317E4B /* RealmLoginKitExampleTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealmLoginKitExampleTests.swift; sourceTree = "<group>"; };
@@ -262,6 +264,7 @@
 			children = (
 				22BB75DC1E8B144100317E4B /* RealmLoginKitExampleTests.swift */,
 				22BB75DE1E8B144100317E4B /* Info.plist */,
+				22ADC2641EA9C845003CC74E /* LoginStringExtension.swift */,
 			);
 			path = RealmLoginKitExampleTests;
 			sourceTree = "<group>";
@@ -578,6 +581,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				22ADC2651EA9C845003CC74E /* LoginStringExtension.swift in Sources */,
 				22BB75DD1E8B144100317E4B /* RealmLoginKitExampleTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

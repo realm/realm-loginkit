@@ -39,7 +39,7 @@ public extension String {
         var host = self
 
         if let scheme = self.URLScheme {
-            host = host.substring(from: self.index(self.startIndex, offsetBy: scheme.characters.count))
+            host = host.substring(from: self.index(self.startIndex, offsetBy: (scheme + "://").characters.count))
         }
 
         if let portRange = host.range(of: ":") {
