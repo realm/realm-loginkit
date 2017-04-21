@@ -74,16 +74,16 @@ public class LoginViewController: UIViewController {
     public var serverPortNumber: Int {
         set { _defaultPortNumber = newValue }
         get {
-            if let portNumber = serverURL?.URLPortNumber { return portNumber }
-            return _defaultPortNumber
+            let portNumber = serverURL!.URLPortNumber
+            return portNumber >= 0 ? portNumber : _defaultPortNumber
         }
     }
 
     public var serverSecurePortNumber: Int {
         set { _defaultSecurePortNumber = newValue }
         get {
-            if let portNumber = serverURL?.URLPortNumber { return portNumber }
-            return _defaultSecurePortNumber
+            let portNumber = serverURL!.URLPortNumber
+            return portNumber >= 0 ? portNumber : _defaultSecurePortNumber
         }
     }
 
@@ -179,6 +179,20 @@ public class LoginViewController: UIViewController {
     }
 
     /**
+     With all of the available credentials, the final URL that will be used
+     for the request to the Realm Authentication Server
+    */
+    public var authenticationRequestURL: URL? {
+        guard let serverHost = serverURL?.URLHost else { return nil }
+        let scheme: String, portNumber: Int
+
+        scheme = isSecureConnection ? "https" : "http"
+        portNumber = isSecureConnection ? serverSecurePortNumber : serverPortNumber
+
+        return URL(string: "\(scheme)://\(serverHost):\(portNumber)")
+    }
+
+    /**
      A model object that exposes the input validation logic of the form
      */
     public lazy var formValidationManager: LoginCredentialsValidationProtocol = LoginCredentialsValidation()
@@ -206,8 +220,6 @@ public class LoginViewController: UIViewController {
     private static let serverURLKey = "RealmLoginServerURLKey"
     private static let emailKey     = "RealmLoginEmailKey"
     private static let passwordKey  = "RealmLoginPasswordKey"
-    
-
 
     /* State Convienience Methods */
     private var isTranslucent: Bool  {
@@ -260,6 +272,7 @@ public class LoginViewController: UIViewController {
         tableDataSource.formInputChangedHandler = { self.prepareForSubmission() }
 
         loginView.didTapCloseHandler = { self.dismiss(animated: true, completion: nil) }
+        loginView.didTapLogInHandler = { self.submitLoginRequest() }
 
         // Configure the keyboard manager for the login view
         keyboardManager.keyboardHeightDidChangeHandler = { newHeight in
@@ -271,6 +284,8 @@ public class LoginViewController: UIViewController {
         loginView.didTapRegisterHandler = { self.setRegistering(!self.isRegistering, animated: true) }
 
         loadLoginCredentials()
+        prepareForSubmission()
+        loginView.updateCloseButtonVisibility()
     }
 
     func setRegistering(_ isRegistering: Bool, animated: Bool) {
@@ -303,14 +318,14 @@ public class LoginViewController: UIViewController {
         loginView.footerView.isSubmitButtonEnabled = isFormValid
     }
 
-    private func submitCredentials() {
+    private func submitLoginRequest() {
         loginView.footerView.isSubmitting = true
         saveLoginCredentials()
 
-
+        guard let authenticationURL = authenticationRequestURL else { return }
 
         let credentials = RLMSyncCredentials(username: username!, password: password!, register: isRegistering)
-        RLMSyncUser.__logIn(with: credentials, authServerURL: URL(string: "\(authScheme)://\(formattedURL!):\(serverPort)")!, timeout: 30, onCompletion: { (user, error) in
+        RLMSyncUser.__logIn(with: credentials, authServerURL: authenticationURL, timeout: 30, onCompletion: { (user, error) in
             DispatchQueue.main.async {
                 self.loginView.footerView.isSubmitting = false
                 
