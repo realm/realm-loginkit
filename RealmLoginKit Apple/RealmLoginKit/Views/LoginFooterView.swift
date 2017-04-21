@@ -68,16 +68,16 @@ class LoginFooterView: UIView {
     private let loadingIndicator = UIActivityIndicatorView(activityIndicatorStyle: .white)
     
     
-    var loginButtonTapped: (() -> Void)?
-    var registerButtonTapped: (() -> Void)?
+    var loginButtonTappedHandler: (() -> Void)?
+    var registerButtonTappedHandler: (() -> Void)?
     
-    private var _registering: Bool = false
-    var registering: Bool {
+    private var _isRegistering: Bool = false
+    var isRegistering: Bool {
         set {
             setRegistering(newValue, animated: false)
         }
         
-        get { return _registering }
+        get { return _isRegistering }
     }
     
     var isSubmitting: Bool = false {
@@ -179,17 +179,17 @@ class LoginFooterView: UIView {
         }
         
         if sender as! NSObject == loginButton {
-            loginButtonTapped?()
+            loginButtonTappedHandler?()
         }
         else {
-            registerButtonTapped?()
+            registerButtonTappedHandler?()
         }
     }
 
     private func updateButtonTitles() {
         let loginText: String , registerText: String
         
-        if _registering {
+        if _isRegistering {
             loginText = "Sign Up"
             registerText = "Log in to Your Account"
         }
@@ -230,12 +230,12 @@ class LoginFooterView: UIView {
         }
     }
     
-    func setRegistering(_ registering: Bool, animated: Bool) {
-        guard registering != _registering else {
+    func setRegistering(_ isRegistering: Bool, animated: Bool) {
+        guard isRegistering != _isRegistering else {
             return
         }
         
-        _registering = registering
+        _isRegistering = isRegistering
         
         if animated == false {
             updateButtonTitles()

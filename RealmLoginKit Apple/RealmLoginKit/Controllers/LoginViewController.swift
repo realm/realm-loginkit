@@ -27,17 +27,8 @@ import Realm
     case darkOpaque
 }
 
-/* The types of inputs cells may be */
-private enum LoginViewControllerCellType: Int {
-    case serverURL
-    case email
-    case password
-    case confirmPassword
-    case rememberLogin
-}
-
 @objc(RLMLoginViewController)
-public class LoginViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UIViewControllerTransitioningDelegate {
+public class LoginViewController: UIViewController {
     
     //MARK: - Public Properties
     
@@ -45,16 +36,101 @@ public class LoginViewController: UIViewController, UITableViewDataSource, UITab
      The visual style of the login controller
     */
     public private(set) var style = LoginViewControllerStyle.lightTranslucent
-    
+
+    /**
+     The server address URL that will form the basis of the Realm authentication
+     server request URL. Including the port number will override the value in `serverPort`.
+     Declaring either scheme, 'https', 'realms', will make this a secure request
+     */
+    public var serverURL: String? {
+        set { tableDataSource.serverURL = newValue }
+        get { return tableDataSource.serverURL }
+    }
+
+    /**
+     Whether the request to the authentication server will occur over HTTPS, or plain
+     HTTP.
+     
+     Setting this value to `true` will always force a secure connection. It may be optionally
+     enabled if the server URL is prefixed with a protocol ending in 's' (eg 'https', 'realms')
+     */
+    public var isSecureConnection: Bool {
+        get {
+            if _isSecureConnection { return true }
+            if let scheme = serverURL?.URLScheme {
+                return scheme.characters.last! == "s"
+            }
+
+            return false
+        }
+        set { _isSecureConnection = newValue }
+    }
+
+    /**
+     The port number that will be appended to the server URL when constructing the final
+     authentication URL, if the server has been set as unsecure. Default value is 9080.
+     Specifying a port in `serverURL` will override this value.
+     */
+    public var serverPortNumber: Int {
+        set { _defaultPortNumber = newValue }
+        get {
+            let portNumber = serverURL!.URLPortNumber
+            return portNumber >= 0 ? portNumber : _defaultPortNumber
+        }
+    }
+
+    public var serverSecurePortNumber: Int {
+        set { _defaultSecurePortNumber = newValue }
+        get {
+            let portNumber = serverURL!.URLPortNumber
+            return portNumber >= 0 ? portNumber : _defaultSecurePortNumber
+        }
+    }
+
+    /**
+     The username of the account that will either be logged in, or registered. While an email
+     address is preferred, there are no specific formatting checks, so any string is valid.
+     */
+    public var username: String? {
+        set { tableDataSource.username = newValue }
+        get { return tableDataSource.username }
+    }
+
+    /**
+     The pasword for this account that is being logged in, or registered. By default, there are
+     no password security policies in place.
+     */
+    public var password: String? {
+        set { tableDataSource.password = newValue }
+        get { return tableDataSource.password }
+    }
+
+    /**
+     When registering a new account, this field is used to confirm the password is as the user intended.
+     The form validation check will fail if the form state is set to registering, and this string doesn't
+     match `password` exactly.
+     */
+    public var confirmPassword: String? {
+        set { tableDataSource.confirmPassword = newValue }
+        get { return tableDataSource.confirmPassword }
+    }
+
+    /**
+     When true, the credentials of the last login will be persisted and will prefill the login form
+     the next time it is opened.
+     */
+    public var rememberLogin: Bool {
+        set { tableDataSource.rememberLogin = newValue }
+        get { return tableDataSource.rememberLogin }
+    }
+
     /**
      Whether the view controller will allow new registrations, or
      simply only allow previously registered accounts to be entered.
     */
-    public var allowsNewAccountRegistration: Bool = true {
-        didSet {
-            footerView.isRegisterButtonHidden = !allowsNewAccountRegistration
-            tableView.reloadData()
-        }
+    public var allowsNewAccountRegistration: Bool {
+        get { return self.loginView.canRegisterNewAccounts }
+        set { self.loginView.canRegisterNewAccounts = newValue }
     }
     
     /**
@@ -65,7 +141,7 @@ public class LoginViewController: UIViewController, UITableViewDataSource, UITab
         set {
             setRegistering(newValue, animated: false)
         }
-        get { return _registering }
+        get { return _isRegistering }
     }
     
     /**
@@ -78,72 +154,72 @@ public class LoginViewController: UIViewController, UITableViewDataSource, UITab
      For cases where apps will be connecting to a pre-established server URL,
      this option can be used to hide the 'server address' field
     */
-    public var isServerURLFieldHidden: Bool = false {
-        didSet {
-            tableView.reloadData()
-        }
+    public var isServerURLFieldHidden: Bool {
+        set { tableDataSource.isServerURLFieldHidden = newValue }
+        get { return tableDataSource.isServerURLFieldHidden }
     }
     
     /**
      For cases where apps do not require logging in each time, the 'remember login'
      field can be hidden
     */
-    public var isRememberAccountDetailsFieldHidden: Bool = false {
-        didSet {
-            tableView.reloadData()
-        }
+    public var isRememberAccountDetailsFieldHidden: Bool {
+        set { tableDataSource.isRememberAccountDetailsFieldHidden = newValue }
+        get { return tableDataSource.isRememberAccountDetailsFieldHidden }
     }
 
     /** 
      In cases where cancelling the login controller might be needed, show 
      a close button that can dismiss the view.
     */
-    public var isCancelButtonHidden = true {
-        didSet {
-            setUpCloseButton()
-        }
+    public var isCancelButtonHidden: Bool {
+        // Proxy this property to the one managed directly by the view
+        set { self.loginView.isCancelButtonHidden = newValue }
+        get { return self.loginView.isCancelButtonHidden }
     }
 
+    /**
+     With all of the available credentials, the final URL that will be used
+     for the request to the Realm Authentication Server
+    */
+    public var authenticationRequestURL: URL? {
+        guard let serverHost = serverURL?.URLHost else { return nil }
+        let scheme: String, portNumber: Int
+
+        scheme = isSecureConnection ? "https" : "http"
+        portNumber = isSecureConnection ? serverSecurePortNumber : serverPortNumber
+
+        return URL(string: "\(scheme)://\(serverHost):\(portNumber)")
+    }
+
+    /**
+     A model object that exposes the input validation logic of the form
+     */
+    public lazy var formValidationManager: LoginCredentialsValidationProtocol = LoginCredentialsValidation()
+
     //MARK: - Private Properties
-    
+
+    /* State tracking */
+    private var _isRegistering = false
+    private var _isSecureConnection = false
+    private var _defaultPortNumber = 9080
+    private var _defaultSecurePortNumber = 9443
+
+    /* The `UIView` subclass that manages all view content in this view controller */
+    private var loginView: LoginView {
+        return (self.view as! LoginView)
+    }
+
+    /* A view model object to manage the table view */
+    private let tableDataSource = LoginTableViewDataSource()
+
+    /* A model object to manage receiving keyboard resize events from the system. */
+    private let keyboardManager = LoginKeyboardManager()
+
     /* User default keys for saving form data */
     private static let serverURLKey = "RealmLoginServerURLKey"
     private static let emailKey     = "RealmLoginEmailKey"
     private static let passwordKey  = "RealmLoginPasswordKey"
-    
-    /* Assets */
-    private let earthIcon = UIImage.earthIcon()
-    private let lockIcon  = UIImage.lockIcon()
-    private let mailIcon  = UIImage.mailIcon()
-    private let tickIcon  = UIImage.tickIcon()
-    
-    /* Views */
-    private let containerView = UIView()
-    private let navigationBar = UINavigationBar()
-    private let tableView = TORoundedTableView()
-    private let headerView = LoginHeaderView()
-    private let footerView = LoginFooterView()
-    private let copyrightView = UILabel()
-    private var closeButton: UIButton? = nil
-    
-    private var effectView: UIVisualEffectView?
-    private var backgroundView: UIView?
-    
-    /* State tracking */
-    private var _registering: Bool = false
-    private var keyboardHeight: CGFloat = 0.0
-    
-    /* Login/Register Credentials */
-    public var serverURL: String?       { didSet { validateFormItems() } }
-    public var serverPort = 9080        { didSet { validateFormItems() } }
-    public var username: String?        { didSet { validateFormItems() } }
-    public var password: String?        { didSet { validateFormItems() } }
-    public var confirmPassword: String? { didSet { validateFormItems() } }
-    public var rememberLogin: Bool = true
-    
-    /* Layout Constants */
-    private let copyrightViewMargin: CGFloat = 45
-    private let closeButtonInset = UIEdgeInsets(top: 15, left: 18, bottom: 0, right: 0)
 
     /* State Convienience Methods */
     private var isTranslucent: Bool  {
@@ -165,16 +241,6 @@ public class LoginViewController: UIViewController, UITableViewDataSource, UITab
     public init(style: LoginViewControllerStyle) {
         super.init(nibName: nil, bundle: nil)
         self.style = style
-        
-        transitioningDelegate = self
-        modalPresentationStyle = isTranslucent ? .overFullScreen : .fullScreen
-        modalTransitionStyle = .crossDissolve
-        modalPresentationCapturesStatusBarAppearance = true
-        
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow(notification:)), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide(notification:)), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
-        
-        loadLoginCredentials()
     }
     
     convenience init() {
@@ -185,541 +251,86 @@ public class LoginViewController: UIViewController, UITableViewDataSource, UITab
         super.init(coder: aDecoder)
     }
 
-    deinit {
-        NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIKeyboardWillShow, object: nil)
-        NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIKeyboardWillHide, object: nil)
-    }
-
-    @objc private func didTapCloseButton() {
-        dismiss(animated: true, completion: nil)
-    }
-
-    //MARK: - View Setup
-    
-    private func setUpTranslucentViews() {
-        effectView = UIVisualEffectView()
-        effectView?.effect = UIBlurEffect(style: isDarkStyle ? .dark : .light)
-        effectView?.frame = view.bounds
-        effectView?.autoresizingMask = [.flexibleWidth, .flexibleHeight]
-        view.addSubview(effectView!)
-    }
-
-    private func setUpTableView() {
-        tableView.frame = view.bounds
-        tableView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
-        tableView.dataSource = self
-        tableView.delegate = self
-        tableView.backgroundColor = .clear
-        tableView.maximumWidth = 500
-        tableView.tableHeaderView = headerView
-        tableView.tableFooterView = footerView
-        tableView.delaysContentTouches = false
-        containerView.addSubview(tableView)
-
-        let infoDictionary = Bundle.main.infoDictionary!
-        if let displayName = infoDictionary["CFBundleDisplayName"] {
-            headerView.appName = displayName as? String
-        }
-        else if let displayName = infoDictionary[kCFBundleNameKey as String] {
-            headerView.appName = displayName as? String
-        }
-
-        footerView.loginButtonTapped = {
-            self.submitLogin()
-        }
-
-        footerView.registerButtonTapped = {
-            self.setRegistering(!self.isRegistering, animated: true)
-        }
-    }
-
-    private func setUpCloseButton() {
-        //Check if we're already set up
-        if isCancelButtonHidden && closeButton == nil { return }
-        if !isCancelButtonHidden && closeButton != nil { return }
-
-        if isCancelButtonHidden {
-            closeButton?.removeFromSuperview()
-            closeButton = nil
-            return
-        }
-
-        let closeIcon = UIImage.closeIcon()
-        closeButton = UIButton(type: .system)
-        closeButton?.setImage(closeIcon, for: .normal)
-        closeButton?.frame = CGRect(origin: .zero, size: closeIcon.size)
-        closeButton?.addTarget(self, action: #selector(didTapCloseButton), for: .touchUpInside)
-        view.addSubview(closeButton!)
-    }
-
-    private func setUpCommonViews() {
-        backgroundView = UIView()
-        backgroundView?.frame = view.bounds
-        backgroundView?.autoresizingMask = [.flexibleWidth, .flexibleHeight]
-        view.addSubview(backgroundView!)
-        
-        containerView.frame = view.bounds
-        containerView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
-        view.addSubview(containerView)
-
-        navigationBar.frame = CGRect(x: 0, y: 0, width: view.bounds.size.width, height: 20)
-        navigationBar.autoresizingMask = [.flexibleWidth]
-        navigationBar.alpha = 0.0
-        view.addSubview(navigationBar)
-        
-        copyrightView.text = "With ❤️ from the Realm team, 2017."
-        copyrightView.textAlignment = .center
-        copyrightView.font = UIFont.systemFont(ofSize: 15)
-        copyrightView.sizeToFit()
-        copyrightView.autoresizingMask = [.flexibleLeftMargin, .flexibleRightMargin, .flexibleTopMargin]
-        copyrightView.frame.origin.y = view.bounds.height - copyrightViewMargin
-        copyrightView.frame.origin.x = (view.bounds.width - copyrightView.frame.width) * 0.5
-        containerView.addSubview(copyrightView)
-
-        setUpTableView()
-        setUpCloseButton()
-
-        applyTheme()
-    }
-    
-    func applyTheme() {
-        // view accessory views
-        navigationBar.barStyle  = isDarkStyle ? .blackTranslucent : .default
-        copyrightView.textColor = isDarkStyle ? UIColor(white: 0.3, alpha: 1.0) : UIColor(white: 0.6, alpha: 1.0)
-
-        // view background
-        if isTranslucent {
-            backgroundView?.backgroundColor = UIColor(white: isDarkStyle ? 0.1 : 0.9, alpha: 0.3)
-        }
-        else {
-            backgroundView?.backgroundColor = UIColor(white: isDarkStyle ? 0.15 : 0.95, alpha: 1.0)
-        }
-
-        if effectView != nil {
-            effectView?.effect = UIBlurEffect(style: isDarkStyle ? .dark : .light)
-        }
-
-        if closeButton != nil {
-            let greyShade = isDarkStyle ? 1.0 : 0.2
-            closeButton?.tintColor = UIColor(white: CGFloat(greyShade), alpha: 1.0)
-        }
-
-        // table accessory views
-        headerView.style = isDarkStyle ? .dark : .light
-        footerView.style = isDarkStyle ? .dark : .light
-
-        // table view and cells
-        tableView.separatorColor = isDarkStyle ? UIColor(white: 0.4, alpha: 1.0) : nil
-        tableView.cellBackgroundColor = UIColor(white: isDarkStyle ? 0.2 : 1.0, alpha: 1.0)
-    }
-
-    func applyTheme(to tableViewCell: LoginTableViewCell) {
-        tableViewCell.imageView?.tintColor = UIColor(white: isDarkStyle ? 0.4 : 0.6, alpha: 1.0)
-        tableViewCell.textLabel?.textColor = isDarkStyle ? .white : .black
-
-        // Only touch the text field if we're actively using it
-        if tableViewCell.textChangedHandler != nil {
-            tableViewCell.textField?.textColor = isDarkStyle ? .white : .black
-            tableViewCell.textField?.keyboardAppearance = isDarkStyle ? .dark : .default
-
-            if isDarkStyle {
-                let placeholderText = tableViewCell.textField?.placeholder
-                let placeholderTextColor = UIColor(white: 0.45, alpha: 1.0)
-                let attributes = [NSForegroundColorAttributeName: placeholderTextColor]
-                tableViewCell.textField?.attributedPlaceholder =  NSAttributedString(string: placeholderText!, attributes: attributes)
-            }
-            else {
-                let placeholderText = tableViewCell.textField?.placeholder
-                tableViewCell.textField?.attributedPlaceholder = nil //setting this as nil also sets `placeholder` to nil
-                tableViewCell.textField?.placeholder = placeholderText
-            }
-        }
-    }
-    
     //MARK: - View Management
+
+    override public func loadView() {
+        super.loadView()
+        self.view = LoginView(darkStyle: isDarkStyle, translucentStyle: isTranslucent)
+    }
 
     override public func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .clear
 
-        if isTranslucent {
-            setUpTranslucentViews()
+        transitioningDelegate = loginView
+        modalPresentationStyle = isTranslucent ? .overFullScreen : .fullScreen
+        modalTransitionStyle = .crossDissolve
+        modalPresentationCapturesStatusBarAppearance = true
+
+        // Set up the data source for the table view
+        tableDataSource.isDarkStyle = isDarkStyle
+        tableDataSource.tableView = loginView.tableView
+        tableDataSource.formInputChangedHandler = { self.prepareForSubmission() }
+
+        loginView.didTapCloseHandler = { self.dismiss(animated: true, completion: nil) }
+        loginView.didTapLogInHandler = { self.submitLoginRequest() }
+
+        // Configure the keyboard manager for the login view
+        keyboardManager.keyboardHeightDidChangeHandler = { newHeight in
+            self.loginView.keyboardHeight = newHeight
+            self.loginView.animateContentInsetTransition()
         }
 
-        setUpCommonViews()
+        // Set up the handler for when the 'Register' button is tapped
+        loginView.didTapRegisterHandler = { self.setRegistering(!self.isRegistering, animated: true) }
+
+        loadLoginCredentials()
+        prepareForSubmission()
+        loginView.updateCloseButtonVisibility()
     }
 
-    override public func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-
-        // Hide the copyright view if there's not enough space on screen
-        updateCopyrightViewVisibility()
-
-        // Recalculate the state for the on-screen views
-        layoutTableContentInset()
-        layoutNavigationBar()
-        layoutCopyrightView()
-        layoutCloseButton()
-    }
-
-    private func layoutTableContentInset() {
-
-        // Vertically align the table view so the table cells are in the middle
-        let boundsHeight = view.bounds.size.height - keyboardHeight // Adjusted for keyboard visibility
-        let contentHeight = tableView.contentSize.height
-        let sectionHeight = tableView.rect(forSection: 0).size.height
-        let contentMidPoint: CGFloat //
-
-        // If keyboard is not visible, align the table cells to the middle of the screen,
-        // else just align the whole content region
-        if keyboardHeight > 0 {
-            contentMidPoint = contentHeight * 0.5
-        }
-        else {
-            contentMidPoint = headerView.frame.height + (sectionHeight * 0.5)
-        }
-
-        var topPadding    = max(0, (boundsHeight * 0.5) - contentMidPoint)
-        topPadding += (UIApplication.shared.statusBarFrame.height + 10)
-
-        var bottomPadding:CGFloat = 0.0
-        if keyboardHeight > 0 {
-            bottomPadding = keyboardHeight + 15
-        }
-
-        var edgeInsets = tableView.contentInset
-        edgeInsets.top = topPadding
-        edgeInsets.bottom = bottomPadding
-        tableView.contentInset = edgeInsets
-    }
-
-    private func layoutNavigationBar() {
-        if UIApplication.shared.isStatusBarHidden {
-            navigationBar.alpha = 0.0
+    func setRegistering(_ isRegistering: Bool, animated: Bool) {
+        guard _isRegistering != isRegistering else {
             return
         }
 
-        let statusBarFrameHeight = UIApplication.shared.statusBarFrame.height
-        navigationBar.frame.size.height = statusBarFrameHeight
+        _isRegistering = isRegistering
 
-        // Show the navigation bar when content starts passing under the status bar
-        let verticalOffset = self.tableView.contentOffset.y
-
-        if verticalOffset >= -statusBarFrameHeight {
-            navigationBar.alpha = 1.0
-        }
-        else if verticalOffset <= -(statusBarFrameHeight + 10) {
-            navigationBar.alpha = 0.0
-        }
-        else {
-            navigationBar.alpha = 1.0 - ((abs(verticalOffset) - statusBarFrameHeight) / 10.0)
-        }
-    }
-
-    private func updateCopyrightViewVisibility() {
-        // Hide the copyright if there's not enough vertical space on the screen for it to not
-        // interfere with the rest of the content
-        let isHidden = (tableView.contentInset.top + tableView.contentSize.height) > copyrightView.frame.minY
-        copyrightView.alpha = isHidden ? 0.0 : 1.0
-    }
-
-    private func updateCloseButtonVisibility() {
-        guard let closeButton = self.closeButton else {
-            return
-        }
-
-        guard self.traitCollection.horizontalSizeClass == .compact else {
-            closeButton.alpha = 1.0
-            return
-        }
-
-        let titleLabel = self.headerView.titleLabel
-        let yOffset = titleLabel.frame.origin.y - tableView.contentOffset.y
-        let thresholdY = closeButton.frame.maxY
-        let normalizedOffset = yOffset - thresholdY
-        var alpha = normalizedOffset / 30.0
-        alpha = min(1.0, alpha); alpha = max(0.0, alpha)
-        closeButton.alpha = alpha
-    }
-
-    private func layoutCopyrightView() {
-        guard copyrightView.isHidden == false else {
-            return
-        }
-
-        // Offset the copyright label
-        let verticalOffset = tableView.contentOffset.y
-        let normalizedOffset = verticalOffset + tableView.contentInset.top
-        copyrightView.frame.origin.y = (view.bounds.height - copyrightViewMargin) - normalizedOffset
-    }
-
-    private func layoutCloseButton() {
-        guard let closeButton = self.closeButton else {
-            return
-        }
-
-        let statusBarFrame = UIApplication.shared.statusBarFrame
-
-        var rect = closeButton.frame
-        rect.origin.x = closeButtonInset.left
-        rect.origin.y = statusBarFrame.size.height + closeButtonInset.top
-        closeButton.frame = rect
-    }
-
-    //MARK: - Scroll View Delegate
-    
-    public func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        layoutNavigationBar()
-        layoutCopyrightView()
-        updateCloseButtonVisibility()
-    }
-
-    //MARK: - Table View Data Source
-
-    public func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        var numberOfRows = isRegistering ? 5 : 4
-        if isServerURLFieldHidden { numberOfRows -= 1 }
-        if isRememberAccountDetailsFieldHidden { numberOfRows -= 1 }
-        return numberOfRows
-    }
-    
-    public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let identifier = "CellIdentifier"
-        var cell = tableView.dequeueReusableCell(withIdentifier: identifier) as? LoginTableViewCell
-        if cell == nil {
-            cell = LoginTableViewCell(style: .default, reuseIdentifier: identifier)
-        }
-
-        let lastCellIndex = tableView.numberOfRows(inSection: 0) - 1
-
-        // Configure rounded caps
-        cell?.topCornersRounded    = (indexPath.row == 0)
-        cell?.bottomCornersRounded = (indexPath.row == lastCellIndex)
-
-        // Configure cell content
-        switch cellType(for: indexPath.row) {
-        case .serverURL:
-            cell?.type = .textField
-            cell?.imageView?.image = earthIcon
-            cell?.textField?.placeholder = "Server URL"
-            cell?.textField?.text = serverURL
-            cell?.textField?.keyboardType = .URL
-            cell?.textChangedHandler = { self.serverURL = cell?.textField?.text }
-            cell?.returnButtonTappedHandler = { self.makeFirstResponder(atRow: indexPath.row + 1) }
-        case .email:
-            cell?.type = .textField
-            cell?.imageView?.image = mailIcon
-            cell?.textField?.placeholder = "Username"
-            cell?.textField?.text = username
-            cell?.textField?.keyboardType = .emailAddress
-            cell?.textChangedHandler = { self.username = cell?.textField?.text }
-            cell?.returnButtonTappedHandler = { self.makeFirstResponder(atRow: indexPath.row + 1) }
-        case .password:
-            cell?.type = .textField
-            cell?.imageView?.image = lockIcon
-            cell?.textField?.placeholder = "Password"
-            cell?.textField?.text = password
-            cell?.textField?.isSecureTextEntry = true
-            cell?.textField?.returnKeyType = isRegistering ? .next : .done
-            cell?.textChangedHandler = { self.password = cell?.textField?.text }
-            cell?.returnButtonTappedHandler = {
-                if self.isRegistering { self.makeFirstResponder(atRow: indexPath.row + 1) }
-                else { self.submitLogin() }
-            }
-        case .confirmPassword:
-            cell?.type = .textField
-            cell?.imageView?.image = lockIcon
-            cell?.textField?.placeholder = "Confirm Password"
-            cell?.textField?.text = confirmPassword
-            cell?.textField?.isSecureTextEntry = true
-            cell?.textField?.returnKeyType = .done
-            cell?.textChangedHandler = { self.confirmPassword = cell?.textField?.text }
-            cell?.returnButtonTappedHandler = { self.submitLogin() }
-        case .rememberLogin:
-            cell?.type = .toggleSwitch
-            cell?.imageView?.image = tickIcon
-            cell?.textLabel!.text = "Remember My Account"
-            cell?.switch?.isOn = rememberLogin
-            cell?.switchChangedHandler = { self.rememberLogin = (cell?.switch?.isOn)! }
-        }
-
-        // Apply the theme after all cell configuration is done
-        applyTheme(to: cell!)
-
-        return cell!
-    }
-
-    private func cellType(for rowIndex: Int) -> LoginViewControllerCellType {
-        switch rowIndex {
-            case 0: return isServerURLFieldHidden ? .email : .serverURL
-            case 1: return isServerURLFieldHidden ? .password : .email
-            case 2:
-                if isServerURLFieldHidden && !isRegistering {
-                    return .rememberLogin
-                }
-                else if isRegistering && isServerURLFieldHidden {
-                    return .confirmPassword
-                }
-                else {
-                    return .password
-                }
-            case 3:
-                if isRegistering && !isServerURLFieldHidden {
-                    return .confirmPassword
-                }
-                else {
-                    return .rememberLogin
-                }
-            case 4: return .rememberLogin
-            default: return .email
-        }
-        
-    }
-
-    // MARK: - Login/Register Transition
-
-    func setRegistering(_ registering: Bool, animated: Bool) {
-        guard _registering != registering else {
-            return
-        }
-
-        _registering = registering
-
-        let rowIndex = isServerURLFieldHidden ? 2 : 3
-        
-        // Insert/Delete the 'confirm password' field
-        if _registering {
-            tableView.insertRows(at: [IndexPath(row: rowIndex, section: 0)], with: .fade)
-            tableView.reloadRows(at: [IndexPath(row: rowIndex - 1, section: 0)], with: .none)
-        }
-        else {
-            tableView.deleteRows(at: [IndexPath(row: rowIndex, section: 0)], with: .fade)
-            tableView.reloadRows(at: [IndexPath(row: rowIndex - 1, section: 0)], with: .none)
-        }
-        
-        // Animate the content size adjustments
-        animateContentInsetTransition()
-        
-        // Update the accessory views
-        headerView.setRegistering(_registering, animated: animated)
-        footerView.setRegistering(_registering, animated: animated)
-
-        // Hide the copyright view if needed
-        UIView.animate(withDuration: animated ? 0.25 : 0.0) {
-            self.updateCopyrightViewVisibility()
-        }
-    }
-    
-    // MARK: - Keyboard Handling
-    func makeFirstResponder(atRow row: Int) {
-        let cell = tableView.cellForRow(at: IndexPath(row: row, section: 0)) as! LoginTableViewCell
-        cell.textField?.becomeFirstResponder()
-    }
-    
-    @objc private func keyboardWillShow(notification: Notification) {
-        let keyboardFrame = notification.userInfo?[UIKeyboardFrameEndUserInfoKey] as! CGRect
-        keyboardHeight = keyboardFrame.height
-        animateContentInsetTransition()
-    }
-    
-    @objc private func keyboardWillHide(notification: Notification) {
-        keyboardHeight = 0
-        animateContentInsetTransition()
-    }
-    
-    private func animateContentInsetTransition() {
-        UIView.animate(withDuration: 0.6, delay: 0, usingSpringWithDamping: 1.0, initialSpringVelocity: 0.9, options: [], animations: {
-            self.layoutTableContentInset()
-            self.layoutNavigationBar()
-        }, completion: nil)
-        
-        // When animating the table view edge insets when its rounded, the header view
-        // snaps because their width override is caught in the animation block.
-        tableView.tableHeaderView?.layer.removeAllAnimations()
-    }
-    
-    //MARK: - View Controller Transitioning
-        
-    public func animationController(forPresented presented: UIViewController, presenting: UIViewController, source: UIViewController) -> UIViewControllerAnimatedTransitioning? {
-        let animationController = LoginViewControllerTransitioning()
-        animationController.backgroundView = backgroundView
-        animationController.contentView = containerView
-        animationController.effectsView = effectView
-        animationController.controlView = closeButton
-        animationController.isDismissing = false
-        return animationController
-    }
-    
-    public func animationController(forDismissed dismissed: UIViewController) -> UIViewControllerAnimatedTransitioning? {
-        let animationController = LoginViewControllerTransitioning()
-        animationController.backgroundView = backgroundView
-        animationController.contentView = containerView
-        animationController.effectsView = effectView
-        animationController.controlView = closeButton
-        animationController.isDismissing = true
-        return animationController
+        tableDataSource.setRegistering(isRegistering, animated: animated)
+        loginView.setRegistering(isRegistering, animated: animated)
     }
     
     //MARK: - Form Submission
-    private func validateFormItems() {
-        var formIsValid = true
+    private func prepareForSubmission() {
+        // Validate the supplied credentials
+        var isFormValid = true
 
-        if serverURL == nil || (serverURL?.isEmpty)! {
-            formIsValid = false
+        // Check each credential against our external validator
+        isFormValid = formValidationManager.isValidServerURL(serverURL) && isFormValid
+        isFormValid = formValidationManager.isValidUsername(username) && isFormValid
+        isFormValid = formValidationManager.isValidPassword(password) && isFormValid
+
+        // If registering, confirm password matches the confirm password field too
+        if isRegistering {
+            isFormValid = isFormValid && formValidationManager.isPassword(password, matching: confirmPassword)
         }
 
-        if !(0...65535 ~= serverPort) {
-            formIsValid = false
-        }
-
-        if username == nil || username!.isEmpty {
-            formIsValid = false
-        }
-
-        if password == nil || password!.isEmpty {
-            formIsValid = false
-        }
-
-        if isRegistering && password != confirmPassword {
-            formIsValid = false
-        }
-
-        footerView.isSubmitButtonEnabled = formIsValid
+        // Enable the 'submit' button if all is valid
+        loginView.footerView.isSubmitButtonEnabled = isFormValid
     }
 
-    private func submitLogin() {
-        footerView.isSubmitting = true
-        
+    private func submitLoginRequest() {
+        loginView.footerView.isSubmitting = true
         saveLoginCredentials()
-        
-        var authScheme = "http"
-        var scheme: String?
-        var formattedURL = serverURL
-        if let schemeRange = formattedURL?.range(of: "://") {
-            scheme = formattedURL?.substring(to: schemeRange.lowerBound)
-            if scheme == "realms" || scheme == "https" {
-                serverPort = 9443
-                authScheme = "https"
-            }
-            formattedURL = formattedURL?.substring(from: schemeRange.upperBound)
-        }
-        if let portRange = formattedURL?.range(of: ":") {
-            if let portString = formattedURL?.substring(from: portRange.upperBound) {
-                serverPort = Int(portString) ?? serverPort
-            }
-            formattedURL = formattedURL?.substring(to: portRange.lowerBound)
-        }
-        
+
+        guard let authenticationURL = authenticationRequestURL else { return }
+
         let credentials = RLMSyncCredentials(username: username!, password: password!, register: isRegistering)
-        RLMSyncUser.__logIn(with: credentials, authServerURL: URL(string: "\(authScheme)://\(formattedURL!):\(serverPort)")!, timeout: 30, onCompletion: { (user, error) in
+        RLMSyncUser.__logIn(with: credentials, authServerURL: authenticationURL, timeout: 30, onCompletion: { (user, error) in
             DispatchQueue.main.async {
-                self.footerView.isSubmitting = false
+                self.loginView.footerView.isSubmitting = false
                 
                 if let error = error {
-                    let alertController = UIAlertController(title: "Unable to Sign In", message: error.localizedDescription, preferredStyle: .alert)
-                    alertController.addAction(UIAlertAction(title: "Okay", style: .default, handler: nil))
-                    self.present(alertController, animated: true, completion: nil)
-                    
+                    self.showError(title: "Unable to Sign In", message: error.localizedDescription)
                     return
                 }
                 
@@ -727,7 +338,13 @@ public class LoginViewController: UIViewController, UITableViewDataSource, UITab
             }
         })
     }
-    
+
+    private func showError(title: String, message: String) {
+        let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        alertController.addAction(UIAlertAction(title: "Okay", style: .default, handler: nil))
+        self.present(alertController, animated: true, completion: nil)
+    }
+
     private func saveLoginCredentials() {
         let userDefaults = UserDefaults.standard
         
@@ -748,7 +365,7 @@ public class LoginViewController: UIViewController, UITableViewDataSource, UITab
     private func loadLoginCredentials() {
         let userDefaults = UserDefaults.standard
         serverURL = userDefaults.string(forKey: LoginViewController.serverURLKey)
-        username = userDefaults.string(forKey:  LoginViewController.emailKey)
+        username = userDefaults.string(forKey: LoginViewController.emailKey)
         password = userDefaults.string(forKey: LoginViewController.passwordKey)
     }
 }
