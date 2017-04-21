@@ -32,6 +32,10 @@ class LoginCredential: RLMObject {
     dynamic var username: String?
     dynamic var password: String?
 
+    override class func indexedProperties() -> [String] {
+        return ["serverURL", "username"]
+    }
+
     override class func shouldIncludeInDefaultSchema() -> Bool {
         return false
     }
