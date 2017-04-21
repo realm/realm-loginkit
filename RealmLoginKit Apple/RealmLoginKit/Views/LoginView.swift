@@ -331,6 +331,9 @@ class LoginView: UIView, UITableViewDelegate, UIViewControllerTransitioningDeleg
             return
         }
 
+        // Don't override the alpha if we're currently in an alpha animation
+        guard closeButton.layer.animation(forKey: "opacity") == nil else { return }
+
         let titleLabel = self.headerView.titleLabel
         let yOffset = titleLabel.frame.origin.y - tableView.contentOffset.y
         let thresholdY = closeButton.frame.maxY
