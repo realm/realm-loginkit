@@ -9,7 +9,7 @@
 import XCTest
 @testable import RealmLoginKitExample
 
-class RealmLoginKitViewControllerTests: XCTestCase {
+class LoginViewControllerTests: XCTestCase {
 
     func testLoginControllerCreation() {
         let controller = LoginViewController()
