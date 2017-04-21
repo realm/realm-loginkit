@@ -17,6 +17,7 @@
 ////////////////////////////////////////////////////////////////////////////
 
 import XCTest
+@testable import RealmLoginKitExample
 
 class LoginStringExtensionTests: XCTestCase {
     
