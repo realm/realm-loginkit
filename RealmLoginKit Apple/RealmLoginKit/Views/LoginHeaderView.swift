@@ -36,13 +36,13 @@ class LoginHeaderView: UIView {
     private let bottomMargin = 30 // Gap between the label and the bottom of the view
     private let logoSize = 100
 
-    private var _registering: Bool = false
+    private var _isRegistering: Bool = false
     var isRegistering: Bool {
         set {
             setRegistering(newValue, animated: false)
         }
         
-        get { return _registering }
+        get { return _isRegistering }
     }
     
     public var appName: String? {
@@ -120,12 +120,12 @@ class LoginHeaderView: UIView {
     
     //MARK: Register State Transition
     
-    func setRegistering(_ registering: Bool, animated: Bool) {
-        guard registering != _registering else {
+    func setRegistering(_ isRegistering: Bool, animated: Bool) {
+        guard isRegistering != _isRegistering else {
             return
         }
         
-        _registering = registering
+        _isRegistering = isRegistering
         
         if animated == false {
             updateTitleView()

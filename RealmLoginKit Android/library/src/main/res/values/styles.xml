@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="RealmButtonColored" parent="Widget.AppCompat.Button.Colored">
+        <item name="colorButtonNormal">#FB8C81</item>
+    </style>
+
+    <style name="RealmButtonColoredSub" parent="Widget.AppCompat.Button.Colored">
+        <item name="colorButtonNormal">#FBB782</item>
+    </style>
+
+</resources>
