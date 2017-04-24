@@ -14,6 +14,7 @@ namespace LoginKitForms
     {
         public LoginPage()
         {
+            BindingContext = LoginKitModel.LoginPageViewModel.GetInstance();
             InitializeComponent();
         }
     }
