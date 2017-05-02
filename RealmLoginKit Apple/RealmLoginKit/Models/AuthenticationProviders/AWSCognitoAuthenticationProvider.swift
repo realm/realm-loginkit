@@ -23,9 +23,9 @@ import AWSCognitoIdentityProvider
 
 class AWSCognitoAuthenticationProvider: NSObject, AuthenticationProvider, AWSCognitoIdentityInteractiveAuthenticationDelegate {
 
-    public var userName: String? = nil
+    public var username: String? = nil
     public var password: String? = nil
-    public var signingUp: Bool = false
+    public var isRegistering: Bool = false
 
     // AWS Account Credentials
     private let serviceRegion: AWSRegionType
@@ -53,9 +53,9 @@ class AWSCognitoAuthenticationProvider: NSObject, AuthenticationProvider, AWSCog
     }
 
     func authenticate(success: ((RLMSyncCredentials) -> Void)?, error: ((Error) -> Void)?) {
-        if self.signingUp {
-            let attributes = [AWSCognitoIdentityUserAttributeType(name: "email", value: userName!)]
-            self.userPool.signUp(userName!, password: password!, userAttributes: attributes, validationData: nil).continueWith(block: { task -> Any? in
+        if self.isRegistering {
+            let attributes = [AWSCognitoIdentityUserAttributeType(name: "email", value: username!)]
+            self.userPool.signUp(username!, password: password!, userAttributes: attributes, validationData: nil).continueWith(block: { task -> Any? in
                 DispatchQueue.main.async {
                     if (task.error != nil) {
                         error?(task.error!)
@@ -81,8 +81,8 @@ class AWSCognitoAuthenticationProvider: NSObject, AuthenticationProvider, AWSCog
             })
         }
         else {
-            let user = self.userPool.getUser(userName!)
-            user.getSession(userName!, password: password!, validationData: nil).continueWith(block: { task -> Any? in
+            let user = self.userPool.getUser(username!)
+            user.getSession(username!, password: password!, validationData: nil).continueWith(block: { task -> Any? in
                 DispatchQueue.main.async {
                     if (task.error != nil) {
                         error?(task.error!)
