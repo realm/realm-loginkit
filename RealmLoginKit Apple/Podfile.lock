@@ -1,17 +1,27 @@
 PODS:
+  - AWSCognito (2.5.5):
+    - AWSCore (= 2.5.5)
+  - AWSCognitoIdentityProvider (2.5.5):
+    - AWSCore (= 2.5.5)
+  - AWSCore (2.5.5)
   - Realm (2.5.0):
     - Realm/Headers (= 2.5.0)
   - Realm/Headers (2.5.0)
   - TORoundedTableView (0.0.3)
 
 DEPENDENCIES:
+  - AWSCognito
+  - AWSCognitoIdentityProvider
   - Realm
   - TORoundedTableView
 
 SPEC CHECKSUMS:
+  AWSCognito: 5f1dddb8669682b1224c19c214270a942e438b06
+  AWSCognitoIdentityProvider: 673bda0bc0f77cd1e2b0ab3c02095bc0b69b7603
+  AWSCore: 665371d51ccdfe62430c586e3cb8e57eff8ce09d
   Realm: 62abce501668580092d2be9b6ba7324a3d5f906a
   TORoundedTableView: 4155565233135d81d6626a0c4ecfba27991cf2b1
 
-PODFILE CHECKSUM: 08daeeb6cffe195e55f91dde03086960561cc56e
+PODFILE CHECKSUM: 7ef601323373122bd5e1507868ffeedb59bdc3ab
 
 COCOAPODS: 1.2.0

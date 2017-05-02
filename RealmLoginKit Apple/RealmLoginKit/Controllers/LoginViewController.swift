@@ -20,13 +20,43 @@ import UIKit
 import TORoundedTableView
 import Realm
 
+/** The visual styles in which the login controller can be displayed. */
 @objc public enum LoginViewControllerStyle: Int {
-    case lightTranslucent
-    case lightOpaque
-    case darkTranslucent
-    case darkOpaque
+    case lightTranslucent /* Light theme, with a translucent background showing the app content poking through. */
+    case lightOpaque      /* Light theme, with a solid background color. */
+    case darkTranslucent  /* Dark theme, with a translucent background showing the app content poking through. */
+    case darkOpaque       /* Dark theme, with a solid background color. */
 }
 
+/** A protocol for third party objects to integrate with and manage the authentication 
+    of user credentials. Used for integration with third party services like Amazon Cognito.
+ */
+@objc(RLMAuthenticationProvider)
+public protocol AuthenticationProvider: NSObjectProtocol {
+
+    /** The credentials captured by the login controller (if set) */
+    var username: String? { get set }
+    var password: String? { get set }
+    var isRegistering: Bool   { get set }
+
+    /**
+     The provider will asynchronously perform the necessary requests to obtain the
+     required information from the third party service that can then be used to
+     create an `RLMSynCredentials` object for input into the ROS Authentication server.
+     */
+    func authenticate(success: ((RLMSyncCredentials) -> Void)?, error: ((Error) -> Void)?)
+
+    /**
+     Not strictly required, but if the sign-in request needs to be cancelled,
+     this will be called to give the logic a chance to clean itself up.
+     */
+    func cancelAuthentication() -> Bool
+}
+
+/** 
+ A view controller showing an inpur form for logging into a Realm Object Server instance running
+ on a remote server.
+ */
 @objc(RLMLoginViewController)
 public class LoginViewController: UIViewController {
     
@@ -218,11 +248,6 @@ public class LoginViewController: UIViewController {
 
     /* A coordinator object for managing saving and retreiving previous login credential sets */
     private let savedCredentialsCoordinator = LoginPersistedCredentialsCoordinator()
-
-    /* User default keys for saving form data */
-    private static let serverURLKey = "RealmLoginServerURLKey"
-    private static let emailKey     = "RealmLoginEmailKey"
-    private static let passwordKey  = "RealmLoginPasswordKey"
 
     /* State Convienience Methods */
     private var isTranslucent: Bool  {
