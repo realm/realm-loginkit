@@ -40,14 +40,14 @@ public protocol AuthenticationProvider: NSObjectProtocol {
     var isRegistering: Bool   { get set }
 
     /**
-     The provider will asynchronously perform the necessary requests to obtain the
+     The provider will perform the necessary requests (asynchronously if desired) to obtain the
      required information from the third party service that can then be used to
      create an `RLMSynCredentials` object for input into the ROS Authentication server.
      */
     func authenticate(success: ((RLMSyncCredentials) -> Void)?, error: ((Error) -> Void)?)
 
     /**
-     Not strictly required, but if the sign-in request needs to be cancelled,
+     Not strictly required, but if the sign-in request is asynchronous and needs to be cancelled,
      this will be called to give the logic a chance to clean itself up.
      */
     func cancelAuthentication() -> Bool
@@ -302,14 +302,14 @@ public class LoginViewController: UIViewController {
         loginView.didTapCloseHandler = { self.dismiss(animated: true, completion: nil) }
         loginView.didTapLogInHandler = { self.submitLoginRequest() }
 
+        // Set up the handler for when the 'Register' button is tapped
+        loginView.didTapRegisterHandler = { self.setRegistering(!self.isRegistering, animated: true) }
+
         // Configure the keyboard manager for the login view
         keyboardManager.keyboardHeightDidChangeHandler = { newHeight in
             self.loginView.keyboardHeight = newHeight
             self.loginView.animateContentInsetTransition()
         }
-
-        // Set up the handler for when the 'Register' button is tapped
-        loginView.didTapRegisterHandler = { self.setRegistering(!self.isRegistering, animated: true) }
 
         loadLoginCredentials()
         prepareForSubmission()
