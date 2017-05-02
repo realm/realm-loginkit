@@ -216,6 +216,9 @@ public class LoginViewController: UIViewController {
     /* A model object to manage receiving keyboard resize events from the system. */
     private let keyboardManager = LoginKeyboardManager()
 
+    /* A coordinator object for managing saving and retreiving previous login credential sets */
+    private let savedCredentialsCoordinator = LoginPersistedCredentialsCoordinator()
+
     /* User default keys for saving form data */
     private static let serverURLKey = "RealmLoginServerURLKey"
     private static let emailKey     = "RealmLoginEmailKey"
@@ -288,6 +291,13 @@ public class LoginViewController: UIViewController {
         loginView.updateCloseButtonVisibility()
     }
 
+    private func loadLoginCredentials() {
+        guard let credentials = self.savedCredentialsCoordinator.allCredentialsObjects?.firstObject() else { return }
+        self.serverURL = credentials.serverURL
+        self.username = credentials.username
+        self.password = credentials.password
+    }
+
     func setRegistering(_ isRegistering: Bool, animated: Bool) {
         guard _isRegistering != isRegistering else {
             return
@@ -320,20 +330,26 @@ public class LoginViewController: UIViewController {
 
     private func submitLoginRequest() {
         loginView.footerView.isSubmitting = true
-        saveLoginCredentials()
 
         guard let authenticationURL = authenticationRequestURL else { return }
 
         let credentials = RLMSyncCredentials(username: username!, password: password!, register: isRegistering)
         RLMSyncUser.__logIn(with: credentials, authServerURL: authenticationURL, timeout: 30, onCompletion: { (user, error) in
             DispatchQueue.main.async {
-                self.loginView.footerView.isSubmitting = false
-                
+                // Display an error message if the login failed
                 if let error = error {
+                    self.loginView.footerView.isSubmitting = false
                     self.showError(title: "Unable to Sign In", message: error.localizedDescription)
                     return
                 }
-                
+
+                // Save the credentials so they can be re-used next time
+                if self.rememberLogin {
+                    try! self.savedCredentialsCoordinator.saveCredentials(serverURL: self.serverURL!, username: self.username!,
+                                                                          password: self.password!)
+                }
+
+                // Inform the parent that the login was successful
                 self.loginSuccessfulHandler?(user!)
             }
         })
@@ -343,29 +359,5 @@ public class LoginViewController: UIViewController {
         let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
         alertController.addAction(UIAlertAction(title: "Okay", style: .default, handler: nil))
         self.present(alertController, animated: true, completion: nil)
-    }
-
-    private func saveLoginCredentials() {
-        let userDefaults = UserDefaults.standard
-        
-        if rememberLogin {
-            userDefaults.set(serverURL, forKey: LoginViewController.serverURLKey)
-            userDefaults.set(username, forKey: LoginViewController.emailKey)
-            userDefaults.set(password, forKey: LoginViewController.passwordKey)
-        }
-        else {
-            userDefaults.set(nil, forKey: LoginViewController.serverURLKey)
-            userDefaults.set(nil, forKey: LoginViewController.emailKey)
-            userDefaults.set(nil, forKey: LoginViewController.passwordKey)
-        }
-        
-        userDefaults.synchronize()
-    }
-    
-    private func loadLoginCredentials() {
-        let userDefaults = UserDefaults.standard
-        serverURL = userDefaults.string(forKey: LoginViewController.serverURLKey)
-        username = userDefaults.string(forKey: LoginViewController.emailKey)
-        password = userDefaults.string(forKey: LoginViewController.passwordKey)
     }
 }

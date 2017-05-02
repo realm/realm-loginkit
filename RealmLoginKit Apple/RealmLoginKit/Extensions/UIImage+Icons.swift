@@ -58,6 +58,56 @@ extension UIImage {
         return image!.withRenderingMode(.alwaysTemplate)
     }
 
+    public class func histroyIcon() -> UIImage {
+        UIGraphicsBeginImageContextWithOptions(CGSize(width: 20, height: 20), false, 0.0)
+
+        //// Color Declarations
+        let fillColor = UIColor(red: 0.000, green: 0.000, blue: 0.000, alpha: 1.000)
+
+        //// ArrowBody Drawing
+        let arrowBodyPath = UIBezierPath()
+        arrowBodyPath.move(to: CGPoint(x: 1.75, y: 5.73))
+        arrowBodyPath.addCurve(to: CGPoint(x: 4.54, y: 2.65), controlPoint1: CGPoint(x: 2.43, y: 4.51), controlPoint2: CGPoint(x: 3.38, y: 3.45))
+        arrowBodyPath.addCurve(to: CGPoint(x: 9.83, y: 1), controlPoint1: CGPoint(x: 6.03, y: 1.61), controlPoint2: CGPoint(x: 7.86, y: 1))
+        arrowBodyPath.addCurve(to: CGPoint(x: 19, y: 10), controlPoint1: CGPoint(x: 14.89, y: 1), controlPoint2: CGPoint(x: 19, y: 5.03))
+        arrowBodyPath.addCurve(to: CGPoint(x: 9.83, y: 19), controlPoint1: CGPoint(x: 19, y: 14.97), controlPoint2: CGPoint(x: 14.89, y: 19))
+        arrowBodyPath.addCurve(to: CGPoint(x: 1, y: 12.44), controlPoint1: CGPoint(x: 5.63, y: 19), controlPoint2: CGPoint(x: 2.08, y: 16.22))
+        fillColor.setStroke()
+        arrowBodyPath.lineWidth = 2
+        arrowBodyPath.lineCapStyle = .round
+        arrowBodyPath.stroke()
+
+
+        //// ArrowCap Drawing
+        let arrowCapPath = UIBezierPath()
+        arrowCapPath.move(to: CGPoint(x: 5.11, y: 5.82))
+        arrowCapPath.addLine(to: CGPoint(x: 1.7, y: 6.43))
+        arrowCapPath.addLine(to: CGPoint(x: 1, y: 2.94))
+        fillColor.setStroke()
+        arrowCapPath.lineWidth = 2
+        arrowCapPath.lineCapStyle = .round
+        arrowCapPath.lineJoinStyle = .round
+        arrowCapPath.stroke()
+
+
+        //// ClockHands Drawing
+        let clockHandsPath = UIBezierPath()
+        clockHandsPath.move(to: CGPoint(x: 10, y: 5))
+        clockHandsPath.addLine(to: CGPoint(x: 10, y: 10.36))
+        clockHandsPath.addLine(to: CGPoint(x: 13.5, y: 13.69))
+        fillColor.setStroke()
+        clockHandsPath.lineWidth = 2
+        clockHandsPath.lineCapStyle = .round
+        clockHandsPath.lineJoinStyle = .round
+        clockHandsPath.stroke()
+
+        let image = UIGraphicsGetImageFromCurrentImageContext()
+
+        UIGraphicsEndImageContext()
+
+        return image!.withRenderingMode(.alwaysTemplate)
+    }
+
     public class func mailIcon() -> UIImage {
         UIGraphicsBeginImageContextWithOptions(CGSize(width: 20, height: 15), false, 0.0)
         
