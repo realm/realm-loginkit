@@ -299,10 +299,9 @@ public class LoginViewController: UIViewController {
         tableDataSource.tableView = loginView.tableView
         tableDataSource.formInputChangedHandler = { self.prepareForSubmission() }
 
+        // Set callbacks for the accessory view buttons
         loginView.didTapCloseHandler = { self.dismiss(animated: true, completion: nil) }
         loginView.didTapLogInHandler = { self.submitLoginRequest() }
-
-        // Set up the handler for when the 'Register' button is tapped
         loginView.didTapRegisterHandler = { self.setRegistering(!self.isRegistering, animated: true) }
 
         // Configure the keyboard manager for the login view
