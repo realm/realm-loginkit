@@ -30,16 +30,16 @@ class LoginPersistedCredentialsCoordinator: NSObject {
     public var allCredentialsObjects: RLMArray<LoginCredentials>? {
         guard realmFileExists else { return nil }
         guard let loginCredentialsList = LoginCredentialsList.allObjects(in: credentialsRealm).firstObject() else { return nil }
-        return (loginCredentialsList as! LoginCredentialsList).credentialsList
+        return (loginCredentialsList as! LoginCredentialsList).credentialsList as? RLMArray<LoginCredentials>
     }
 
     public func saveCredentials(serverURL: String, username: String, password: String) throws {
         let realm = credentialsRealm
-        let credentialsList = self.credentialsList.credentialsList!
+        let credentialsList = self.credentialsList.credentialsList
 
         // See if an object with the same username and server URL exists
         let serverHost = serverURL.URLHost
-        var credentials = LoginCredentials.objects(in: realm, where: "ANY serverURL CONTAINS[c] %@ AND username == [c] %@", serverHost, username).firstObject() as? LoginCredentials
+        var credentials = LoginCredentials.objects(in: realm, where: "serverURL CONTAINS[c] %@ AND username ==[c] %@", serverHost, username).firstObject() as? LoginCredentials
         if credentials == nil {
             credentials = LoginCredentials()
         }
@@ -67,7 +67,7 @@ class LoginPersistedCredentialsCoordinator: NSObject {
 
     /** The file path to where the credentials file is saved. Placed in the 'Application Support' directory. */
     lazy var realmFileURL: URL = {
-        return FileManager.default.applicationSupportDirectoryURL.appendingPathComponent(self.realmFileName)
+        return FileManager.default.applicationLibraryDirectoryURL.appendingPathComponent(self.realmFileName)
     }()
 
     /** Generates the Realm configuration object that will manage this credentials Realm. */
@@ -75,7 +75,9 @@ class LoginPersistedCredentialsCoordinator: NSObject {
         let configuration = RLMRealmConfiguration.default()
         configuration.fileURL = self.realmFileURL
         configuration.objectClasses = [LoginCredentialsList.self, LoginCredentials.self]
+#if !(arch(i386) || arch(x86_64)) && os(iOS)
         configuration.encryptionKey = LoginPersistedCredentialsCoordinator.getEncryptionKey()
+#endif
         return configuration
     }()
 
