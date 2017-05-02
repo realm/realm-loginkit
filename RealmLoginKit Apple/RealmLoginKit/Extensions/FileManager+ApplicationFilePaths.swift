@@ -19,7 +19,7 @@
 import Foundation
 
 extension FileManager {
-    public var applicationSupportDirectoryURL: URL {
-        return self.urls(for: .applicationSupportDirectory, in: .userDomainMask).first!
+    public var applicationLibraryDirectoryURL: URL {
+        return self.urls(for: .libraryDirectory, in: .userDomainMask).first!
     }
 }
