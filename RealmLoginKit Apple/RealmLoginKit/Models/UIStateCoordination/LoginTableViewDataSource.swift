@@ -265,11 +265,9 @@ class LoginTableViewDataSource: NSObject, UITableViewDataSource {
         // Insert/Delete the 'confirm password' field
         if _isRegistering {
             tableView?.insertRows(at: [IndexPath(row: rowIndex, section: 0)], with: animated ? .fade : .none)
-            tableView?.reloadRows(at: [IndexPath(row: rowIndex - 1, section: 0)], with: .none)
         }
         else {
             tableView?.deleteRows(at: [IndexPath(row: rowIndex, section: 0)], with: animated ? .fade : .none)
-            tableView?.reloadRows(at: [IndexPath(row: rowIndex - 1, section: 0)], with: .none)
         }
     }
 
