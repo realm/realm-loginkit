@@ -344,9 +344,10 @@ public class LoginViewController: UIViewController {
                 }
 
                 // Save the credentials so they can be re-used next time
-                try! self.savedCredentialsCoordinator.saveCredentials(serverURL: self.serverURL!,
-                                                                      username: self.username!,
-                                                                      password: self.password!)
+                if self.rememberLogin {
+                    try! self.savedCredentialsCoordinator.saveCredentials(serverURL: self.serverURL!, username: self.username!,
+                                                                          password: self.password!)
+                }
 
                 // Inform the parent that the login was successful
                 self.loginSuccessfulHandler?(user!)
