@@ -19,15 +19,15 @@
 import UIKit
 import Realm
 
-class LoginCredentialList: RLMObject {
-    dynamic var credentialList: RLMArray<LoginCredential>?
+class LoginCredentialsList: RLMObject {
+    dynamic var credentialsList: RLMArray<LoginCredentials>?
 
     override class func shouldIncludeInDefaultSchema() -> Bool {
         return false
     }
 }
 
-class LoginCredential: RLMObject {
+class LoginCredentials: RLMObject {
     dynamic var serverURL: String?
     dynamic var username: String?
     dynamic var password: String?

@@ -22,9 +22,42 @@ import Realm
 class LoginPersistedCredentialsCoordinator: NSObject {
 
     //MARK: - Public Properties -
-    public var numberOfSavedCrendentialObjects: UInt {
+    public var numberOfSavedCrendentialsObjects: UInt {
         guard realmFileExists else { return 0 }
-        return LoginCredential.allObjects(in: credentialsRealm).count
+        return LoginCredentials.allObjects(in: credentialsRealm).count
+    }
+
+    public var allCredentialsObjects: RLMArray<LoginCredentials>? {
+        guard realmFileExists else { return nil }
+        guard let loginCredentialsList = LoginCredentialsList.allObjects(in: credentialsRealm).firstObject() else { return nil }
+        return (loginCredentialsList as! LoginCredentialsList).credentialsList
+    }
+
+    public func saveCredentials(serverURL: String, username: String, password: String) throws {
+        let realm = credentialsRealm
+        let credentialsList = self.credentialsList.credentialsList!
+
+        // See if an object with the same username and server URL exists
+        let serverHost = serverURL.URLHost
+        var credentials = LoginCredentials.objects(in: realm, where: "ANY serverURL CONTAINS[c] %@ AND username == [c] %@", serverHost, username).firstObject() as? LoginCredentials
+        if credentials == nil {
+            credentials = LoginCredentials()
+        }
+
+        // Update the object, and move it to the front of the credentials list
+        try realm.transaction {
+            credentials!.serverURL = serverURL
+            credentials!.username = username
+            credentials!.password = password
+
+            let index = credentialsList.index(of: credentials!)
+            if index != UInt(NSNotFound) {
+                credentialsList.moveObject(at: index, to: 0)
+            }
+            else {
+                credentialsList.insert(credentials!, at: 0)
+            }
+        }
     }
 
     //MARK: - Private Realm Setup Properties -
@@ -41,7 +74,7 @@ class LoginPersistedCredentialsCoordinator: NSObject {
     lazy var credentialsRealmConfiguration: RLMRealmConfiguration = {
         let configuration = RLMRealmConfiguration.default()
         configuration.fileURL = self.realmFileURL
-        configuration.objectClasses = [LoginCredentialList.self, LoginCredential.self]
+        configuration.objectClasses = [LoginCredentialsList.self, LoginCredentials.self]
         configuration.encryptionKey = LoginPersistedCredentialsCoordinator.getEncryptionKey()
         return configuration
     }()
@@ -54,6 +87,20 @@ class LoginPersistedCredentialsCoordinator: NSObject {
     /** Create a new instance of the credentials Realm */
     private var credentialsRealm: RLMRealm {
         return try! RLMRealm(configuration: credentialsRealmConfiguration)
+    }
+
+    private var credentialsList: LoginCredentialsList {
+        let realm = credentialsRealm
+        if let credentialsList = LoginCredentialsList.allObjects(in: realm).firstObject() {
+            return credentialsList as! LoginCredentialsList
+        }
+
+        let newCredentialsList = LoginCredentialsList()
+        try! realm.transaction {
+            realm.add(newCredentialsList)
+        }
+
+        return newCredentialsList
     }
 
     // MARK: - Security Keychain Interaction -
