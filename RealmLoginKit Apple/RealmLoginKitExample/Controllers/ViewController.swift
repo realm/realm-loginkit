@@ -55,7 +55,9 @@ class ViewController: UIViewController {
     @IBAction func showLoginButtonTapped(_ sender: AnyObject?) {
         let style: LoginViewControllerStyle = isDarkMode ? .darkTranslucent : .lightTranslucent
         let loginViewController = LoginViewController(style: style)
-        //loginViewController.authenticationProvider = AWSCognitoAuthenticationProvider(serviceRegion: .USEast1, userPoolID: "", clientID: "")
+//        loginViewController.authenticationProvider = AWSCognitoAuthenticationProvider(serviceRegion: .USEast1, userPoolID: "",
+//                                                                                      clientID: "",
+//                                                                                      clientSecret: "")
         loginViewController.isCancelButtonHidden = false
         loginViewController.loginSuccessfulHandler = { user in
             loginViewController.presentingViewController?.dismiss(animated: true, completion: nil)
