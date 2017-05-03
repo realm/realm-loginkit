@@ -23,6 +23,7 @@ import AWSCognitoIdentityProvider
 
 class AWSCognitoAuthenticationProvider: NSObject, AuthenticationProvider, AWSCognitoIdentityInteractiveAuthenticationDelegate {
 
+    // Authentican Provider Input Credentials
     public var username: String? = nil
     public var password: String? = nil
     public var isRegistering: Bool = false
@@ -31,20 +32,21 @@ class AWSCognitoAuthenticationProvider: NSObject, AuthenticationProvider, AWSCog
     private let serviceRegion: AWSRegionType
     private let userPoolID: String
     private let clientID: String
-
     private let userPool: AWSCognitoIdentityUserPool
 
-    public var shouldExposeURL: Bool { return false }
+    // Task token to let us cancel requests as needed
+    private var cancellationTokenSource: AWSCancellationTokenSource?
 
     init(serviceRegion: AWSRegionType, userPoolID: String, clientID: String, clientSecret: String) {
+        // Capture the Cognito account tokens + settings
         self.serviceRegion = serviceRegion
         self.userPoolID = userPoolID
         self.clientID = clientID
 
+        // Access the User Pool object containing our users
         let serviceConfiguration = AWSServiceConfiguration(region: self.serviceRegion, credentialsProvider: nil)
         let poolConfiguration = AWSCognitoIdentityUserPoolConfiguration(clientId: self.clientID, clientSecret: clientSecret, poolId: self.userPoolID)
-
-        AWSCognitoIdentityUserPool.register(with: serviceConfiguration, userPoolConfiguration:poolConfiguration, forKey:"RealmLoginKit")
+        AWSCognitoIdentityUserPool.register(with: serviceConfiguration, userPoolConfiguration: poolConfiguration, forKey:"RealmLoginKit")
         self.userPool = AWSCognitoIdentityUserPool(forKey: "RealmLoginKit")
 
         super.init()
@@ -52,54 +54,83 @@ class AWSCognitoAuthenticationProvider: NSObject, AuthenticationProvider, AWSCog
         self.userPool.delegate = self
     }
 
-    func authenticate(success: ((RLMSyncCredentials) -> Void)?, error: ((Error) -> Void)?) {
+    func cancelAuthentication() {
+        cancellationTokenSource?.cancel()
+    }
+
+    func authenticate(onCompletion: ((RLMSyncCredentials?, Error?) -> Void)?) {
+        // Cancel any previous operations if they are still pending
+        cancellationTokenSource?.cancel()
+        cancellationTokenSource = nil
+
+        // Create a new cancellation token source
+        cancellationTokenSource = AWSCancellationTokenSource()
+
+        // Trigger either a new reigstration or an existing login
         if self.isRegistering {
-            let attributes = [AWSCognitoIdentityUserAttributeType(name: "email", value: username!)]
-            self.userPool.signUp(username!, password: password!, userAttributes: attributes, validationData: nil).continueWith(block: { task -> Any? in
-                DispatchQueue.main.async {
-                    if (task.error != nil) {
-                        error?(task.error!)
-                        return
-                    }
-
-                    let response = task.result!
-                    response.user.getSession().continueWith(block: { task -> Any? in
-                        DispatchQueue.main.async {
-                            if (task.error != nil) {
-                                error?(task.error!)
-                                return
-                            }
-
-                            let session = task.result!
-                            print("Access token is \(session.accessToken!)")
-                        }
-                        return nil
-                    })
-                }
-
-                return nil
-            })
+            registerNewAccount(onCompletion: onCompletion)
         }
         else {
-            let user = self.userPool.getUser(username!)
-            user.getSession(username!, password: password!, validationData: nil).continueWith(block: { task -> Any? in
-                DispatchQueue.main.async {
-                    if (task.error != nil) {
-                        error?(task.error!)
-                        return
-                    }
-
-                    let userSession = task.result!
-                    let credentials = RLMSyncCredentials(customToken: userSession.accessToken!.tokenString, provider: RLMIdentityProvider(rawValue: "fooauth"), userInfo: nil)
-                    success?(credentials)
-                }
-
-                return nil
-            })
+            logIntoExistingAccount(onCompletion: onCompletion)
         }
     }
 
-    func cancelAuthentication() -> Bool {
-        return true
+    private func registerNewAccount(onCompletion: ((RLMSyncCredentials?, Error?) -> Void)?) {
+        // Any additional, potentially required attributes submitted along with the username and password credentials
+        let attributes = [AWSCognitoIdentityUserAttributeType(name: "email", value: username!)]
+
+        // The block called when the response from the user session request is complete
+        let getUserSessionBlock: ((AWSTask<AWSCognitoIdentityUserSession>) -> Void) = { task in
+            if (task.error != nil) {
+                onCompletion?(nil, task.error!)
+                return
+            }
+
+            let session = task.result!
+            print("Access token is \(session.accessToken!). Please 'confirm' user from the dashboard to continue.")
+        }
+
+        // The block called when the response from a signup request is received
+        let signUpBlock: ((AWSTask<AWSCognitoIdentityUserPoolSignUpResponse>) -> Void) = { task in
+            if (task.error != nil) {
+                onCompletion?(nil, task.error!)
+                return
+            }
+
+            let response = task.result!
+            response.user.getSession().continueWith(block: { task -> Any? in
+                DispatchQueue.main.async { getUserSessionBlock(task) }
+                return nil
+            }, cancellationToken: self.cancellationTokenSource!.token)
+        }
+
+        // Make the initial signup request to the Cognito User Pool
+        self.userPool.signUp(username!, password: password!, userAttributes: attributes, validationData: nil).continueWith(block: { task -> Any? in
+            DispatchQueue.main.async { signUpBlock(task) }
+            return nil
+        }, cancellationToken: cancellationTokenSource!.token)
+    }
+
+    private func logIntoExistingAccount(onCompletion: ((RLMSyncCredentials?, Error?) -> Void)?) {
+        // Set up the block that will be called when we get a response from the server
+        let getUserSessionBlock: ((AWSTask<AWSCognitoIdentityUserSession>) -> Void) = { task in
+            if (task.error != nil) {
+                onCompletion?(nil, task.error!)
+                return
+            }
+
+            let userSession = task.result!
+
+            // Extract the token from the user session and set up the resulting SyncCredentials objects
+            let credentials = RLMSyncCredentials(customToken: userSession.accessToken!.tokenString, provider: RLMIdentityProvider(rawValue: "cognito"), userInfo: nil)
+            onCompletion?(credentials, nil)
+        }
+
+        // Perform the login request
+        let user = self.userPool.getUser(username!)
+        user.getSession(username!, password: password!, validationData: nil).continueWith(block: { task -> Any? in
+            DispatchQueue.main.async { getUserSessionBlock(task) }
+            return nil
+        }, cancellationToken: cancellationTokenSource!.token)
     }
 }
