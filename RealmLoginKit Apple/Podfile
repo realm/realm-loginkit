@@ -5,6 +5,8 @@ def shared_pods
     # Pods for RealmLoginKit
   pod 'TORoundedTableView'
   pod 'Realm'
+  pod 'AWSCognito'
+  pod 'AWSCognitoIdentityProvider'
 end 
 
 target 'RealmLoginKitExample' do

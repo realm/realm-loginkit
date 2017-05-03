@@ -20,13 +20,43 @@ import UIKit
 import TORoundedTableView
 import Realm
 
+/** The visual styles in which the login controller can be displayed. */
 @objc public enum LoginViewControllerStyle: Int {
-    case lightTranslucent
-    case lightOpaque
-    case darkTranslucent
-    case darkOpaque
+    case lightTranslucent /* Light theme, with a translucent background showing the app content poking through. */
+    case lightOpaque      /* Light theme, with a solid background color. */
+    case darkTranslucent  /* Dark theme, with a translucent background showing the app content poking through. */
+    case darkOpaque       /* Dark theme, with a solid background color. */
 }
 
+/** A protocol for third party objects to integrate with and manage the authentication 
+    of user credentials. Used for integration with third party services like Amazon Cognito.
+ */
+@objc(RLMAuthenticationProvider)
+public protocol AuthenticationProvider: NSObjectProtocol {
+
+    /** The credentials captured by the login controller (if set) */
+    var username: String? { get set }
+    var password: String? { get set }
+    var isRegistering: Bool   { get set }
+
+    /**
+     The provider will perform the necessary requests (asynchronously if desired) to obtain the
+     required information from the third party service that can then be used to
+     create an `RLMSynCredentials` object for input into the ROS Authentication server.
+     */
+    func authenticate(onCompletion: ((RLMSyncCredentials?, Error?) -> Void)?)
+
+    /**
+     Not strictly required, but if the sign-in request is asynchronous and needs to be cancelled,
+     this will be called to give the logic a chance to clean itself up.
+     */
+    func cancelAuthentication() -> Void
+}
+
+/** 
+ A view controller showing an inpur form for logging into a Realm Object Server instance running
+ on a remote server.
+ */
 @objc(RLMLoginViewController)
 public class LoginViewController: UIViewController {
     
@@ -193,6 +223,14 @@ public class LoginViewController: UIViewController {
     }
 
     /**
+     When integrating with third party services that require another web service to
+     verify the credentials before they are submitted to the Realm authentication server,
+     this property can be set to an object capable of performing this request and generation
+     the subsequent `RLMSyncCredentials` objects.
+    */
+    public var authenticationProvider: AuthenticationProvider?
+
+    /**
      A model object that exposes the input validation logic of the form
      */
     public lazy var formValidationManager: LoginCredentialsValidationProtocol = LoginCredentialsValidation()
@@ -218,11 +256,6 @@ public class LoginViewController: UIViewController {
 
     /* A coordinator object for managing saving and retreiving previous login credential sets */
     private let savedCredentialsCoordinator = LoginPersistedCredentialsCoordinator()
-
-    /* User default keys for saving form data */
-    private static let serverURLKey = "RealmLoginServerURLKey"
-    private static let emailKey     = "RealmLoginEmailKey"
-    private static let passwordKey  = "RealmLoginPasswordKey"
 
     /* State Convienience Methods */
     private var isTranslucent: Bool  {
@@ -254,6 +287,10 @@ public class LoginViewController: UIViewController {
         super.init(coder: aDecoder)
     }
 
+    deinit {
+        authenticationProvider?.cancelAuthentication()
+    }
+
     //MARK: - View Management
 
     override public func loadView() {
@@ -274,17 +311,16 @@ public class LoginViewController: UIViewController {
         tableDataSource.tableView = loginView.tableView
         tableDataSource.formInputChangedHandler = { self.prepareForSubmission() }
 
+        // Set callbacks for the accessory view buttons
         loginView.didTapCloseHandler = { self.dismiss(animated: true, completion: nil) }
         loginView.didTapLogInHandler = { self.submitLoginRequest() }
+        loginView.didTapRegisterHandler = { self.setRegistering(!self.isRegistering, animated: true) }
 
         // Configure the keyboard manager for the login view
         keyboardManager.keyboardHeightDidChangeHandler = { newHeight in
             self.loginView.keyboardHeight = newHeight
             self.loginView.animateContentInsetTransition()
         }
-
-        // Set up the handler for when the 'Register' button is tapped
-        loginView.didTapRegisterHandler = { self.setRegistering(!self.isRegistering, animated: true) }
 
         loadLoginCredentials()
         prepareForSubmission()
@@ -329,30 +365,63 @@ public class LoginViewController: UIViewController {
     }
 
     private func submitLoginRequest() {
+        // Show the spinner view on the login button
         loginView.footerView.isSubmitting = true
 
+        // Make sure we have a valid URL for the Realm Authentication Server
         guard let authenticationURL = authenticationRequestURL else { return }
 
-        let credentials = RLMSyncCredentials(username: username!, password: password!, register: isRegistering)
-        RLMSyncUser.__logIn(with: credentials, authServerURL: authenticationURL, timeout: 30, onCompletion: { (user, error) in
-            DispatchQueue.main.async {
-                // Display an error message if the login failed
-                if let error = error {
-                    self.loginView.footerView.isSubmitting = false
-                    self.showError(title: "Unable to Sign In", message: error.localizedDescription)
+        // Create the callback block that will perform the request
+        let logInBlock: ((RLMSyncCredentials) -> Void) = { credentials in
+            RLMSyncUser.__logIn(with: credentials, authServerURL: authenticationURL, timeout: 30, onCompletion: { (user, error) in
+                DispatchQueue.main.async {
+                    // Display an error message if the login failed
+                    if let error = error {
+                        self.loginView.footerView.isSubmitting = false
+                        self.showError(title: "Unable to Sign In", message: error.localizedDescription)
+                        return
+                    }
+
+                    // Save the credentials so they can be re-used next time
+                    if self.rememberLogin {
+                        try! self.savedCredentialsCoordinator.saveCredentials(serverURL: self.serverURL!, username: self.username!,
+                                                                              password: self.password!)
+                    }
+
+                    // Inform the parent that the login was successful
+                    self.loginSuccessfulHandler?(user!)
+                }
+            })
+        }
+
+        // If an authentication provider was supplied, allow it to perform the necessary requests to generate a credentials object
+        if let authenticationProvider = self.authenticationProvider {
+            // Copy over the current credentials
+            authenticationProvider.username = self.username!
+            authenticationProvider.password = self.password!
+            authenticationProvider.isRegistering = self.isRegistering
+
+            // Perform the request
+            authenticationProvider.authenticate { credentials, error in
+                // The credentials were successfully generated by the provider
+                if let credentials = credentials {
+                    logInBlock(credentials)
                     return
                 }
 
-                // Save the credentials so they can be re-used next time
-                if self.rememberLogin {
-                    try! self.savedCredentialsCoordinator.saveCredentials(serverURL: self.serverURL!, username: self.username!,
-                                                                          password: self.password!)
+                // Show an error dialog if an error was supplied
+                if let error = error {
+                    self.showError(title: "Unable to Sign In", message: error.localizedDescription)
                 }
 
-                // Inform the parent that the login was successful
-                self.loginSuccessfulHandler?(user!)
+                // Hide the spinning indicator
+                self.loginView.footerView.isSubmitting = false
             }
-        })
+        }
+        else {
+            let credentials = RLMSyncCredentials(username: username!, password: password!, register: isRegistering)
+            logInBlock(credentials)
+        }
     }
 
     private func showError(title: String, message: String) {
