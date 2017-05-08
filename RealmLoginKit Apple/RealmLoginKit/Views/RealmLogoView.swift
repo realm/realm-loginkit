@@ -25,7 +25,7 @@ enum RealmLogoStyle {
 }
 
 @IBDesignable
-class RealmLogoView: UIView
+public class RealmLogoView: UIView
 {
     /** Set the visual style of the Realm logo */
     @IBInspectable var style: RealmLogoStyle = .colored {
