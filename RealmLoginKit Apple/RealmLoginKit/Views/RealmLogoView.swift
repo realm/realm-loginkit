@@ -53,12 +53,12 @@ public class RealmLogoView: UIView
         self.contentMode = .redraw
     }
     
-    required init?(coder aDecoder: NSCoder) {
+    required public init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
         self.contentMode = .redraw
     }
     
-    override func draw(_ rect: CGRect) {
+    override public func draw(_ rect: CGRect) {
         super.draw(rect)
         
         if style == .monochrome {
@@ -79,7 +79,7 @@ public class RealmLogoView: UIView
         }
     }
     
-    override func sizeToFit() {
+    override public func sizeToFit() {
         var resizedFrame = frame
         
         // size to a square if the word mark is hidden
