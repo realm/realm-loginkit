@@ -7,7 +7,7 @@ PODS:
   - Realm (2.7.0):
     - Realm/Headers (= 2.7.0)
   - Realm/Headers (2.7.0)
-  - RealmLoginKit/AWSCognito (0.0.13):
+  - RealmLoginKit/AWSCognito (0.0.14):
     - AWSCognito
     - AWSCognitoIdentityProvider
     - Realm
@@ -26,9 +26,9 @@ SPEC CHECKSUMS:
   AWSCognitoIdentityProvider: 44b0e11aea801bb7dbe810a7f2cf21374d8e225b
   AWSCore: 47109d026cdbc1272624caa73114fbdd2ba3ad66
   Realm: 07e5d3a9e0e41d65fd5f9f05150ed6295d0f093b
-  RealmLoginKit: dd4a2bfe9adf5f6ac98ef8ba7f454b0767b8bc39
+  RealmLoginKit: ef2555fa26f372605b868292e4eb2a65a6ad8153
   TORoundedTableView: 4155565233135d81d6626a0c4ecfba27991cf2b1
 
-PODFILE CHECKSUM: 3e928767027fc1a028f5308d865518f6c5b2790b
+PODFILE CHECKSUM: febd7f575639d5b8092e87f3ca794673f94762d1
 
-COCOAPODS: 1.2.0
+COCOAPODS: 1.2.1

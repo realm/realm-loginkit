@@ -13,12 +13,12 @@ Pod::Spec.new do |s|
   s.dependency 'TORoundedTableView'
   
   s.subspec 'Core' do |core|
-    core.source_files = 'RealmLoginKit Apple/RealmLoginKit/**/*.{swift}', 'RealmLoginKit/**/*.{swift}'
-    core.exclude_files = 'RealmLoginKit/Models/AuthenticationProviders/*'
+    core.source_files = '**/RealmLoginKit/**/*.{swift}'
+    core.exclude_files = '**/RealmLoginKit/Models/AuthenticationProviders/*'
   end
   
   s.subspec 'AWSCognito' do |aws|
-    aws.source_files = 'RealmLoginKit Apple/RealmLoginKit/**/*.{swift}', 'RealmLoginKit/**/*.{swift}'
+    aws.source_files = '**/RealmLoginKit/**/*.{swift}'
     aws.dependency 'AWSCognito'
     aws.dependency 'AWSCognitoIdentityProvider'
   end
