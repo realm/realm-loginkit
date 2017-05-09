@@ -18,7 +18,6 @@
 
 import UIKit
 import Realm
-import AWSCore
 import AWSCognitoIdentityProvider
 
 class AWSCognitoAuthenticationProvider: NSObject, AuthenticationProvider, AWSCognitoIdentityInteractiveAuthenticationDelegate {
