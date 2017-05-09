@@ -8,16 +8,17 @@ Pod::Spec.new do |s|
   s.source   = { :git => 'https://github.com/realm-demos/realm-loginkit.git', :tag => s.version.to_s }
   s.requires_arc = true
   s.platform = :ios, '9.0'
-  s.source_files = 'RealmLoginKit Apple/RealmLoginKit/**/*.{swift}', 'RealmLoginKit/**/*.{swift}'
   s.default_subspec = 'Core'
   s.dependency 'Realm'
   s.dependency 'TORoundedTableView'
-
+  
   s.subspec 'Core' do |core|
-    s.exclude_files = 'RealmLoginKit/Models/AuthenticationProviders/*'
+    core.source_files = 'RealmLoginKit Apple/RealmLoginKit/**/*.{swift}', 'RealmLoginKit/**/*.{swift}'
+    core.exclude_files = 'RealmLoginKit/Models/AuthenticationProviders/*'
   end
   
   s.subspec 'AWSCognito' do |aws|
+    aws.source_files = 'RealmLoginKit Apple/RealmLoginKit/**/*.{swift}', 'RealmLoginKit/**/*.{swift}'
     aws.dependency 'AWSCognito'
     aws.dependency 'AWSCognitoIdentityProvider'
   end

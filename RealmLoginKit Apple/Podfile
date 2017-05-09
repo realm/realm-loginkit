@@ -2,7 +2,7 @@
 # platform :ios, '9.0'
 
 def shared_pods
-  pod 'RealmLoginKit', :path => 'RealmLoginKit.podspec'
+  pod 'RealmLoginKit/AWSCognito', :path => 'RealmLoginKit.podspec'
 end 
 
 target 'RealmLoginKitExample' do
