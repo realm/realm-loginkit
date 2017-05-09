@@ -45,7 +45,7 @@ public class RealmLogoView: UIView
     @IBInspectable public var logoStrokeWidth: Double = 8.0
 
     
-    init(frame: CGRect, style: RealmLogoStyle = .colored, wordMarkHidden: Bool = false) {
+    public init(frame: CGRect, style: RealmLogoStyle = .colored, wordMarkHidden: Bool = false) {
         self.style = style
         self.isWordMarkHidden = wordMarkHidden
         super.init(frame: frame)
