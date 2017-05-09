@@ -277,8 +277,11 @@ public class LoginViewController: UIViewController {
     public init(style: LoginViewControllerStyle) {
         super.init(nibName: nil, bundle: nil)
         self.style = style
+        modalPresentationStyle = isTranslucent ? .overFullScreen : .fullScreen
+        modalTransitionStyle = .crossDissolve
+        modalPresentationCapturesStatusBarAppearance = true
     }
-    
+
     convenience init() {
         self.init(style: .lightTranslucent)
     }
@@ -302,9 +305,6 @@ public class LoginViewController: UIViewController {
         super.viewDidLoad()
 
         transitioningDelegate = loginView
-        modalPresentationStyle = isTranslucent ? .overFullScreen : .fullScreen
-        modalTransitionStyle = .crossDissolve
-        modalPresentationCapturesStatusBarAppearance = true
 
         // Set up the data source for the table view
         tableDataSource.isDarkStyle = isDarkStyle
