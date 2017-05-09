@@ -19,7 +19,7 @@
 import Foundation
 import UIKit
 
-enum RealmLogoStyle {
+public enum RealmLogoStyle {
     case colored    // The standard, colored version of the Realm logo, good for light themed interfaces
     case monochrome // A monochrome, hollow version of the Realm logo, good for dark theme interfaces
 }
@@ -28,21 +28,21 @@ enum RealmLogoStyle {
 public class RealmLogoView: UIView
 {
     /** Set the visual style of the Realm logo */
-    @IBInspectable var style: RealmLogoStyle = .colored {
+    @IBInspectable public var style: RealmLogoStyle = .colored {
         didSet {
             setNeedsDisplay()
         }
     }
     
     /** Controls whether the 'realm' text is present in the logo or not */
-    @IBInspectable var isWordMarkHidden: Bool = false {
+    @IBInspectable public var isWordMarkHidden: Bool = false {
         didSet {
             setNeedsDisplay()
         }
     }
     
     /** In the monochrome style, the stroke thickness of the Realm Logo */
-    @IBInspectable var logoStrokeWidth: Double = 8.0
+    @IBInspectable public var logoStrokeWidth: Double = 8.0
 
     
     init(frame: CGRect, style: RealmLogoStyle = .colored, wordMarkHidden: Bool = false) {

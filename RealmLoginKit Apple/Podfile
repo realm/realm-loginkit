@@ -2,11 +2,7 @@
 # platform :ios, '9.0'
 
 def shared_pods
-    # Pods for RealmLoginKit
-  pod 'TORoundedTableView'
-  pod 'Realm'
-  pod 'AWSCognito'
-  pod 'AWSCognitoIdentityProvider'
+  pod 'RealmLoginKit', :path => 'RealmLoginKit.podspec'
 end 
 
 target 'RealmLoginKitExample' do
