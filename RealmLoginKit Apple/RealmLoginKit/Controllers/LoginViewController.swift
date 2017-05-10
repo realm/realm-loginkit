@@ -173,7 +173,18 @@ public class LoginViewController: UIViewController {
         }
         get { return _isRegistering }
     }
-    
+
+    /**
+     Transitions the view controller between the 'logging in' and 'signing up'
+     states. Can be animated, or updated instantly.
+     */
+    public func setRegistering(_ isRegistering: Bool, animated: Bool) {
+        guard _isRegistering != isRegistering else { return }
+        _isRegistering = isRegistering
+        tableDataSource.setRegistering(isRegistering, animated: animated)
+        loginView.setRegistering(isRegistering, animated: animated)
+    }
+
     /**
      Upon successful login/registration, this callback block will be called,
      providing the user account object that was returned by the server.
@@ -334,18 +345,8 @@ public class LoginViewController: UIViewController {
         self.password = credentials.password
     }
 
-    func setRegistering(_ isRegistering: Bool, animated: Bool) {
-        guard _isRegistering != isRegistering else {
-            return
-        }
+    //MARK: - Form Submission -
 
-        _isRegistering = isRegistering
-
-        tableDataSource.setRegistering(isRegistering, animated: animated)
-        loginView.setRegistering(isRegistering, animated: animated)
-    }
-    
-    //MARK: - Form Submission
     private func prepareForSubmission() {
         // Validate the supplied credentials
         var isFormValid = true
