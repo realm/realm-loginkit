@@ -125,7 +125,6 @@
 			children = (
 				221840D81E2CCAE300E85B6E /* AppDelegate.swift */,
 				221840E71E2CCB5100E85B6E /* Controllers */,
-				221840E91E2CCB5100E85B6E /* Models */,
 				221840EA1E2CCB5100E85B6E /* Resources */,
 				221840EE1E2CCB5100E85B6E /* Support */,
 			);
@@ -140,14 +139,6 @@
 			);
 			name = Controllers;
 			path = RealmLoginKitExample/Controllers;
-			sourceTree = SOURCE_ROOT;
-		};
-		221840E91E2CCB5100E85B6E /* Models */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			name = Models;
-			path = RealmLoginKitExample/Models;
 			sourceTree = SOURCE_ROOT;
 		};
 		221840EA1E2CCB5100E85B6E /* Resources */ = {

@@ -268,14 +268,14 @@ class LoginView: UIView, UITableViewDelegate, UIViewControllerTransitioningDeleg
     public override func layoutSubviews() {
         super.layoutSubviews()
 
-        // Hide the copyright view if there's not enough space on screen
-        updateCopyrightViewVisibility()
-
         // Recalculate the state for the on-screen views
         layoutTableContentInset()
         layoutNavigationBar()
         layoutCopyrightView()
         layoutCloseButton()
+
+        // Hide the copyright view if there's not enough space on screen
+        updateCopyrightViewVisibility()
     }
 
     public func animateContentInsetTransition() {
@@ -389,6 +389,7 @@ class LoginView: UIView, UITableViewDelegate, UIViewControllerTransitioningDeleg
         let verticalOffset = tableView.contentOffset.y
         let normalizedOffset = verticalOffset + tableView.contentInset.top
         copyrightView.frame.origin.y = (bounds.height - copyrightViewMargin) - normalizedOffset
+        copyrightView.frame.origin.x = floor((bounds.size.width - copyrightView.frame.size.width) * 0.5)
     }
 
     public func layoutCloseButton() {
