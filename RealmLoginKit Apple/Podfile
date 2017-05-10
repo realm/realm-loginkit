@@ -3,6 +3,7 @@ platform :ios, '9.0'
 
 def shared_pods
   pod 'RealmLoginKit', :path => 'RealmLoginKit.podspec'
+  # pod 'Reveal-SDK', :configurations => ['Debug']
 end 
 
 target 'RealmLoginKitExample' do

@@ -58,14 +58,40 @@ class LoginView: UIView, UITableViewDelegate, UIViewControllerTransitioningDeleg
         get { return _registering }
     }
 
+    /* Removes the Realm copyright text at the bottom. */
+    public var isCopyrightLabelHidden = false {
+        didSet {
+            if isCopyrightLabelHidden {
+                copyrightView?.removeFromSuperview()
+                copyrightView = nil
+            }
+            else {
+                setUpCopyrightLabel()
+                applyTheme()
+            }
+            self.setNeedsLayout()
+        }
+    }
+
+    /* The copyright text displayed at the bottom of 
+     the view when there is sufficient space */
+    public var copyrightLabelText = "With ❤️ from the Realm team, 2017." {
+        didSet {
+            setUpCopyrightLabel()
+            copyrightView?.text = copyrightLabelText
+            copyrightView?.sizeToFit()
+            self.setNeedsLayout()
+        }
+    }
+
     /* Subviews */
     public let containerView = UIView()
     public let navigationBar = UINavigationBar()
     public let tableView     = TORoundedTableView()
     public let headerView    = LoginHeaderView()
     public let footerView    = LoginFooterView()
-    public let copyrightView = UILabel()
-    public var closeButton: UIButton? = nil
+    public var copyrightView: UILabel?
+    public var closeButton: UIButton?
 
     public var effectView: UIVisualEffectView?
     public var backgroundView: UIView?
@@ -160,6 +186,23 @@ class LoginView: UIView, UITableViewDelegate, UIViewControllerTransitioningDeleg
         applyTheme()
     }
 
+    private func setUpCopyrightLabel()
+    {
+        guard isCopyrightLabelHidden == false, copyrightView == nil else { return }
+
+        copyrightView = UILabel()
+        guard let copyrightView = copyrightView else { return }
+
+        copyrightView.text = copyrightLabelText
+        copyrightView.textAlignment = .center
+        copyrightView.font = UIFont.systemFont(ofSize: 15)
+        copyrightView.sizeToFit()
+        copyrightView.autoresizingMask = [.flexibleLeftMargin, .flexibleRightMargin, .flexibleTopMargin]
+        copyrightView.frame.origin.y = self.bounds.height - copyrightViewMargin
+        copyrightView.frame.origin.x = (self.bounds.width - copyrightView.frame.width) * 0.5
+        containerView.addSubview(copyrightView)
+    }
+
     private func setUpCommonViews() {
         backgroundView = UIView()
         backgroundView?.frame = bounds
@@ -175,17 +218,9 @@ class LoginView: UIView, UITableViewDelegate, UIViewControllerTransitioningDeleg
         navigationBar.alpha = 0.0
         self.addSubview(navigationBar)
 
-        copyrightView.text = "With ❤️ from the Realm team, 2017."
-        copyrightView.textAlignment = .center
-        copyrightView.font = UIFont.systemFont(ofSize: 15)
-        copyrightView.sizeToFit()
-        copyrightView.autoresizingMask = [.flexibleLeftMargin, .flexibleRightMargin, .flexibleTopMargin]
-        copyrightView.frame.origin.y = self.bounds.height - copyrightViewMargin
-        copyrightView.frame.origin.x = (self.bounds.width - copyrightView.frame.width) * 0.5
-        containerView.addSubview(copyrightView)
-
         setUpTableView()
         setUpCloseButton()
+        setUpCopyrightLabel()
         
         applyTheme()
     }
@@ -193,7 +228,7 @@ class LoginView: UIView, UITableViewDelegate, UIViewControllerTransitioningDeleg
     private func applyTheme() {
         // view accessory views
         navigationBar.barStyle  = isDarkStyle ? .blackTranslucent : .default
-        copyrightView.textColor = isDarkStyle ? UIColor(white: 0.3, alpha: 1.0) : UIColor(white: 0.6, alpha: 1.0)
+        copyrightView?.textColor = isDarkStyle ? UIColor(white: 0.3, alpha: 1.0) : UIColor(white: 0.6, alpha: 1.0)
 
         // view background
         if isTranslucentStyle {
@@ -233,14 +268,14 @@ class LoginView: UIView, UITableViewDelegate, UIViewControllerTransitioningDeleg
     public override func layoutSubviews() {
         super.layoutSubviews()
 
-        // Hide the copyright view if there's not enough space on screen
-        updateCopyrightViewVisibility()
-
         // Recalculate the state for the on-screen views
         layoutTableContentInset()
         layoutNavigationBar()
         layoutCopyrightView()
         layoutCloseButton()
+
+        // Hide the copyright view if there's not enough space on screen
+        updateCopyrightViewVisibility()
     }
 
     public func animateContentInsetTransition() {
@@ -315,6 +350,8 @@ class LoginView: UIView, UITableViewDelegate, UIViewControllerTransitioningDeleg
     }
 
     public func updateCopyrightViewVisibility() {
+        guard let copyrightView = copyrightView else { return }
+
         // Hide the copyright if there's not enough vertical space on the screen for it to not
         // interfere with the rest of the content
         let isHidden = (tableView.contentInset.top + tableView.contentSize.height) > copyrightView.frame.minY
@@ -344,7 +381,7 @@ class LoginView: UIView, UITableViewDelegate, UIViewControllerTransitioningDeleg
     }
 
     public func layoutCopyrightView() {
-        guard copyrightView.isHidden == false else {
+        guard let copyrightView = copyrightView, copyrightView.isHidden == false else {
             return
         }
 
@@ -352,6 +389,7 @@ class LoginView: UIView, UITableViewDelegate, UIViewControllerTransitioningDeleg
         let verticalOffset = tableView.contentOffset.y
         let normalizedOffset = verticalOffset + tableView.contentInset.top
         copyrightView.frame.origin.y = (bounds.height - copyrightViewMargin) - normalizedOffset
+        copyrightView.frame.origin.x = floor((bounds.size.width - copyrightView.frame.size.width) * 0.5)
     }
 
     public func layoutCloseButton() {

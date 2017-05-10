@@ -9,10 +9,12 @@ PODS:
   - RealmLoginKit/Core (0.0.15):
     - Realm
     - TORoundedTableView
+  - Reveal-SDK (8)
   - TORoundedTableView (0.0.3)
 
 DEPENDENCIES:
   - RealmLoginKit (from `RealmLoginKit.podspec`)
+  - Reveal-SDK
 
 EXTERNAL SOURCES:
   RealmLoginKit:
@@ -21,8 +23,9 @@ EXTERNAL SOURCES:
 SPEC CHECKSUMS:
   Realm: 07e5d3a9e0e41d65fd5f9f05150ed6295d0f093b
   RealmLoginKit: 4e6bc57eefc09304d6b4edfd1a520be79bf455b4
+  Reveal-SDK: 43be4e662864e937960d0d04d005135e29c4e53b
   TORoundedTableView: 4155565233135d81d6626a0c4ecfba27991cf2b1
 
-PODFILE CHECKSUM: 77878d4a6723c75e8828462867e128cf90e790a0
+PODFILE CHECKSUM: a7be17676669dd3bc40e5cbb8be16d85ce9c7849
 
 COCOAPODS: 1.2.1
