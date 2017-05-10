@@ -97,6 +97,23 @@ public class LoginViewController: UIViewController {
     }
 
     /**
+     Sets whether the copyright label shown at the bottom of the
+     view is visible or not.
+     */
+    public var isCopyrightLabelHidden: Bool {
+        get { return self.loginView.isCopyrightLabelHidden }
+        set { self.loginView.isCopyrightLabelHidden = newValue }
+    }
+
+    /**
+     Sets the text shown in the copyright label.
+     */
+    public var copyrightLabelText: String {
+        get { return self.loginView.copyrightLabelText }
+        set { self.loginView.copyrightLabelText = newValue }
+    }
+
+    /**
      The port number that will be appended to the server URL when constructing the final
      authentication URL, if the server has been set as unsecure. Default value is 9080.
      Specifying a port in `serverURL` will override this value.
