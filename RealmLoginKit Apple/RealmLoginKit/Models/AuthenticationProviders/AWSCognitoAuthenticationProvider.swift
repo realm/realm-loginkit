@@ -20,7 +20,7 @@ import UIKit
 import Realm
 import AWSCognitoIdentityProvider
 
-class AWSCognitoAuthenticationProvider: NSObject, AuthenticationProvider, AWSCognitoIdentityInteractiveAuthenticationDelegate {
+public class AWSCognitoAuthenticationProvider: NSObject, AuthenticationProvider, AWSCognitoIdentityInteractiveAuthenticationDelegate {
 
     // Authentican Provider Input Credentials
     public var username: String? = nil
@@ -37,7 +37,7 @@ class AWSCognitoAuthenticationProvider: NSObject, AuthenticationProvider, AWSCog
     // Task token to let us cancel requests as needed
     private var cancellationTokenSource: AWSCancellationTokenSource?
 
-    init(serviceRegion: AWSRegionType, userPoolID: String, clientID: String, clientSecret: String) {
+    public init(serviceRegion: AWSRegionType, userPoolID: String, clientID: String, clientSecret: String) {
         // Capture the Cognito account tokens + settings
         self.serviceRegion = serviceRegion
         self.userPoolID = userPoolID
@@ -55,11 +55,11 @@ class AWSCognitoAuthenticationProvider: NSObject, AuthenticationProvider, AWSCog
         self.userPool.delegate = self
     }
 
-    func cancelAuthentication() {
+    public func cancelAuthentication() {
         cancellationTokenSource?.cancel()
     }
 
-    func authenticate(onCompletion: ((RLMSyncCredentials?, Error?) -> Void)?) {
+    public func authenticate(onCompletion: ((RLMSyncCredentials?, Error?) -> Void)?) {
         // Cancel any previous operations if they are still pending
         cancellationTokenSource?.cancel()
         cancellationTokenSource = nil
