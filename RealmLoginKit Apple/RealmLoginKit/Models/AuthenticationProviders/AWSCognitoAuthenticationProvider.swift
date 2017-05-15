@@ -123,7 +123,7 @@ public class AWSCognitoAuthenticationProvider: NSObject, AuthenticationProvider,
             let userSession = task.result!
 
             // Extract the token from the user session and set up the resulting SyncCredentials objects
-            let credentials = RLMSyncCredentials(customToken: userSession.accessToken!.tokenString, provider: RLMIdentityProvider(rawValue: "cognito"), userInfo: nil)
+            let credentials = RLMSyncCredentials(customToken: userSession.accessToken!.tokenString, provider: RLMIdentityProvider(rawValue: "custom/cognito"), userInfo: nil)
             onCompletion?(credentials, nil)
         }
 
