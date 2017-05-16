@@ -54,16 +54,7 @@ class ViewController: UIViewController {
     @IBAction func showLoginButtonTapped(_ sender: AnyObject?) {
         let style: LoginViewControllerStyle = isDarkMode ? .darkTranslucent : .lightTranslucent
         let loginViewController = LoginViewController(style: style)
-
-        /**
-         To enable Amazon Cognito functionality in this sampe app, make sure to open the Podfile in the same directory
-         and make sure to swap out the commented out lines, making sure the `pod 'RealmLoginKit/AWSCognito` line is uncommented,
-         and then run another `pod install` command.
-         */
-
-//        loginViewController.authenticationProvider = AWSCognitoAuthenticationProvider(serviceRegion: .USEast1, userPoolID: "",
-//                                                                                      clientID: "",
-//                                                                                      clientSecret: "")
+        loginViewController.authenticationProvider = AWSCognitoAuthenticationProvider(serviceRegion: .USEast1, userPoolID: "", clientID: "", clientSecret: "")
         loginViewController.isCancelButtonHidden = false
         loginViewController.loginSuccessfulHandler = { user in
             loginViewController.presentingViewController?.dismiss(animated: true, completion: nil)
