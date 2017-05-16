@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name     = 'RealmLoginKit'
-  s.version  = '0.1.0'
+  s.version  = '0.1.1'
   s.license  =  { :type => 'Apache-2.0', :file => 'LICENSE' }
   s.summary  = 'A generic login view controller for apps that use the Realm Mobile Platform'
   s.homepage = 'https://realm.io'
