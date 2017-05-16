@@ -200,6 +200,7 @@ public class LoginViewController: UIViewController {
         _isRegistering = isRegistering
         tableDataSource.setRegistering(isRegistering, animated: animated)
         loginView.setRegistering(isRegistering, animated: animated)
+        prepareForSubmission()
     }
 
     /**
