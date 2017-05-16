@@ -306,7 +306,7 @@ class LoginView: UIView, UITableViewDelegate, UIViewControllerTransitioningDeleg
             contentMidPoint = headerView.frame.height + (sectionHeight * 0.5)
         }
 
-        var topPadding    = max(0, (boundsHeight * 0.5) - contentMidPoint)
+        var topPadding = max(0, (boundsHeight * 0.5) - contentMidPoint)
         topPadding += (UIApplication.shared.statusBarFrame.height + 10)
 
         var bottomPadding:CGFloat = 0.0
@@ -321,7 +321,8 @@ class LoginView: UIView, UITableViewDelegate, UIViewControllerTransitioningDeleg
 
         // Align the scroll view offset so it's centered vertically
         if boundsHeight < contentHeight {
-            let verticalOffset = tableView.tableHeaderView!.frame.size.height - topPadding
+            var verticalOffset = tableView.tableHeaderView!.frame.size.height - topPadding
+            verticalOffset = min(verticalOffset, -(bounds.size.height - (contentHeight + bottomPadding)))
             tableView.contentOffset = CGPoint(x: 0.0, y: verticalOffset)
         }
     }
@@ -434,6 +435,7 @@ class LoginView: UIView, UITableViewDelegate, UIViewControllerTransitioningDeleg
 
     public func animationController(forPresented presented: UIViewController, presenting: UIViewController, source: UIViewController) -> UIViewControllerAnimatedTransitioning? {
         let animationController = LoginViewControllerTransitioning()
+        animationController.statusBarView = navigationBar
         animationController.backgroundView = backgroundView
         animationController.contentView = containerView
         animationController.effectsView = effectView
@@ -444,6 +446,7 @@ class LoginView: UIView, UITableViewDelegate, UIViewControllerTransitioningDeleg
 
     public func animationController(forDismissed dismissed: UIViewController) -> UIViewControllerAnimatedTransitioning? {
         let animationController = LoginViewControllerTransitioning()
+        animationController.statusBarView = navigationBar
         animationController.backgroundView = backgroundView
         animationController.contentView = containerView
         animationController.effectsView = effectView

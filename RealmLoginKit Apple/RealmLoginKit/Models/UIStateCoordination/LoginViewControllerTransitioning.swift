@@ -21,11 +21,12 @@ import UIKit
 class LoginViewControllerTransitioning: NSObject, UIViewControllerAnimatedTransitioning {
     
     public var isDismissing = false
-    
-    public var contentView: UIView? = nil
-    public var controlView: UIView? = nil
-    public var effectsView: UIVisualEffectView? = nil
-    public var backgroundView: UIView? = nil
+
+    public var statusBarView: UIView?
+    public var contentView: UIView?
+    public var controlView: UIView?
+    public var effectsView: UIVisualEffectView?
+    public var backgroundView: UIView?
     
     func transitionDuration(using transitionContext: UIViewControllerContextTransitioning?) -> TimeInterval {
         return 0.75
@@ -37,7 +38,10 @@ class LoginViewControllerTransitioning: NSObject, UIViewControllerAnimatedTransi
         
         let fromViewController = transitionContext.viewController(forKey: UITransitionContextViewControllerKey.from)
         let toViewController = transitionContext.viewController(forKey: UITransitionContextViewControllerKey.to)
-        
+
+        let statusBarAlpha = statusBarView!.alpha
+        let animateStatusBar = statusBarAlpha > CGFloat(0.0)
+
         // Hold onto a reference to the effect
         let effect = effectsView?.effect
         
@@ -50,7 +54,11 @@ class LoginViewControllerTransitioning: NSObject, UIViewControllerAnimatedTransi
         backgroundView?.alpha = !isDismissing ? 0.0 : 1.0
         effectsView?.effect = !isDismissing ? nil : effect
         controlView?.alpha = !isDismissing ? 0.0 : 1.0
-        
+
+        if animateStatusBar {
+            statusBarView?.alpha = !isDismissing ? 0.0 : statusBarAlpha
+        }
+
         if !isDismissing {
             containerView.addSubview(toViewController!.view)
         }
@@ -66,6 +74,11 @@ class LoginViewControllerTransitioning: NSObject, UIViewControllerAnimatedTransi
             self.backgroundView?.alpha = !self.isDismissing ? 1.0 : 0.0
             self.effectsView?.effect = !self.isDismissing ? effect : nil
             self.controlView?.alpha = !self.isDismissing ? 1.0 : 0.0
+
+            if animateStatusBar {
+                self.statusBarView?.alpha = !self.isDismissing ? statusBarAlpha : 0.0
+            }
+
         }) { complete in
             self.effectsView?.effect = effect
             transitionContext.completeTransition(!transitionContext.transitionWasCancelled)
