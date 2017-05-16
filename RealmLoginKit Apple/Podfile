@@ -2,8 +2,14 @@
 platform :ios, '9.0'
 
 def shared_pods
+  # This is the default version of RealmLoginKit. Comment this line out if you want to use
+  # a specific third-party login mechanism, such as AWS Cognito
   pod 'RealmLoginKit', :path => 'RealmLoginKit.podspec'
-  pod 'RealmLoginKit/AWSCognito', :path => 'RealmLoginKit.podspec'
+
+  # Uncomment this line if you want to enable the AWS Cognito features of RealmLoginKit
+  # pod 'RealmLoginKit/AWSCognito', :path => 'RealmLoginKit.podspec'
+
+  # Client-side component of http://revealapp.com used for UI debugging
   # pod 'Reveal-SDK', :configurations => ['Debug']
 end 
 
