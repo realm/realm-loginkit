@@ -1,9 +1,4 @@
 PODS:
-  - AWSCognito (2.5.6):
-    - AWSCore (= 2.5.6)
-  - AWSCognitoIdentityProvider (2.5.6):
-    - AWSCore (= 2.5.6)
-  - AWSCore (2.5.6)
   - Realm (2.7.0):
     - Realm/Headers (= 2.7.0)
   - Realm/Headers (2.7.0)
@@ -11,32 +6,23 @@ PODS:
     - Realm
     - RealmLoginKit/Core (= 0.1.0)
     - TORoundedTableView
-  - RealmLoginKit/AWSCognito (0.1.0):
-    - AWSCognito
-    - AWSCognitoIdentityProvider
-    - Realm
-    - TORoundedTableView
   - RealmLoginKit/Core (0.1.0):
     - Realm
     - TORoundedTableView
-  - TORoundedTableView (0.0.3)
+  - TORoundedTableView (0.1.2)
 
 DEPENDENCIES:
   - RealmLoginKit (from `RealmLoginKit.podspec`)
-  - RealmLoginKit/AWSCognito (from `RealmLoginKit.podspec`)
 
 EXTERNAL SOURCES:
   RealmLoginKit:
     :path: RealmLoginKit.podspec
 
 SPEC CHECKSUMS:
-  AWSCognito: 18edcf80780d45229371dc954c77c825c617f9c4
-  AWSCognitoIdentityProvider: 44b0e11aea801bb7dbe810a7f2cf21374d8e225b
-  AWSCore: 47109d026cdbc1272624caa73114fbdd2ba3ad66
   Realm: 07e5d3a9e0e41d65fd5f9f05150ed6295d0f093b
   RealmLoginKit: 7e1415790077bb75d825b0ef198e52f1a363a5b5
-  TORoundedTableView: 4155565233135d81d6626a0c4ecfba27991cf2b1
+  TORoundedTableView: 31217495487ec13b9a2750b36e3e49223b0f23cb
 
-PODFILE CHECKSUM: df0e16b0c1f61b1e7fc3b142ecce0da89e27fde8
+PODFILE CHECKSUM: 6c7362a09c1c8219569472d59cb8cc06fe3a5b8f
 
 COCOAPODS: 1.2.1
