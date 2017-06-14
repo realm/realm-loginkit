@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Scheme
-   LastUpgradeVersion = "0820"
+   LastUpgradeVersion = "0900"
    version = "1.3">
    <BuildAction
       parallelizeBuildables = "YES"
@@ -35,6 +35,16 @@
                BlueprintIdentifier = "22BB75D91E8B144100317E4B"
                BuildableName = "RealmLoginKitExampleTests.xctest"
                BlueprintName = "RealmLoginKitExampleTests"
+               ReferencedContainer = "container:RealmLoginKit.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "22A3B47D1ECBBE68000CBE4C"
+               BuildableName = "RealmLoginKitExampleUITests.xctest"
+               BlueprintName = "RealmLoginKitExampleUITests"
                ReferencedContainer = "container:RealmLoginKit.xcodeproj">
             </BuildableReference>
          </TestableReference>

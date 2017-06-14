@@ -10,7 +10,7 @@ def shared_pods
   # pod 'RealmLoginKit/AWSCognito', :path => 'RealmLoginKit.podspec'
 
   # Client-side component of http://revealapp.com used for UI debugging
-  # pod 'Reveal-SDK', :configurations => ['Debug']
+  pod 'Reveal-SDK', :configurations => ['Debug']
 end 
 
 target 'RealmLoginKitExample' do

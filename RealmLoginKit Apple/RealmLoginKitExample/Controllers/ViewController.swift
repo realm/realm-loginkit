@@ -44,7 +44,7 @@ class ViewController: UIViewController {
         super.viewDidAppear(animated)
     }
     
-    func segmentedControlChanged() {
+    @objc func segmentedControlChanged() {
         view.backgroundColor = UIColor(white: isDarkMode ? 0.1 : 0.92, alpha: 1.0)
         navigationController?.navigationBar.barStyle = isDarkMode ? .blackTranslucent : .default
         view.window?.tintColor = isDarkMode ? UIColor(red:90.0/255.0, green:120.0/255.0, blue:218.0/255.0, alpha:1.0) : nil;
