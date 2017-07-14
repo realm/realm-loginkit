@@ -20,7 +20,7 @@ import UIKit
 import Realm
 
 class LoginCredentialsList: RLMObject {
-    dynamic var credentialsList = RLMArray(objectClassName: LoginCredentials.className())
+    @objc dynamic var credentialsList = RLMArray(objectClassName: LoginCredentials.className())
 
     override class func shouldIncludeInDefaultSchema() -> Bool {
         return false
@@ -28,9 +28,9 @@ class LoginCredentialsList: RLMObject {
 }
 
 class LoginCredentials: RLMObject {
-    dynamic var serverURL: String?
-    dynamic var username: String?
-    dynamic var password: String?
+    @objc dynamic var serverURL: String?
+    @objc dynamic var username: String?
+    @objc dynamic var password: String?
 
     override class func indexedProperties() -> [String] {
         return ["serverURL", "username"]

@@ -47,7 +47,7 @@ extension RLMObject {
 }
 
 public final class RLMIterator: IteratorProtocol {
-    private let iteratorBase: NSFastEnumerationIterator
+    private var iteratorBase: NSFastEnumerationIterator
 
     internal init(collection: RLMCollection) {
         iteratorBase = NSFastEnumerationIterator(collection)

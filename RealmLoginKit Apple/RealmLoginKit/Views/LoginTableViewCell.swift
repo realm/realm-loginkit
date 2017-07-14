@@ -55,6 +55,7 @@ class LoginTableViewCell: TORoundedTableViewCapCell, UITextFieldDelegate {
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         selectionStyle = .none
+        isUserInteractionEnabled = false
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -66,6 +67,7 @@ class LoginTableViewCell: TORoundedTableViewCapCell, UITextFieldDelegate {
     func configureViews() {
         if type == .textField && _textField == nil {
             _textField = UITextField()
+            _textField?.isUserInteractionEnabled = true
             _textField?.autocorrectionType = .no
             _textField?.autocapitalizationType = .none
             _textField?.delegate = self

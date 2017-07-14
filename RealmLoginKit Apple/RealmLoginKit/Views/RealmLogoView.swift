@@ -19,7 +19,7 @@
 import Foundation
 import UIKit
 
-public enum RealmLogoStyle {
+@objc public enum RealmLogoStyle: Int {
     case colored    // The standard, colored version of the Realm logo, good for light themed interfaces
     case monochrome // A monochrome, hollow version of the Realm logo, good for dark theme interfaces
 }

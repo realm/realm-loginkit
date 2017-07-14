@@ -27,7 +27,7 @@ public enum LoginViewControllerCellType: Int {
     case rememberLogin
 }
 
-class LoginTableViewDataSource: NSObject, UITableViewDataSource {
+public class LoginTableViewDataSource: NSObject, UITableViewDataSource {
 
     /** The table view managed by this data source */
     public var tableView: UITableView? {
@@ -178,8 +178,13 @@ class LoginTableViewDataSource: NSObject, UITableViewDataSource {
             if isDarkStyle {
                 let placeholderText = tableViewCell.textField?.placeholder
                 let placeholderTextColor = UIColor(white: 0.45, alpha: 1.0)
-                let attributes = [NSForegroundColorAttributeName: placeholderTextColor]
-                tableViewCell.textField?.attributedPlaceholder =  NSAttributedString(string: placeholderText!, attributes: attributes)
+                #if swift(>=4.0)
+                    let attributes = [NSAttributedStringKey.foregroundColor: placeholderTextColor]
+                #else
+                    let attributes = [NSForegroundColorAttributeName: placeholderTextColor]
+                #endif
+
+                tableViewCell.textField?.attributedPlaceholder = NSAttributedString(string: placeholderText!, attributes: attributes)
             }
             else {
                 let placeholderText = tableViewCell.textField?.placeholder

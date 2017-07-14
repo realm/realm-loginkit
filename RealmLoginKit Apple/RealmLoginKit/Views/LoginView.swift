@@ -86,7 +86,7 @@ class LoginView: UIView, UITableViewDelegate, UIViewControllerTransitioningDeleg
 
     /* Subviews */
     public let containerView = UIView()
-    public let navigationBar = UINavigationBar()
+    public let navigationBar = StatusBarUnderlayView()
     public let tableView     = TORoundedTableView()
     public let headerView    = LoginHeaderView()
     public let footerView    = LoginFooterView()
@@ -227,7 +227,7 @@ class LoginView: UIView, UITableViewDelegate, UIViewControllerTransitioningDeleg
 
     private func applyTheme() {
         // view accessory views
-        navigationBar.barStyle  = isDarkStyle ? .blackTranslucent : .default
+        navigationBar.style  = isDarkStyle ? StatusBarUnderlayStyle.dark : StatusBarUnderlayStyle.light
         copyrightView?.textColor = isDarkStyle ? UIColor(white: 0.3, alpha: 1.0) : UIColor(white: 0.6, alpha: 1.0)
 
         // view background
@@ -307,7 +307,13 @@ class LoginView: UIView, UITableViewDelegate, UIViewControllerTransitioningDeleg
         }
 
         var topPadding = max(0, (boundsHeight * 0.5) - contentMidPoint)
-        topPadding += (UIApplication.shared.statusBarFrame.height + 10)
+
+        if #available(iOS 11.0, *) {
+            topPadding += 10
+        }
+        else {
+            topPadding += (UIApplication.shared.statusBarFrame.height + 10)
+        }
 
         var bottomPadding:CGFloat = 0.0
         if keyboardHeight > 0 {
@@ -342,11 +348,11 @@ class LoginView: UIView, UITableViewDelegate, UIViewControllerTransitioningDeleg
         if verticalOffset >= -statusBarFrameHeight {
             navigationBar.alpha = 1.0
         }
-        else if verticalOffset <= -(statusBarFrameHeight + 10) {
+        else if verticalOffset <= -(statusBarFrameHeight + 5) {
             navigationBar.alpha = 0.0
         }
         else {
-            navigationBar.alpha = 1.0 - ((abs(verticalOffset) - statusBarFrameHeight) / 10.0)
+            navigationBar.alpha = 1.0 - ((abs(verticalOffset) - statusBarFrameHeight) / 5.0)
         }
     }
 

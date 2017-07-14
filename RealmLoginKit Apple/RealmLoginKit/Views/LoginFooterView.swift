@@ -173,7 +173,7 @@ class LoginFooterView: UIView {
         updateSubmitButton()
     }
     
-    func buttonTapped(sender: AnyObject?) {
+    @objc func buttonTapped(sender: AnyObject?) {
         guard let sender = sender else {
             return
         }
