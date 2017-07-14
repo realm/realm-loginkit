@@ -178,7 +178,12 @@ class LoginTableViewDataSource: NSObject, UITableViewDataSource {
             if isDarkStyle {
                 let placeholderText = tableViewCell.textField?.placeholder
                 let placeholderTextColor = UIColor(white: 0.45, alpha: 1.0)
-                let attributes = [NSAttributedStringKey.foregroundColor: placeholderTextColor]
+                #if swift(>=4.0)
+                    let attributes = [NSAttributedStringKey.foregroundColor: placeholderTextColor]
+                #else
+                    let attributes = [NSForegroundColorAttributeName: placeholderTextColor]
+                #endif
+
                 tableViewCell.textField?.attributedPlaceholder = NSAttributedString(string: placeholderText!, attributes: attributes)
             }
             else {
