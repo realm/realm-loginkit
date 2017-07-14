@@ -129,10 +129,6 @@ class LoginView: UIView, UITableViewDelegate, UIViewControllerTransitioningDeleg
     private func setUpViews() {
         backgroundColor = .clear
 
-        if #available(iOS 11.0, *) {
-            insetsLayoutMarginsFromSafeArea = false
-        }
-
         setUpTranslucentViews()
         setUpCommonViews()
         setUpTableView()
