@@ -55,7 +55,7 @@ class LoginTableViewCell: TORoundedTableViewCapCell, UITextFieldDelegate {
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         selectionStyle = .none
-        isUserInteractionEnabled = false
+        isUserInteractionEnabled = true
     }
     
     required init?(coder aDecoder: NSCoder) {
