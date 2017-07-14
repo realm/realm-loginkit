@@ -27,7 +27,7 @@ public enum LoginViewControllerCellType: Int {
     case rememberLogin
 }
 
-class LoginTableViewDataSource: NSObject, UITableViewDataSource {
+public class LoginTableViewDataSource: NSObject, UITableViewDataSource {
 
     /** The table view managed by this data source */
     public var tableView: UITableView? {

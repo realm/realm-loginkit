@@ -18,6 +18,7 @@
 
 import XCTest
 @testable import RealmLoginKitExample
+@testable import RealmLoginKit
 
 class LoginCredentialsValidationTests: XCTestCase {
     
