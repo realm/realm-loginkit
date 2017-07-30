@@ -105,3 +105,5 @@ This project adheres to the [Contributor Covenant Code of Conduct](https://realm
 # License
 
 Realm LoginKit is licensed under the Apache license. See the LICENSE file for details.
+
+![analytics](https://ga-beacon.appspot.com/UA-50247013-2/realm-loginkit/README?pixel)
