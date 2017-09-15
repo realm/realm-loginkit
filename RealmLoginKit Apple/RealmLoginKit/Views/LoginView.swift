@@ -154,6 +154,10 @@ class LoginView: UIView, UITableViewDelegate, UIViewControllerTransitioningDeleg
         tableView.tableFooterView = footerView
         tableView.delaysContentTouches = false
         tableView.delegate = self
+        if #available(iOS 11.0, *) {
+            tableView.contentInsetAdjustmentBehavior = .never
+        }
+
         containerView.addSubview(tableView)
 
         let infoDictionary = Bundle.main.infoDictionary!
@@ -307,13 +311,7 @@ class LoginView: UIView, UITableViewDelegate, UIViewControllerTransitioningDeleg
         }
 
         var topPadding = max(0, (boundsHeight * 0.5) - contentMidPoint)
-
-        if #available(iOS 11.0, *) {
-            topPadding += 10
-        }
-        else {
-            topPadding += (UIApplication.shared.statusBarFrame.height + 10)
-        }
+        topPadding += (UIApplication.shared.statusBarFrame.height + 10)
 
         var bottomPadding:CGFloat = 0.0
         if keyboardHeight > 0 {

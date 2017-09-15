@@ -27,10 +27,6 @@ extension RLMRealm {
         }
         return version
     }
-
-    @nonobjc public func resolve<Confined: RLMThreadConfined>(reference: RLMThreadSafeReference<Confined>) -> Confined? {
-        return __resolve(reference as! RLMThreadSafeReference<RLMThreadConfined>) as! Confined?
-    }
 }
 
 extension RLMObject {
