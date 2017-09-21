@@ -103,7 +103,7 @@ class LoginFooterView: UIView {
     //MARK: - View Handling
     
     private func setUpViews() {
-        loginButton.layer.cornerRadius = 5
+        loginButton.layer.cornerRadius = 10
         loginButton.layer.masksToBounds = true
         loginButton.setTitleColor(.white, for: .normal)
         loginButton.titleLabel?.font = UIFont.systemFont(ofSize: 18)
@@ -112,7 +112,7 @@ class LoginFooterView: UIView {
         addSubview(loginButton)
         
         registerButton.backgroundColor = .clear
-        registerButton.layer.cornerRadius = 5
+        registerButton.layer.cornerRadius = 10
         registerButton.layer.borderWidth = 1
         registerButton.layer.masksToBounds = true
         registerButton.titleLabel?.font = UIFont.systemFont(ofSize: 15)
