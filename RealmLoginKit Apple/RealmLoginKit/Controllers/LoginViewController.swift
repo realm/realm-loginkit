@@ -392,24 +392,22 @@ public class LoginViewController: UIViewController {
 
         // Create the callback block that will perform the request
         let logInBlock: ((RLMSyncCredentials) -> Void) = { credentials in
-            RLMSyncUser.__logIn(with: credentials, authServerURL: authenticationURL, timeout: 30, onCompletion: { (user, error) in
-                DispatchQueue.main.async {
-                    // Display an error message if the login failed
-                    if let error = error {
-                        self.loginView.footerView.isSubmitting = false
-                        self.showError(title: "Unable to Sign In", message: error.localizedDescription)
-                        return
-                    }
-
-                    // Save the credentials so they can be re-used next time
-                    if self.rememberLogin {
-                        try! self.savedCredentialsCoordinator.saveCredentials(serverURL: self.serverURL!, username: self.username!,
-                                                                              password: self.password!)
-                    }
-
-                    // Inform the parent that the login was successful
-                    self.loginSuccessfulHandler?(user!)
+            RLMSyncUser.__logIn(with: credentials, authServerURL: authenticationURL, timeout: 30, callbackQueue: DispatchQueue.main, onCompletion: { (user, error) in
+                // Display an error message if the login failed
+                if let error = error {
+                    self.loginView.footerView.isSubmitting = false
+                    self.showError(title: "Unable to Sign In", message: error.localizedDescription)
+                    return
                 }
+
+                // Save the credentials so they can be re-used next time
+                if self.rememberLogin {
+                    try! self.savedCredentialsCoordinator.saveCredentials(serverURL: self.serverURL!, username: self.username!,
+                                                                          password: self.password!)
+                }
+
+                // Inform the parent that the login was successful
+                self.loginSuccessfulHandler?(user!)
             })
         }
 

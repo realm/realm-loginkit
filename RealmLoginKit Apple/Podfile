@@ -11,6 +11,8 @@ def shared_pods
 
   # Client-side component of http://revealapp.com used for UI debugging
   pod 'Reveal-SDK', :configurations => ['Debug']
+
+  pod 'Realm', :git => 'https://github.com/realm/realm-cocoa.git', :branch => 'master-3.0', :submodules => true
 end 
 
 target 'RealmLoginKitExample' do

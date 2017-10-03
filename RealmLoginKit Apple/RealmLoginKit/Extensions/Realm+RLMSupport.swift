@@ -32,13 +32,13 @@ extension RLMRealm {
 extension RLMObject {
     // Swift query convenience functions
     public class func objects(where predicateFormat: String, _ args: CVarArg...) -> RLMResults<RLMObject> {
-        return objects(with: NSPredicate(format: predicateFormat, arguments: getVaList(args)))
+        return objects(with: NSPredicate(format: predicateFormat, arguments: getVaList(args))) as! RLMResults<RLMObject>
     }
 
     public class func objects(in realm: RLMRealm,
                               where predicateFormat: String,
                               _ args: CVarArg...) -> RLMResults<RLMObject> {
-        return objects(in: realm, with: NSPredicate(format: predicateFormat, arguments: getVaList(args)))
+        return objects(in: realm, with: NSPredicate(format: predicateFormat, arguments: getVaList(args))) as! RLMResults<RLMObject>
     }
 }
 
@@ -73,6 +73,6 @@ extension RLMCollection {
     }
 
     public func objects(where predicateFormat: String, _ args: CVarArg...) -> RLMResults<RLMObject> {
-        return objects(with: NSPredicate(format: predicateFormat, arguments: getVaList(args)))
+        return objects(with: NSPredicate(format: predicateFormat, arguments: getVaList(args))) as! RLMResults<RLMObject>
     }
 }
