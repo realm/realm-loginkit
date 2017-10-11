@@ -27,18 +27,9 @@ extension RLMRealm {
         }
         return version
     }
-}
 
-extension RLMObject {
-    // Swift query convenience functions
-    public class func objects(where predicateFormat: String, _ args: CVarArg...) -> RLMResults<RLMObject> {
-        return objects(with: NSPredicate(format: predicateFormat, arguments: getVaList(args)))
-    }
-
-    public class func objects(in realm: RLMRealm,
-                              where predicateFormat: String,
-                              _ args: CVarArg...) -> RLMResults<RLMObject> {
-        return objects(in: realm, with: NSPredicate(format: predicateFormat, arguments: getVaList(args)))
+    public func objects<T: RLMObject>(ofType: T.Type, where predicateFormat: String, _ args: CVarArg...) -> RLMResults<T> {
+        return T.objects(in: self, with: NSPredicate(format: predicateFormat, arguments: getVaList(args))) as! RLMResults<T>
     }
 }
 
@@ -72,7 +63,4 @@ extension RLMCollection {
         return indexOfObject(with: NSPredicate(format: predicateFormat, arguments: getVaList(args)))
     }
 
-    public func objects(where predicateFormat: String, _ args: CVarArg...) -> RLMResults<RLMObject> {
-        return objects(with: NSPredicate(format: predicateFormat, arguments: getVaList(args)))
-    }
 }
