@@ -154,9 +154,12 @@ class LoginView: UIView, UITableViewDelegate, UIViewControllerTransitioningDeleg
         tableView.tableFooterView = footerView
         tableView.delaysContentTouches = false
         tableView.delegate = self
+
+#if swift(>=3.2)
         if #available(iOS 11.0, *) {
             tableView.contentInsetAdjustmentBehavior = .never
         }
+#endif
 
         containerView.addSubview(tableView)
 
