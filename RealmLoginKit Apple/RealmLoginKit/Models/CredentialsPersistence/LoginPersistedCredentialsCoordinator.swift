@@ -30,7 +30,7 @@ class LoginPersistedCredentialsCoordinator: NSObject {
     public var allCredentialsObjects: RLMArray<LoginCredentials>? {
         guard realmFileExists else { return nil }
         guard let loginCredentialsList = LoginCredentialsList.allObjects(in: credentialsRealm).firstObject() else { return nil }
-        return (loginCredentialsList as! LoginCredentialsList).credentialsList as? RLMArray<LoginCredentials>
+        return (loginCredentialsList as! LoginCredentialsList).credentialsList
     }
 
     public func saveCredentials(serverURL: String, username: String, password: String) throws {
@@ -39,7 +39,7 @@ class LoginPersistedCredentialsCoordinator: NSObject {
 
         // See if an object with the same username and server URL exists
         let serverHost = serverURL.URLHost
-        var credentials = LoginCredentials.objects(in: realm, where: "serverURL CONTAINS[c] %@ AND username ==[c] %@", serverHost, username).firstObject() as? LoginCredentials
+        var credentials = realm.objects(ofType: LoginCredentials.self, where: "serverURL CONTAINS[c] %@ AND username ==[c] %@", serverHost, username).firstObject()
         if credentials == nil {
             credentials = LoginCredentials()
         }

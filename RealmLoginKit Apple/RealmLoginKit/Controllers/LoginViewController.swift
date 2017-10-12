@@ -383,6 +383,25 @@ public class LoginViewController: UIViewController {
         loginView.footerView.isSubmitButtonEnabled = isFormValid
     }
 
+    // If RLMSyncUser.__login has the signature from realm-cocoa 2.x, return a
+    // wrapper which exposes the 3.x API, and otherwise return the method directly
+    typealias rc2LoginFunction = (RLMSyncCredentials, URL, TimeInterval, @escaping RLMUserCompletionBlock) -> Void
+    typealias rc3LoginFunction = (RLMSyncCredentials, URL, TimeInterval, DispatchQueue, @escaping RLMUserCompletionBlock) -> Void
+
+    private func wrapLoginFunction(_ method: @escaping rc3LoginFunction) -> rc3LoginFunction {
+        return method
+    }
+
+    private func wrapLoginFunction(_ method: @escaping rc2LoginFunction) -> rc3LoginFunction {
+        return { (credentials: RLMSyncCredentials, url: URL, timeout: TimeInterval, queue: DispatchQueue, completion: @escaping RLMUserCompletionBlock) in
+            method(credentials, url, timeout) { (user, error) in
+                queue.async {
+                    completion(user, error)
+                }
+            }
+        }
+    }
+
     private func submitLoginRequest() {
         // Show the spinner view on the login button
         loginView.footerView.isSubmitting = true
@@ -391,26 +410,25 @@ public class LoginViewController: UIViewController {
         guard let authenticationURL = authenticationRequestURL else { return }
 
         // Create the callback block that will perform the request
+        let login = wrapLoginFunction(RLMSyncUser.__logIn)
         let logInBlock: ((RLMSyncCredentials) -> Void) = { credentials in
-            RLMSyncUser.__logIn(with: credentials, authServerURL: authenticationURL, timeout: 30, onCompletion: { (user, error) in
-                DispatchQueue.main.async {
-                    // Display an error message if the login failed
-                    if let error = error {
-                        self.loginView.footerView.isSubmitting = false
-                        self.showError(title: "Unable to Sign In", message: error.localizedDescription)
-                        return
-                    }
-
-                    // Save the credentials so they can be re-used next time
-                    if self.rememberLogin {
-                        try! self.savedCredentialsCoordinator.saveCredentials(serverURL: self.serverURL!, username: self.username!,
-                                                                              password: self.password!)
-                    }
-
-                    // Inform the parent that the login was successful
-                    self.loginSuccessfulHandler?(user!)
+            login(credentials, authenticationURL, 30, DispatchQueue.main) { (user, error) in
+                // Display an error message if the login failed
+                if let error = error {
+                    self.loginView.footerView.isSubmitting = false
+                    self.showError(title: "Unable to Sign In", message: error.localizedDescription)
+                    return
                 }
-            })
+
+                // Save the credentials so they can be re-used next time
+                if self.rememberLogin {
+                    try! self.savedCredentialsCoordinator.saveCredentials(serverURL: self.serverURL!, username: self.username!,
+                                                                          password: self.password!)
+                }
+
+                // Inform the parent that the login was successful
+                self.loginSuccessfulHandler?(user!)
+            }
         }
 
         // If an authentication provider was supplied, allow it to perform the necessary requests to generate a credentials object
