@@ -26,13 +26,20 @@ public extension String {
     }
 
     public var URLPortNumber: Int {
-        guard let portRange = self.range(of: ":", options: .backwards) else { return -1 }
+        // if the user didn't supply a port, presume the Realm default
+        guard let portRange = self.range(of: ":", options: .backwards) else { return 9080 }
 
+        var result = 9080 // this is the default Realm port
         let startIndex = self.index(portRange.upperBound, offsetBy: 0)
         let endIndex = self.index(portRange.upperBound, offsetBy: 2)
         guard self[startIndex...endIndex] != "//" else { return -1 }
 
-        return Int(self.substring(from: portRange.upperBound))!
+        // here we make sure it's actually a number...
+        if let inherentPortNumber = Int(self.substring(from: portRange.upperBound)) {
+            result = inherentPortNumber
+        }
+        
+        return result
     }
 
     public var URLHost: String {

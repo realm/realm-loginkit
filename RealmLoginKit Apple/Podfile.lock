@@ -1,15 +1,15 @@
 PODS:
-  - Realm (2.10.1):
-    - Realm/Headers (= 2.10.1)
-  - Realm/Headers (2.10.1)
-  - RealmLoginKit (0.1.1):
+  - Realm (3.0.2):
+    - Realm/Headers (= 3.0.2)
+  - Realm/Headers (3.0.2)
+  - RealmLoginKit (0.1.3):
     - Realm
-    - RealmLoginKit/Core (= 0.1.1)
+    - RealmLoginKit/Core (= 0.1.3)
     - TORoundedTableView
-  - RealmLoginKit/Core (0.1.1):
+  - RealmLoginKit/Core (0.1.3):
     - Realm
     - TORoundedTableView
-  - Reveal-SDK (10)
+  - Reveal-SDK (13)
   - TORoundedTableView (0.1.3)
 
 DEPENDENCIES:
@@ -21,9 +21,9 @@ EXTERNAL SOURCES:
     :path: RealmLoginKit.podspec
 
 SPEC CHECKSUMS:
-  Realm: fc7a317a5c2c9ba91f5f235ede4e2ea76e9eba0c
-  RealmLoginKit: 25560fa7fdea1227f76864c67c4d87e42439be09
-  Reveal-SDK: 7869ddf1f902cabbb07a1f0dd06bd25861a126f7
+  Realm: 6f23fd1f178a09342eac21bfa7c2bf4312a7a180
+  RealmLoginKit: 41a2fc61f3fa294e35c786b751133b1744f4d640
+  Reveal-SDK: ccc2b0f8014965ea448b7534a7c2c8da232b75e8
   TORoundedTableView: cd1437ef81ab3888dea8c06d2dfe4795bcaac768
 
 PODFILE CHECKSUM: 2054849f4bc59a6b2d8ed2d17ab2932832067003
